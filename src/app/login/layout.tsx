@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Montserrat_Alternates } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./style.css";
 
-const sans = Montserrat_Alternates({ subsets: ["cyrillic"], weight: '400' });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "Админ Панель",
-    description: "Админ панель для управления приложением",
+    title: "Вход в админ панель"
+
 };
 
 export default function RootLayout({
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ru">
-        <body className={sans.className}>{children}</body>
+        <body className={inter.className}>{children}</body>
         </html>
     );
 }

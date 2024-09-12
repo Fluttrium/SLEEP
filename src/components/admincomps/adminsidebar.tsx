@@ -1,8 +1,10 @@
 "use client"
 import {useDashboardStore} from "@/app/admin/_store/adminpageStore";
 import {Button} from "@/components/ui/button"
+import { TfiWrite } from "react-icons/tfi";
 
 import {EnvelopeOpenIcon, ExitIcon, PersonIcon} from "@radix-ui/react-icons";
+import {LuUsers2} from "react-icons/lu";
 
 export default function Sidebar() {
     const setSection = useDashboardStore((state) => state.setSection);
@@ -12,14 +14,20 @@ export default function Sidebar() {
             <div className="rounded-2xl backdrop-blur bg-gray-200 w-12 h-12 justify-center flex items-center">
                 <p>лого</p></div>
             <ul className="space-y-5">
-                <li onClick={() => setSection('users')}>
+                <li onClick={() => setSection('requests')}>
                     <Button variant="outline" size="icon">
                         <PersonIcon className="h-5 w-5"/>
                     </Button>
+
                 </li>
-                <li onClick={() => setSection('requests')}>
+                <li onClick={() => setSection('users')}>
                     <Button variant="outline" size="icon">
-                        <EnvelopeOpenIcon className="h-5 w-5"/>
+                        <LuUsers2 className="h-5 w-5"/>
+                    </Button>
+                </li>
+                <li onClick={() => setSection('redactor')}>
+                    <Button variant="outline" size="icon">
+                        <TfiWrite className="h-5 w-5"/>
                     </Button>
                 </li>
             </ul>

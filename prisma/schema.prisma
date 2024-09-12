@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  name     String
+  surname  String
+  email    String    @unique
+  phone    String
+  results  Result[]
+  messages Message[]
+  posts    Post[]
+  profile  Profile?
+  password String    @default("sleep2024")
+  role     Role      @default(USER)
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  title     String
+  body      String
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
+}
+
+model Profile {
+  id     Int    @id @default(autoincrement())
+  bio    String
+  userId Int    @unique
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Post {
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  title      String
+  body       String
+  published  Boolean    @default(false)
+  authorId   Int
+  author     User       @relation(fields: [authorId], references: [id])
+  categories Category[] @relation("CategoryToPost")
+}
+
+model Result {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  score     Int
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String
+  posts Post[] @relation("CategoryToPost")
+}
+
+enum Role {
+  USER
+  ADMIN
+}

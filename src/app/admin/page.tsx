@@ -4,7 +4,7 @@ import { useDashboardStore } from "@/app/admin/_store/adminpageStore";
 import Requests from "@/components/admincomps/Requests";
 import { Separator } from "@/components/ui/separator";
 import { Users } from "@/components/admincomps/Users";
-import Redactor from "@/components/admincomps/Redactor";
+import { Redactor } from "@/components/admincomps/Redactor";
 
 export default function AdminMainPage() {
     const section = useDashboardStore((state) => state.section);

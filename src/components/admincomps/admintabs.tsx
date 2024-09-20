@@ -18,20 +18,20 @@ import {
 
 export function TabsDemo() {
     return (
-        <Tabs defaultValue="account" className="w-[400px]">
+        <Tabs defaultValue="account" className="w-[400px] h-max">
             <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="account">Аккаунт</TabsTrigger>
                 <TabsTrigger value="password">Пароль</TabsTrigger>
             </TabsList>
-            <TabsContent value="account">
-                <Card>
+            <TabsContent className="h-max" value="account">
+                <Card >
                     <CardHeader>
                         <CardTitle>Аккаунт</CardTitle>
                         <CardDescription>
                             Измените данные своего аккаунта. Для подтверждения нажмите кнопку готово.
                         </CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-2">
+                    <CardContent className="space-y-7">
                         <div className="space-y-1">
                             <Label htmlFor="name">Имя</Label>
                             <Input id="name" defaultValue="Василий Васильевич" />
@@ -54,7 +54,7 @@ export function TabsDemo() {
                             Измените пароль здесь. После изменения пароля вы выйдете из аккаунта.
                         </CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-2">
+                    <CardContent className="space-y-7">
                         <div className="space-y-1">
                             <Label htmlFor="current">Текущий пароль</Label>
                             <Input id="current" type="password" />

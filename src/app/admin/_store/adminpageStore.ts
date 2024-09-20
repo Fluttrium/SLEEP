@@ -6,6 +6,6 @@ interface DashboardState {
 }
 
 export const useDashboardStore = create<DashboardState>((set) => ({
-    section: 'users', 
+    section: 'requests', 
     setSection: (section) => set({ section }),
 }));

@@ -6,7 +6,7 @@ import { PrismaClient, User } from "@prisma/client";
 const prisma = new PrismaClient();
 
 // Функция для получения пользователя по имени (или email)
-export async function giveUser(username: string): Promise<User | null> {
+ async function giveUser(username: string): Promise<User | null> {
     try {
         const user = await prisma.user.findUnique({
             where: {

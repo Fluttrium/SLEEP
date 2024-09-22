@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { Button } from "../ui/button";
 
 import { ArrowRight, ShoppingCart, User } from "lucide-react";
+import { SearchInput } from "./search-input";
 
 
 interface Props {
@@ -21,7 +22,7 @@ export const Header: React.FC<Props> = ({className }) => {
         {/* Левая часть */}
         <Link href="/">
           <div className="flex items-center gap-4">
-          <Image src="/logo.png" alt="Logo" width={35} height={35} />
+          <Image src="/sleeplogo.png" alt="Logo" width={55} height={55} />
             <div>
               <h1 className="text-2xl uppercase font-black">Михаил Бочкарев</h1>
               <p className="text-sm text-gray-400 leading-3">Здоровый сон возможен</p>
@@ -29,6 +30,11 @@ export const Header: React.FC<Props> = ({className }) => {
           </div>
         </Link>
 
+        
+          <div className="mx-10 flex-1">
+            <SearchInput />
+          </div>
+        
         
 
         {/* Правая часть */} 

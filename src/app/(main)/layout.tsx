@@ -18,7 +18,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header/>
+      <Header/>
+      <video
+        className="fixed top-0 left-0 w-full h-full object-cover -z-10"
+        src="/dream.mp4"
+        autoPlay
+        loop
+        muted
+      />
+        
         {children}</body>
     </html>
   );

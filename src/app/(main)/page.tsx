@@ -10,36 +10,36 @@ export default function Home() {
     <>
       <div className="bg-[url('https://example.com/your-vector-background.svg')] bg-cover bg-center min-h-screen">
         <Container className="mt-5">
-          <Title text="Покажем путь к здоровому сну" size="lg" className="font-extrabold" />
+          {/* <Title text="Покажем путь к здоровому сну" size="lg" className="font-extrabold" /> */}
         </Container>
 
         <TopBar />
 
         <div className="flex justify-center items-start mt-5 bg-[url('https://example.com/your-vector-background.svg')] bg-cover bg-center p-5 rounded-lg">
   {/* Левая колонка с вопросами и кнопкой */}
-  <div className="max-w-lg">
-    <ul className="space-y-3">
-      <li className="flex items-center">
-        <Title text="Бесплатный тест на апноэ во сне" size="lg" className="font-extrabold" />
-      </li>
-      <li className="flex items-center">
-        <span className={clsx("text-blue-500", "mr-2")}>✓</span>
-        <Title text="Усталость, храп, плохие ночи?" size="md" />
-      </li>
-      <li className="flex items-center">
-        <span className={clsx("text-blue-500", "mr-2")}>✓</span>
-        <Title text="Возможно, вы страдаете от апноэ сна." size="md" />
-      </li>
-      <li className="flex items-center">
-        <span className={clsx("text-blue-500", "mr-2")}>✓</span>
-        <Title text="Оплачиваемая консультация врача по сну от нашей команды" size="md" className="font-semibold" />
-      </li>
-    </ul>
+  <div className="max-w-xl">
+  <ul className="space-y-4">
+    <li className="flex items-center">
+      <Title text="🎉 Бесплатный тест на апноэ во сне" size="xl" className="font-extrabold text-4xl" />
+    </li>
+    <li className="flex items-center">
+      <span className={clsx("text-blue-500", "mr-2")}>✓</span>
+      <Title text="😴 Устали от храпа и плохого сна?" size="xl" className="text-2xl" />
+    </li>
+    <li className="flex items-center">
+      <span className={clsx("text-blue-500", "mr-2")}>✓</span>
+      <Title text="🔍 Узнайте, страдаете ли вы от апноэ!" size="xl" className="text-2xl" />
+    </li>
+    <li className="flex items-center">
+      <span className={clsx("text-blue-500", "mr-2")}>✓</span>
+      <Title text="👨‍⚕️ Получите консультацию от наших врачей!" size="xl" className="text-2xl font-semibold" />
+    </li>
+  </ul>
 
-    <button className="mt-5 px-16 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-      Пройти тест
-    </button>
-  </div>
+  <button className="mt-5 px-10 py-4 bg-blue-600 text-white rounded-2xl text-xl font-semibold hover:bg-blue-700 transition-all duration-200">
+    🚀 Пройти тест прямо сейчас!
+  </button>
+</div>
 
   {/* Правая колонка с картинкой */}
   <div className="ml-20">
@@ -53,7 +53,7 @@ export default function Home() {
 </div>
 
 
-        <Container>
+        {/* <Container>
           <div className="flex gap-[60px]">
             <div className="flex flex-col gap-16">
               <NewsGroupList
@@ -88,7 +88,7 @@ export default function Home() {
               />
             </div>
           </div>
-        </Container>
+        </Container> */}
       </div>
     </>
   );

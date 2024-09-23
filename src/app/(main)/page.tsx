@@ -1,3 +1,4 @@
+import { SleepStats } from "@/components/shared/blocks";
 import { Container } from "@/components/shared/container";
 import { NewsCard } from "@/components/shared/news-card";
 import { NewsGroupList } from "@/components/shared/news-grouplist";
@@ -53,7 +54,7 @@ export default function Home() {
 </div>
 
 
-        {/* <Container>
+        <Container>
           <div className="flex gap-[60px]">
             <div className="flex flex-col gap-16">
               <NewsGroupList
@@ -88,7 +89,8 @@ export default function Home() {
               />
             </div>
           </div>
-        </Container> */}
+        </Container> 
+        <SleepStats/>
       </div>
     </>
   );

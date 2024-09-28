@@ -1,44 +1,69 @@
 'use client';
 
+import { useStore } from '@/app/(main)/store/mainPageStore';
 import { cn } from '../../lib/utils';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface Props {
   className?: string;
 }
 
 const cats = [
-  { id: 1, name: 'Нарушения сна' },
-  { id: 2, name: 'Опрос' },
-  { id: 3, name: 'Как работает' },
-  { id: 4, name: 'Услуги' },
-  { id: 5, name: 'Здоровый сон' },
-  { id: 6, name: 'О нас' },
+  { id: 1, name: 'Тест' },
+  { id: 2, name: 'Статьи' },
+  { id: 3, name: 'Проблемы со сном' },
 ];
 
 export const Categories: React.FC<Props> = ({ className }) => {
-  return (
-    
-    <div className="relative">
-      
-      {/* Фоновое видео */}
+  const { activeId, setActiveId } = useStore(); // Получаем состояние из Zustand
 
-      {/* Контейнер с категориями */}
-      <div className={cn('inline-flex gap-1 bg-gray-50 bg-opacity-80 p-1 rounded-2xl', className)}>
-        
-        {cats.map(({ name, id }, index) => (
+  const scrollToSection = (id: number) => {
+    const category = cats.find(cat => cat.id === id);
+    if (category && category.name) {
+      const section = document.getElementById(category.name);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+        setActiveId(id); // Устанавливаем активный элемент
+      }
+    }
+  };
+
+  const handleScroll = () => {
+    const sections = cats.map(cat => document.getElementById(cat.name));
+    const scrollPosition = window.scrollY + window.innerHeight / 2;
+
+    sections.forEach((section, index) => {
+      if (section) {
+        const sectionTop = section.offsetTop;
+        const sectionBottom = sectionTop + section.offsetHeight;
+        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+          setActiveId(cats[index].id); // Обновляем активный элемент при скролле
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  return (
+    <div className="relative">
+      <div className={cn('inline-flex gap-1 bg-secondary p-1 rounded-2xl', className)}>
+        {cats.map(({ name, id }) => (
           <a
             className={cn(
-              'flex items-center font-bold h-11 rounded-2xl px-5',
-              // categoryActiveId === id && 'bg-white shadow-md shadow-gray-200 text-primary',
+              'flex items-center font-bold h-11 rounded-2xl px-5 cursor-pointer',
+              activeId === id ? 'bg-white shadow-md shadow-gray-200 text-primary' : 'bg-transparent'
             )}
-            href={`/#${name}`}
-            key={index}
+            onClick={() => scrollToSection(id)} // Используем scrollToSection
+            key={id}
           >
             <button>{name}</button>
-          
           </a>
-          
         ))}
       </div>
     </div>

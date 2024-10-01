@@ -2,8 +2,11 @@ import { SleepStats } from "@/components/shared/blocks";
 import { Container } from "@/components/shared/container";
 import { NewsCard } from "@/components/shared/news-card";
 import { NewsGroupList } from "@/components/shared/news-grouplist";
+import Steps from "@/components/shared/steps";
 import { Title } from "@/components/shared/title";
 import { TopBar } from "@/components/shared/top-bar";
+import { TimelineDemo } from "@/components/timelinecomponent";
+
 import clsx from 'clsx';
 
 export default function Home() {
@@ -74,7 +77,7 @@ export default function Home() {
                     {
                       id: 3, // Исправлено id
                       title: "Храп как причина плохого сна",
-                      imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.jpg",
+                      imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.",
                       body: "Советы по улучшению качества сна."
                     },
                     {
@@ -94,6 +97,7 @@ export default function Home() {
         {/* Проблемы со сном */}
         <div id="Проблемы со сном">
           <SleepStats />
+          <Steps/>
         </div>
       </div>
     </>

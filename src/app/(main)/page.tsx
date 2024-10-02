@@ -1,13 +1,12 @@
-import {SleepStats} from "@/components/shared/ui/blocks";
-import {Container} from "@/components/shared/ui/container";
-import {NewsCard} from "@/components/shared/news-card";
 import {NewsGroupList} from "@/components/shared/news-grouplist";
-import {Title} from "@/components/shared/ui/title";
 import {TopBar} from "@/components/shared/top-bar";
 import clsx from 'clsx';
 import {Hero} from "@/components/shared/hero";
 import Image from "next/image";
 import React from "react";
+import Steps from "@/components/shared/steps";
+import {Container} from "@/components/shared/ui/container";
+import {SleepStats} from "@/components/shared/ui/blocks";
 
 export default function Home() {
     return (
@@ -63,52 +62,48 @@ export default function Home() {
 
                 {/* Статьи */}
                 <div id="Статьи">
-                    <section className='relative w-screen'>
-                        <div className='absolute right-0 top-0 -rotate-180 -z-40'>
-                            <Image src="/hero1.svg" alt="Icon" width={300} height={300} style={{height: '100%'}}/>
-                        </div>
-                        <Container>
-                            <div className="flex gap-[60px]">
-                                <div className="flex flex-col gap-16">
-                                    <NewsGroupList
-                                        title="Статьи"
-                                        items={[
-                                            {
-                                                id: 1,
-                                                title: "Апноэ во сне",
-                                                imageUrl: "https://www.periodistadigital.com/wp-content/uploads/2018/06/apnea-del-suen-o.jpg",
-                                                body: "Подробное описание статьи о нарушениях сна."
-                                            },
-                                            {
-                                                id: 2,
-                                                title: "Храп как причина плохого сна",
-                                                imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.jpg",
-                                                body: "Советы по улучшению качества сна."
-                                            },
-                                            {
-                                                id: 3, // Исправлено id
-                                                title: "Храп как причина плохого сна",
-                                                imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.jpg",
-                                                body: "Советы по улучшению качества сна."
-                                            },
-                                            {
-                                                id: 4, // Исправлено id
-                                                title: "Храп как причина плохого сна",
-                                                imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.jpg",
-                                                body: "Советы по улучшению качества сна."
-                                            }
-                                        ]}
-                                        categoryId={0}
-                                    />
-                                </div>
+                    <Container>
+                        <div className="flex gap-[60px]">
+                            <div className="flex flex-col gap-16">
+                                <NewsGroupList
+                                    title="Статьи"
+                                    items={[
+                                        {
+                                            id: 1,
+                                            title: "Апноэ во сне",
+                                            imageUrl: "https://www.periodistadigital.com/wp-content/uploads/2018/06/apnea-del-suen-o.jpg",
+                                            body: "Подробное описание статьи о нарушениях сна."
+                                        },
+                                        {
+                                            id: 2,
+                                            title: "Храп как причина плохого сна",
+                                            imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.jpg",
+                                            body: "Советы по улучшению качества сна."
+                                        },
+                                        {
+                                            id: 3, // Исправлено id
+                                            title: "Храп как причина плохого сна",
+                                            imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.",
+                                            body: "Советы по улучшению качества сна."
+                                        },
+                                        {
+                                            id: 4, // Исправлено id
+                                            title: "Храп как причина плохого сна",
+                                            imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.jpg",
+                                            body: "Советы по улучшению качества сна."
+                                        }
+                                    ]}
+                                    categoryId={0}
+                                />
                             </div>
-                        </Container>
-                    </section>
+                        </div>
+                    </Container>
                 </div>
 
                 {/* Проблемы со сном */}
                 <div id="Проблемы со сном">
                     <SleepStats/>
+                    <Steps/>
                 </div>
             </div>
         </>

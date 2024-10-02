@@ -10,7 +10,6 @@ datasource db {
 
 model User {
   id       Int       @id @default(autoincrement())
-
   email    String    @unique
   name     String
   role     Role      @default(USER)
@@ -20,8 +19,7 @@ model User {
   messages Message[]
   posts    Post[]
   profile  Profile?
-  results  Result[]
-
+  results  Result[] // Связь с результатами пользователя
 }
 
 model Message {
@@ -52,18 +50,49 @@ model Post {
   categories Category[] @relation("CategoryToPost")
 }
 
-model Result {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  score     Int
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-}
-
 model Category {
   id    Int    @id @default(autoincrement())
   name  String
   posts Post[] @relation("CategoryToPost")
+}
+
+model Test {
+  id Int @id @default(autoincrement())
+
+  title     String // Название теста
+  urltitle  String
+  questions Question[] // Вопросы, связанные с этим тестом
+  results   Result[] // Результаты, связанные с этим тестом
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Question {
+  id      Int      @id @default(autoincrement())
+  text    String // Текст вопроса
+  test    Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
+  testId  Int // Внешний ключ для связи с тестом
+  options Option[] // Варианты ответа
+}
+
+model Option {
+  id         Int      @id @default(autoincrement())
+  text       String // Текст варианта ответа
+  score      Int // Балл, который начисляется за этот вариант ответа
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId Int // Внешний ключ для связи с вопросом
+}
+
+model Result {
+  id       Int      @id @default(autoincrement())
+  title    String // Название результата
+  minScore Int // Минимальное количество баллов для достижения этого результата
+  maxScore Int // Максимальное количество баллов для достижения этого результата
+  links    String[] // Ссылки на статьи, связанные с этим результатом
+  test     Test     @relation(fields: [testId], references: [id])
+  testId   Int // Внешний ключ для связи с тестом
+  user     User?    @relation(fields: [userId], references: [id]) // Связь с пользователем
+  userId   Int? // Обратите внимание на вопросительный знак
 }
 
 enum Role {

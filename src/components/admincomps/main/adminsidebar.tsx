@@ -1,13 +1,11 @@
 "use client"
-import { useDashboardStore } from "@/app/admin/_store/adminpageStore";
-import { Button } from "@/components/ui/button"
+import {useDashboardStore} from "@/app/admin/_store/adminpageStore";
+import {Button} from "@/components/ui/button"
 import {
     CircleUserRound,
-    Book,
-    Settings2,
     UsersRound,
     LogOut,
-    SquarePen
+    SquarePen, SquareCheckBig
 } from "lucide-react"
 import {
     Tooltip,
@@ -18,24 +16,31 @@ import {
 
 
 export default function Sidebar() {
-    const setSection = useDashboardStore((state) => state.setSection);
+    const {setSection, section} = useDashboardStore((state) => ({
+        setSection: state.setSection,
+        section: state.section,
+    }));
+
+    const isActive = (currentSection: string) => section === currentSection ? 'bg-blue-500 text-white' : 'text-black';
 
     return (
-
-        <nav className="flex flex-col justify-between items-center gap-1 p-2 my-4" >
+        <nav className="flex flex-col justify-between items-center gap-1 p-2 my-4">
             <TooltipProvider>
                 <div className="rounded-2xl backdrop-blur bg-gray-200 w-12 h-12 justify-center flex items-center">
-                    <p>лого</p></div>
+                    <img
+                        src="/sleeplogo.png"
+                    />
+                </div>
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
                             onClick={() => setSection('requests')}
                             variant="ghost"
                             size="icon"
-                            className="rounded-lg"
+                            className={`rounded-lg ${isActive('requests')}`}
                             aria-label="Личный кабинет"
                         >
-                            <CircleUserRound className="size-7" />
+                            <CircleUserRound className="size-7"/>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={10}>
@@ -48,10 +53,10 @@ export default function Sidebar() {
                             onClick={() => setSection('users')}
                             variant="ghost"
                             size="icon"
-                            className="rounded-lg"
+                            className={`rounded-lg ${isActive('users')}`}
                             aria-label="Пользователи"
                         >
-                            <UsersRound className="size-7" />
+                            <UsersRound className="size-7"/>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={10}>
@@ -64,14 +69,30 @@ export default function Sidebar() {
                             onClick={() => setSection('redactor')}
                             variant="ghost"
                             size="icon"
-                            className="rounded-lg"
+                            className={`rounded-lg ${isActive('redactor')}`}
                             aria-label="База знаний"
                         >
-                            <SquarePen className="size-7" />
+                            <SquarePen className="size-7"/>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={10}>
                         База знаний
+                    </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            onClick={() => setSection('test')}
+                            variant="ghost"
+                            size="icon"
+                            className={`rounded-lg ${isActive('test')}`}
+                            aria-label="Тесты"
+                        >
+                            <SquareCheckBig className="size-7"/>
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" sideOffset={10}>
+                        Тесты
                     </TooltipContent>
                 </Tooltip>
                 <Tooltip>
@@ -82,7 +103,7 @@ export default function Sidebar() {
                             className="rounded-lg"
                             aria-label="Settings"
                         >
-                            <LogOut className="size-7" />
+                            <LogOut className="size-7"/>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent className="bg-destructive" side="right" sideOffset={5}>
@@ -90,33 +111,6 @@ export default function Sidebar() {
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
-        </nav >
-
+        </nav>
     );
 }
-
-{/*<nav className="fix  absolute left-0 z-10 flex flex-col h-screen py-8   justify-between items-center">
-            <div className="rounded-2xl backdrop-blur bg-gray-200 w-12 h-12 justify-center flex items-center">
-                <p>лого</p></div>
-            <ul className="space-y-5">
-                <li onClick={() => setSection('requests')}>
-                    <Button variant="outline" size="icon">
-                        <PersonIcon className="h-5 w-5" />
-                    </Button>
-
-                </li>
-                <li onClick={() => setSection('users')}>
-                    <Button variant="outline" size="icon">
-                        <LuUsers2 className="h-5 w-5" />
-                    </Button>
-                </li>
-                <li onClick={() => setSection('redactor')}>
-                    <Button variant="outline" size="icon">
-                        <TfiWrite className="h-5 w-5" />
-                    </Button>
-                </li>
-            </ul>
-            <Button variant="outline" size="icon">
-                <ExitIcon className="h-4 w-4" />
-            </Button>
-        </nav> */}

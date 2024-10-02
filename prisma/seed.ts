@@ -1,10 +1,13 @@
-import {PrismaClient} from '@prisma/client';
-import {categories, posts, users} from "./constants";
+
+import { PrismaClient } from "@prisma/client";
+import { categories, users } from "./constants";
+
 
 const prisma = new PrismaClient();
 
 async function up() {
     try {
+
         const createdUsers = await prisma.user.createMany(
             {
                 data: users,
@@ -52,4 +55,6 @@ async function up() {
     }
 }
 
+
 up();
+

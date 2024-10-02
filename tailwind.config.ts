@@ -59,7 +59,20 @@ const config: Config = {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			}
-  		}
+  		},
+		animation: {
+			shimmer: "shimmer 2s linear infinite",
+		},
+		keyframes: {
+			shimmer: {
+				from: {
+					backgroundPosition: "0 0",
+				},
+				to: {
+					backgroundPosition: "-200% 0",
+				},
+			},
+		},
   	}
   },
   plugins: [require("tailwindcss-animate")],

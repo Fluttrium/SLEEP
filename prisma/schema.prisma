@@ -10,16 +10,18 @@ datasource db {
 
 model User {
   id       Int       @id @default(autoincrement())
-  name     String
-  surname  String
+
   email    String    @unique
+  name     String
+  role     Role      @default(USER)
+  password String    @default("sleep2024")
   phone    String
-  results  Result[]
+  surname  String
   messages Message[]
   posts    Post[]
   profile  Profile?
-  password String    @default("sleep2024")
-  role     Role      @default(USER)
+  results  Result[]
+
 }
 
 model Message {

@@ -1,7 +1,8 @@
 import Image from "next/image";
 import React from "react";
 import { Timeline } from "@/components/ui/timeline";
-import { Title } from "./shared/title";
+import {Title} from "@/components/shared/ui/title";
+
 
 export function TimelineDemo() {
   const data = [

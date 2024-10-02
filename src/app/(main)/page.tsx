@@ -1,8 +1,6 @@
 import {NewsGroupList} from "@/components/shared/news-grouplist";
 import {TopBar} from "@/components/shared/top-bar";
-import clsx from 'clsx';
 import {Hero} from "@/components/shared/hero";
-import Image from "next/image";
 import React from "react";
 import Steps from "@/components/shared/steps";
 import {Container} from "@/components/shared/ui/container";
@@ -103,6 +101,9 @@ export default function Home() {
                 {/* Проблемы со сном */}
                 <div id="Проблемы со сном">
                     <SleepStats/>
+
+                </div>
+                <div id='Как мы можем помочь вам'>
                     <Steps/>
                 </div>
             </div>

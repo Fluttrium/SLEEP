@@ -1,22 +1,25 @@
-import { SleepStats } from "@/components/shared/blocks";
-import { Container } from "@/components/shared/container";
-import { NewsCard } from "@/components/shared/news-card";
-import { NewsGroupList } from "@/components/shared/news-grouplist";
-import { Title } from "@/components/shared/title";
-import { TopBar } from "@/components/shared/top-bar";
+import {SleepStats} from "@/components/shared/ui/blocks";
+import {Container} from "@/components/shared/ui/container";
+import {NewsCard} from "@/components/shared/news-card";
+import {NewsGroupList} from "@/components/shared/news-grouplist";
+import {Title} from "@/components/shared/ui/title";
+import {TopBar} from "@/components/shared/top-bar";
 import clsx from 'clsx';
+import {Hero} from "@/components/shared/hero";
+import Image from "next/image";
+import React from "react";
 
 export default function Home() {
-  return (
-    <>
-      <div className=" bg-cover bg-center min-h-screen">
+    return (
+        <>
+            <div className=" bg-cover bg-center min-h-screen">
 
-        <div className="absolute flex justify-center w-screen">
-          <TopBar />
-        </div>
+                <div className="absolute flex justify-center w-screen">
+                    <TopBar/>
+                </div>
 
-        {/* Тест */}
-        <div id="Тест" className="flex justify-center items-start mt-5 bg-[url('https://example.com/your-vector-background.svg')] bg-cover bg-center p-5 rounded-lg">
+                {/* Тест
+        <div  className="flex justify-center items-start mt-5 bg-[url('https://example.com/your-vector-background.svg')] bg-cover bg-center p-5 rounded-lg">
           <div className="max-w-xl">
             <ul className="space-y-4">
               <li className="flex items-center">
@@ -41,6 +44,7 @@ export default function Home() {
             </button>
           </div>
 
+
           <div className="ml-20">
             <img
               src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.logopediaymas.es%2Fwp-content%2Fuploads%2F2022%2F12%2Fapnea-del-sueno.jpg&f=1&nofb=1&ipt=b6e27623c2044ec88b6f58c64810db9c13a5f162ae3a7044ff95e2a1ae9ca567&ipo=images"
@@ -50,52 +54,63 @@ export default function Home() {
             />
           </div>
         </div>
+        */}
 
-        {/* Статьи */}
-        <div id="Статьи">
-          <Container >
-            <div className="flex gap-[60px]">
-              <div className="flex flex-col gap-16">
-                <NewsGroupList
-                  title="Статьи"
-                  items={[
-                    {
-                      id: 1,
-                      title: "Апноэ во сне",
-                      imageUrl: "https://www.periodistadigital.com/wp-content/uploads/2018/06/apnea-del-suen-o.jpg",
-                      body: "Подробное описание статьи о нарушениях сна."
-                    },
-                    {
-                      id: 2,
-                      title: "Храп как причина плохого сна",
-                      imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.jpg",
-                      body: "Советы по улучшению качества сна."
-                    },
-                    {
-                      id: 3, // Исправлено id
-                      title: "Храп как причина плохого сна",
-                      imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.jpg",
-                      body: "Советы по улучшению качества сна."
-                    },
-                    {
-                      id: 4, // Исправлено id
-                      title: "Храп как причина плохого сна",
-                      imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.jpg",
-                      body: "Советы по улучшению качества сна."
-                    }
-                  ]}
-                  categoryId={0}
-                />
-              </div>
+                {/*новый выриант hero*/}
+                <div id="Тест">
+                    <Hero/>
+                </div>
+
+                {/* Статьи */}
+                <div id="Статьи">
+                    <section className='relative w-screen'>
+                        <div className='absolute right-0 top-0 -rotate-180 -z-40'>
+                            <Image src="/hero1.svg" alt="Icon" width={300} height={300} style={{height: '100%'}}/>
+                        </div>
+                        <Container>
+                            <div className="flex gap-[60px]">
+                                <div className="flex flex-col gap-16">
+                                    <NewsGroupList
+                                        title="Статьи"
+                                        items={[
+                                            {
+                                                id: 1,
+                                                title: "Апноэ во сне",
+                                                imageUrl: "https://www.periodistadigital.com/wp-content/uploads/2018/06/apnea-del-suen-o.jpg",
+                                                body: "Подробное описание статьи о нарушениях сна."
+                                            },
+                                            {
+                                                id: 2,
+                                                title: "Храп как причина плохого сна",
+                                                imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.jpg",
+                                                body: "Советы по улучшению качества сна."
+                                            },
+                                            {
+                                                id: 3, // Исправлено id
+                                                title: "Храп как причина плохого сна",
+                                                imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.jpg",
+                                                body: "Советы по улучшению качества сна."
+                                            },
+                                            {
+                                                id: 4, // Исправлено id
+                                                title: "Храп как причина плохого сна",
+                                                imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.jpg",
+                                                body: "Советы по улучшению качества сна."
+                                            }
+                                        ]}
+                                        categoryId={0}
+                                    />
+                                </div>
+                            </div>
+                        </Container>
+                    </section>
+                </div>
+
+                {/* Проблемы со сном */}
+                <div id="Проблемы со сном">
+                    <SleepStats/>
+                </div>
             </div>
-          </Container>
-        </div>
-
-        {/* Проблемы со сном */}
-        <div id="Проблемы со сном">
-          <SleepStats />
-        </div>
-      </div>
-    </>
-  );
+        </>
+    );
 }

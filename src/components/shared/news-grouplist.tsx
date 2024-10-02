@@ -3,7 +3,7 @@
 import React from 'react';
 import { useIntersection } from 'react-use';
 
-import { Title } from './title';
+import { Title } from './ui/title';
 
 
 // import { useCategoryStore } from '@/shared/store';

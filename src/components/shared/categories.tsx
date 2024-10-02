@@ -1,7 +1,7 @@
 'use client';
 
 import { useStore } from '@/app/(main)/store/mainPageStore';
-import { cn } from '../../lib/utils';
+import { cn } from '@/lib/utils';
 import React, { useEffect } from 'react';
 
 interface Props {

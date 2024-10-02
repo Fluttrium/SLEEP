@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
-import { Title } from './title';
+import { Title } from './ui/title';
 import { Plus } from 'lucide-react';
 import { Button } from '../ui/button';
 

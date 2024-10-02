@@ -2,7 +2,7 @@
 
 
 import { cn } from '@/lib/utils';
-import { Product } from '@prisma/client';
+//import { Product } from '@prisma/client';
 import { Search } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
@@ -15,7 +15,7 @@ interface Props {
 export const SearchInput: React.FC<Props> = ({ className }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [focused, setFocused] = React.useState(false);
-  const [products, setProducts] = React.useState<Product[]>([]);
+  //const [products, setProducts] = React.useState<Product[]>([]);
   const ref = React.useRef(null);
 
   useClickAway(ref, () => {
@@ -38,7 +38,7 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
   const onClickItem = () => {
     setFocused(false);
     setSearchQuery('');
-    setProducts([]);
+   // setProducts([]);
   };
 
   return (
@@ -58,7 +58,7 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
 
-        {products.length > 0 && (
+        {/* {products.length > 0 && (
           <div
             className={cn(
               'absolute w-full bg-white rounded-xl py-2 top-14 shadow-md transition-all duration-200 invisible opacity-0 z-30',
@@ -75,7 +75,7 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
               </Link>
             ))}
           </div>
-        )}
+        )}*/}
       </div>
     </>
   );

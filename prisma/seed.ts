@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 
 async function up() {
     try {
+
         const createdUsers = await prisma.user.createMany(
             {
                 data: users,

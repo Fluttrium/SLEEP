@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Container } from './container';
 import Image from 'next/image';
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 import { ArrowRight, ShoppingCart, User } from "lucide-react";
 import { SearchInput } from "./search-input";
@@ -20,7 +20,7 @@ export const Header: React.FC<Props> = ({ className }) => {
     <header className={cn('border-b bg-background', className)}>
       <Container className="flex items-center justify-between py-8">
         {/* Левая часть */}
-        <Link href="/">
+        <Link href="/public">
           <div className="flex items-center gap-4">
             <Image src="/sleeplogo.png" alt="Logo" width={55} height={55} />
             <div>

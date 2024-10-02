@@ -1,3 +1,4 @@
+
 import { PrismaClient } from "@prisma/client";
 import { categories, users } from "./constants";
 
@@ -54,4 +55,6 @@ async function up() {
     }
 }
 
+
 up();
+

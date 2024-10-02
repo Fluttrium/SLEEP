@@ -10,6 +10,7 @@ datasource db {
 
 model User {
   id       Int       @id @default(autoincrement())
+
   email    String    @unique
   name     String
   role     Role      @default(USER)
@@ -20,6 +21,7 @@ model User {
   posts    Post[]
   profile  Profile?
   results  Result[]
+
 }
 
 model Message {

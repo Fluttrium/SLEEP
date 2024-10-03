@@ -5,6 +5,10 @@ import React from "react";
 import Steps from "@/components/shared/steps";
 import {Container} from "@/components/shared/ui/container";
 import {SleepStats} from "@/components/shared/ui/blocks";
+import { GlareCard } from "@/components/ui/glare-card";
+import TeamCard from "@/components/shared/team";
+import Information from "@/components/shared/information";
+
 
 export default function Home() {
     return (
@@ -105,6 +109,9 @@ export default function Home() {
                 </div>
                 <div id='Как мы можем помочь вам'>
                     <Steps/>
+                    <TeamCard/>
+                  <Information/>
+
                 </div>
             </div>
         </>

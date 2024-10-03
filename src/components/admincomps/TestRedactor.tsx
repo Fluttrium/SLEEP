@@ -63,11 +63,14 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
     const [result, setResult] = useState<Results[]>([]);
     const [errorResult, setErrorResult] = useState('');
 
-    if (!test) {
-        return null;
-    }
+    const id = test?.id;
 
-    const id = test.id;
+    // useEffect вызывается независимо от наличия test
+    useEffect(() => {
+        if (test) {
+            fetchQuestions();
+        }
+    }, [test]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -145,6 +148,7 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
     };
 
     const fetchQuestions = async () => {
+        if (!id) return; // Если test не установлен, выходим из функции
         setLoading(true);
         setError('');
 
@@ -197,9 +201,9 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
     };
 
     const fetchResults = async () => {
+        if (!id) return; // Если test не установлен, выходим из функции
         setLoadingResult(true);
         setErrorResult('');
-        const testId = test.id;
 
         try {
             const response = await fetch('/api/admin/tests/result', {
@@ -207,7 +211,7 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ testId }),
+                body: JSON.stringify({ testId: id }),
             });
 
             if (!response.ok) {
@@ -223,9 +227,9 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
         }
     };
 
-    useEffect(() => {
-        fetchQuestions();
-    }, [test]);
+    if (!test) {
+        return null; // Если test отсутствует, не рендерим ничего
+    }
 
     return (
         <div className="relative h-full">
@@ -288,36 +292,24 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>Название</TableHead>
-                                        <TableHead>Диапазон значения</TableHead>
+                                        <TableHead>Диапазон</TableHead>
                                         <TableHead>Ссылки</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {result.length > 0 ? (
-                                        result.map((result: Results) => (
-                                            <TableRow key={result.id}>
-                                                <TableCell>{result.title}</TableCell>
-                                                <TableCell>{result.minScore}-{result.maxScore}</TableCell>
-                                                <TableCell>{result.links}</TableCell>
-                                            </TableRow>
-                                        ))
-                                    ) : (
-                                        <TableRow>
-                                            <TableCell colSpan={2} className="text-center">
-                                                Нет результатов
-                                            </TableCell>
+                                    {loadingResult && <TableRow><TableCell>Загрузка...</TableCell></TableRow>}
+                                    {result.map(res => (
+                                        <TableRow key={res.id}>
+                                            <TableCell>{res.title}</TableCell>
+                                            <TableCell>{res.minScore} - {res.maxScore}</TableCell>
+                                            <TableCell>{res.links.join(", ")}</TableCell>
                                         </TableRow>
-                                    )}
+                                    ))}
                                 </TableBody>
                             </Table>
-
                         </DialogHeader>
                     </DialogContent>
                 </Dialog>
-                <div className='flex items-center gap-5 pr-5'>
-                    {loading && <p>Загрузка...</p>}
-                    {error && <p className='text-red-500'>{error}</p>}
-                </div>
             </div>
             <div className='flex flex-col'>
                 <h2 className='text-xl py-3'>Вопросы к тесту</h2>

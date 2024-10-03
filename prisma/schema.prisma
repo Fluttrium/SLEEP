@@ -60,7 +60,7 @@ model Test {
   id Int @id @default(autoincrement())
 
   title     String // Название теста
-  urltitle  String
+  urltitle  String     @unique
   questions Question[] // Вопросы, связанные с этим тестом
   results   Result[] // Результаты, связанные с этим тестом
   createdAt DateTime   @default(now())

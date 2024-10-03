@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import {Tests} from "@/components/admincomps/TestTable";
+
 
 
 interface DashboardState {
@@ -11,16 +13,16 @@ export const useDashboardStore = create<DashboardState>((set) => ({
     setSection: (section) => set({ section }),
 }));
 
-interface TestRedactorState {
-    isOpen: boolean;
-    testId: string | null; // или другой тип, если необходимо
-    setOpen: (open: boolean) => void;
-    setTestId: (id: string | null) => void;
+interface TestStore {
+    isCreating: boolean;
+    createdTestId: Tests | null;
+    setIsCreating: (value: boolean) => void;
+    setCreatedTestId: (id: Tests| null) => void;
 }
 
-export const useTestRedactorStore = create<TestRedactorState>((set) => ({
-    isOpen: false,
-    testId: null,
-    setOpen: (open) => set({ isOpen: open }),
-    setTestId: (id) => set({ testId: id }),
+export const useTestRedactorStore = create<TestStore>((set) => ({
+    isCreating: false,
+    createdTestId: null,
+    setIsCreating: (value) => set({ isCreating: value }),
+    setCreatedTestId: (test) => set({ createdTestId: test }),
 }));

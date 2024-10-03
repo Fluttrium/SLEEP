@@ -26,9 +26,8 @@ export function TestCreator() {
     const [testName, setTestName] = useState("Тест на апноэ");
     const [testUrl, setTestUrl] = useState("localhost/");
     const [loading, setLoading] = useState(false);
-    const [isCreating, setIsCreating] = useState(false);
-    const [createdTestId, setCreatedTestId] = useState<number | null>(null); // Состояние для хранения ID созданного теста
-    const setOpen = useTestRedactorStore((state) => state.setOpen);
+
+    const {isCreating, createdTestId, setIsCreating, setCreatedTestId} = useTestRedactorStore();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -57,12 +56,12 @@ export function TestCreator() {
             }
 
             const data = await response.json(); // Предполагается, что сервер возвращает данные теста, включая ID
-            setCreatedTestId(data.id); // Сохраните ID созданного теста
+            setCreatedTestId(data); // Сохраните ID созданного теста
             setTestName("");
             setTestUrl("");
             alert("Тест успешно создан");
             setIsCreating(true); // Установите состояние в true, чтобы открыть редактор
-            setOpen(true); // Откройте редактор теста, если это необходимо
+            // Откройте редактор теста, если это необходимо
         } catch (error) {
             console.error("Ошибка:", error);
         } finally {
@@ -81,10 +80,10 @@ export function TestCreator() {
                 <div className='flex text-7xl'>Создание опросников</div>
                 {isCreating ? (
                     <TestRedactor
-                        id={createdTestId} // Передайте ID теста
+                        test={createdTestId}
                         onClose={() => {
                             setIsCreating(false);
-                            setCreatedTestId(null); // Сбросьте ID при закрытии
+                            setCreatedTestId(null);
                         }}
                     />
                 ) : (

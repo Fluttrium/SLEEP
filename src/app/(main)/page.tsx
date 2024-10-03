@@ -8,6 +8,7 @@ import {SleepStats} from "@/components/shared/ui/blocks";
 import { GlareCard } from "@/components/ui/glare-card";
 import TeamCard from "@/components/shared/team";
 import Information from "@/components/shared/information";
+import Footer from "@/components/footer";
 
 
 export default function Home() {
@@ -111,6 +112,7 @@ export default function Home() {
                     <Steps/>
                     <TeamCard/>
                   <Information/>
+                  <Footer/>
 
                 </div>
             </div>

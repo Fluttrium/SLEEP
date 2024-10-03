@@ -50,7 +50,7 @@ export const SleepStats: React.FC = () => {
         backgroundImage="/iStock-896820002-1.jpg"
       />
       <InfoCard
-        title="0,9%"
+        title="100%"
         content="Лиц с инсомнией направляются на когнитивно-поведенческую терапию инсомнии"
         backgroundImage="/iStock-896820002-1.jpg"
       />

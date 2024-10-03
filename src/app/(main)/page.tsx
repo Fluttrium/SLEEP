@@ -9,6 +9,8 @@ import { GlareCard } from "@/components/ui/glare-card";
 import TeamCard from "@/components/shared/team";
 import Information from "@/components/shared/information";
 import Footer from "@/components/footer";
+import { BentoGrid } from "@/components/ui/bento-grid";
+import { BentoGridDemo } from "@/components/ui/bento-gridDemo";
 
 
 export default function Home() {
@@ -105,8 +107,7 @@ export default function Home() {
 
                 {/* Проблемы со сном */}
                 <div id="Проблемы со сном">
-                    <SleepStats/>
-
+                <BentoGridDemo/>
                 </div>
                 <div id='Как мы можем помочь вам'>
                     <Steps/>

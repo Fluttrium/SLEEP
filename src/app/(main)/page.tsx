@@ -11,6 +11,7 @@ import Information from "@/components/shared/information";
 import Footer from "@/components/footer";
 import { BentoGrid } from "@/components/ui/bento-grid";
 import { BentoGridDemo } from "@/components/ui/bento-gridDemo";
+import { FeaturesSectionDemo } from "@/components/ui/services";
 
 
 export default function Home() {
@@ -111,6 +112,7 @@ export default function Home() {
                 </div>
                 <div id='Как мы можем помочь вам'>
                     <Steps/>
+                    <FeaturesSectionDemo/>
                     <TeamCard/>
                   <Information/>
                   <Footer/>

@@ -5,11 +5,11 @@ import {
     BreadcrumbList,
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
-import React, { useEffect, useState } from "react";
-import { Tests } from "@/components/admincomps/TestTable";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import React, {useEffect, useState} from "react";
+import {Tests} from "@/components/admincomps/TestTable";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {Button} from "@/components/ui/button";
+import {Plus} from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -18,8 +18,8 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
+import {Input} from "@/components/ui/input";
 
 interface TestRedactorProps {
     onClose: () => void;
@@ -49,28 +49,28 @@ interface Results {
     testId: number;
 }
 
-export function TestRedactor({ onClose, test }: TestRedactorProps) {
+export function TestRedactor({onClose, test}: TestRedactorProps) {
+
+
     const [questions, setQuestions] = useState<Questions[]>([]);
     const [loading, setLoading] = useState(false);
     const [qloading, setQloading] = useState(false);
     const [oloading, setOloading] = useState(false);
     const [questionstext, setQuestionsText] = useState("");
-    const [optionstext, setOptionsText] = useState("");
+    const [optionstext, setOptionsText,] = useState("");
     const [optionsScore, setOptionsScore] = useState<number>(0);
     const [error, setError] = useState('');
     const [options, setOptions] = useState<Options[]>([]);
+    const id = test!.id;
+
     const [loadingResult, setLoadingResult] = useState(false);
     const [result, setResult] = useState<Results[]>([]);
     const [errorResult, setErrorResult] = useState('');
+    const [resultTitle, setResultTitle] = useState("");
+    const [minScoreResult, setMinScoreResult] = useState(0);
+    const [maxScoreResult, setMaxScoreResult] = useState(0);
+    const [linksResult, setLinksResult] = useState<string[]>([]);
 
-    const id = test?.id;
-
-    // useEffect вызывается независимо от наличия test
-    useEffect(() => {
-        if (test) {
-            fetchQuestions();
-        }
-    }, [test]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -141,14 +141,54 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
             fetchOptions(questionId); // Обновляем список вопросов
         } catch (error) {
             console.error("Ошибка:", error);
-            setError("Ошибка при создании варианта. Пожалуйста, попробуйте еще раз.");
+            setError("Ошибка при создании вопроса. Пожалуйста, попробуйте еще раз.");
         } finally {
             setOloading(false);
         }
     };
 
+
+    const handleSubmitResult = async (e: React.FormEvent,) => {
+        e.preventDefault();
+        setLoadingResult(true);
+
+        if (!optionstext || !optionsScore) {
+            alert("Пожалуйста, заполните все поля");
+            setOloading(false);
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/admin/tests/result/postresult", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    title: resultTitle,
+                    minScore: minScoreResult,
+                    maxScore: maxScoreResult,
+                    links: linksResult,
+                    testId: id
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Ошибка при создании реэультата");
+            }
+
+            setQuestionsText("");
+            alert("Результат успешно создан");
+            fetchResults(); // Обновляем список вопросов
+        } catch (error) {
+            console.error("Ошибка:", error);
+            setError("Ошибка при создании результата. Пожалуйста, попробуйте еще раз.");
+        } finally {
+            setLoadingResult(false);
+        }
+    };
+
     const fetchQuestions = async () => {
-        if (!id) return; // Если test не установлен, выходим из функции
         setLoading(true);
         setError('');
 
@@ -158,7 +198,7 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ testId: id }),
+                body: JSON.stringify({testId: id}),
             });
 
             if (!response.ok) {
@@ -184,7 +224,7 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ questionId }),
+                body: JSON.stringify({questionId}),
             });
 
             if (!response.ok) {
@@ -201,9 +241,9 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
     };
 
     const fetchResults = async () => {
-        if (!id) return; // Если test не установлен, выходим из функции
         setLoadingResult(true);
         setErrorResult('');
+        const testId = test!.id;
 
         try {
             const response = await fetch('/api/admin/tests/result', {
@@ -211,7 +251,7 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ testId: id }),
+                body: JSON.stringify({testId}),
             });
 
             if (!response.ok) {
@@ -227,8 +267,12 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
         }
     };
 
+    useEffect(() => {
+        fetchQuestions();
+    }, [test]);
+
     if (!test) {
-        return null; // Если test отсутствует, не рендерим ничего
+        return null;
     }
 
     return (
@@ -237,7 +281,7 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button size='default'>
-                            <Plus />
+                            <Plus/>
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
@@ -272,7 +316,7 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
                         <BreadcrumbItem>
                             <BreadcrumbLink onClick={onClose}>Список тестов</BreadcrumbLink>
                         </BreadcrumbItem>
-                        <BreadcrumbSeparator />
+                        <BreadcrumbSeparator/>
                         <BreadcrumbItem>
                             <BreadcrumbLink>{test.title}</BreadcrumbLink>
                         </BreadcrumbItem>
@@ -292,79 +336,198 @@ export function TestRedactor({ onClose, test }: TestRedactorProps) {
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>Название</TableHead>
-                                        <TableHead>Диапазон</TableHead>
+                                        <TableHead>Диапазон значения</TableHead>
                                         <TableHead>Ссылки</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {loadingResult && <TableRow><TableCell>Загрузка...</TableCell></TableRow>}
-                                    {result.map(res => (
-                                        <TableRow key={res.id}>
-                                            <TableCell>{res.title}</TableCell>
-                                            <TableCell>{res.minScore} - {res.maxScore}</TableCell>
-                                            <TableCell>{res.links.join(", ")}</TableCell>
+                                    {result.length > 0 ? (
+                                        result.map((result: Results) => (
+                                            <TableRow key={result.id}>
+                                                <TableCell>{result.title}</TableCell>
+                                                <TableCell>{result.minScore}-{result.maxScore}</TableCell>
+                                                <TableCell>{result.links}</TableCell>
+                                            </TableRow>
+                                        ))
+                                    ) : (
+                                        <TableRow>
+                                            <TableCell colSpan={2} className="text-center">
+                                                Нет результатов
+                                            </TableCell>
                                         </TableRow>
-                                    ))}
+                                    )}
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button>Добавить результат</Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Добавление результата для теста</DialogTitle>
+                                            </DialogHeader>
+                                            <form onSubmit={(e) => handleSubmitResult(e)}
+                                                  className="grid gap-4 py-4">
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="text" className="text-right">
+                                                        Название результата
+                                                    </Label>
+                                                    <Input
+                                                        id="text"
+                                                        value={resultTitle}
+                                                        onChange={(e) => setResultTitle(e.target.value)}
+                                                        required
+                                                        className="col-span-3"
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="score" className="text-right">
+                                                        Минимальный бал для результата
+                                                    </Label>
+                                                    <Input
+                                                        id="score"
+                                                        type="number"
+                                                        value={minScoreResult}
+                                                        onChange={(e) => setMinScoreResult(Number(e.target.value))}
+                                                        required
+                                                        className="col-span-3"
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="score" className="text-right">
+                                                        Максимальный бал для результата
+                                                    </Label>
+                                                    <Input
+                                                        id="score"
+                                                        type="number"
+                                                        value={maxScoreResult}
+                                                        onChange={(e) => setMaxScoreResult(Number(e.target.value))}
+                                                        required
+                                                        className="col-span-3"
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="text" className="text-right">
+                                                        Ссылки для страницы представления результата
+                                                    </Label>
+                                                    <Input
+                                                        id="text"
+                                                        value={linksResult}
+                                                        onChange={(e) => setLinksResult([e.target.value])}
+                                                        required
+                                                        className="col-span-3"
+                                                    />
+                                                </div>
+                                                <DialogFooter>
+                                                    <Button type="submit" disabled={loadingResult}>
+                                                        {oloading ? "Создание..." : "Создать результат"}
+                                                    </Button>
+                                                </DialogFooter>
+                                            </form>
+                                        </DialogContent>
+                                    </Dialog>
                                 </TableBody>
                             </Table>
+
                         </DialogHeader>
                     </DialogContent>
                 </Dialog>
+                <div className='flex items-center bg-slate-500 rounded-3xl h-9 w-36 justify-center'>
+                    <h1 className='text-slate-50'>Вопросов: {questions.length}</h1>
+                </div>
             </div>
-            <div className='flex flex-col'>
-                <h2 className='text-xl py-3'>Вопросы к тесту</h2>
-                {questions.length > 0 ? (
-                    questions.map((question) => (
-                        <div key={question.id} className='py-4'>
-                            <p className="text-lg">{question.text}</p>
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button size="sm">Добавить вариант</Button>
-                                </DialogTrigger>
-                                <DialogContent>
-                                    <DialogHeader>
-                                        <DialogTitle>Добавьте вариант к вопросу</DialogTitle>
-                                        <form onSubmit={(e) => handleSubmitOption(e, question.id)} className="grid gap-4 py-4">
-                                            <div className="grid grid-cols-4 items-center gap-4">
-                                                <Label htmlFor="optionText" className="text-right">
-                                                    Текст варианта
-                                                </Label>
-                                                <Input
-                                                    id="optionText"
-                                                    value={optionstext}
-                                                    onChange={(e) => setOptionsText(e.target.value)}
-                                                    required
-                                                    className="col-span-3"
-                                                />
-                                            </div>
-                                            <div className="grid grid-cols-4 items-center gap-4">
-                                                <Label htmlFor="optionScore" className="text-right">
-                                                    Оценка
-                                                </Label>
-                                                <Input
-                                                    id="optionScore"
-                                                    type="number"
-                                                    value={optionsScore}
-                                                    onChange={(e) => setOptionsScore(Number(e.target.value))}
-                                                    required
-                                                    className="col-span-3"
-                                                />
-                                            </div>
-                                            <DialogFooter>
-                                                <Button type="submit" disabled={oloading}>
-                                                    {oloading ? "Создание..." : "Создать вариант"}
-                                                </Button>
-                                            </DialogFooter>
-                                        </form>
-                                    </DialogHeader>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                    ))
-                ) : (
-                    <p>Нет вопросов</p>
-                )}
-            </div>
+
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Текст</TableHead>
+                        <TableHead>Варианты</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {questions.length > 0 ? (
+                        questions.map((question: Questions) => (
+                            <TableRow key={question.id}>
+                                <TableCell>{question.text}</TableCell>
+                                <TableCell>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button onClick={() => fetchOptions(question.id)}>Варианты</Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Варианты ответов</DialogTitle>
+                                                <Table>
+                                                    <TableHeader>
+                                                        <TableRow>
+                                                            <TableHead>Текст</TableHead>
+                                                            <TableHead>Очки</TableHead>
+                                                        </TableRow>
+                                                    </TableHeader>
+                                                    <TableBody>
+                                                        {options.length > 0 ? (
+                                                            options.map((option: Options) => (
+                                                                <TableRow key={option.id}>
+                                                                    <TableCell>{option.text}</TableCell>
+                                                                    <TableCell>{option.score}</TableCell>
+                                                                </TableRow>
+                                                            ))
+                                                        ) : (
+                                                            <TableRow>
+                                                                <TableCell colSpan={2} className="text-center">
+                                                                    Нет вариантов
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        )}
+                                                    </TableBody>
+                                                </Table>
+
+                                                <form onSubmit={(e) => handleSubmitOption(e, question.id)}
+                                                      className="grid gap-4 py-4">
+                                                    <div className="grid grid-cols-4 items-center gap-4">
+                                                        <Label htmlFor="text" className="text-right">
+                                                            Текст варианта
+                                                        </Label>
+                                                        <Input
+                                                            id="text"
+                                                            value={optionstext}
+                                                            onChange={(e) => setOptionsText(e.target.value)}
+                                                            required
+                                                            className="col-span-3"
+                                                        />
+                                                    </div>
+                                                    <div className="grid grid-cols-4 items-center gap-4">
+                                                        <Label htmlFor="score" className="text-right">
+                                                            Очки
+                                                        </Label>
+                                                        <Input
+                                                            id="score"
+                                                            type="number"
+                                                            value={optionsScore}
+                                                            onChange={(e) => setOptionsScore(Number(e.target.value))}
+                                                            required
+                                                            className="col-span-3"
+                                                        />
+                                                    </div>
+                                                    <DialogFooter>
+                                                        <Button type="submit" disabled={oloading}>
+                                                            {oloading ? "Создание..." : "Создать вариант"}
+                                                        </Button>
+                                                    </DialogFooter>
+                                                </form>
+                                            </DialogHeader>
+                                        </DialogContent>
+                                    </Dialog>
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell colSpan={2} className="text-center">
+                                Нет вопросов
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
         </div>
     );
 }

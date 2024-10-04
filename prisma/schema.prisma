@@ -57,8 +57,7 @@ model Category {
 }
 
 model Test {
-  id Int @id @default(autoincrement())
-
+  id        Int        @id @default(autoincrement())
   title     String // Название теста
   urltitle  String     @unique
   questions Question[] // Вопросы, связанные с этим тестом

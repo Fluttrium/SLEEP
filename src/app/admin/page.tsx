@@ -1,10 +1,11 @@
 "use client"
-import Sidebar from "@/components/admincomps/adminsidebar";
+import Sidebar from "@/components/admincomps/main/adminsidebar";
 import { useDashboardStore } from "@/app/admin/_store/adminpageStore";
-import Requests from "@/components/admincomps/Requests";
+import Requests from "@/components/admincomps/main/Requests";
 import { Separator } from "@/components/ui/separator";
-import { Users } from "@/components/admincomps/Users";
-import { Redactor } from "@/components/admincomps/Redactor";
+import { Users } from "@/components/admincomps/main/Users";
+import { Redactor } from "@/components/admincomps/main/Redactor";
+import {TestCreator} from "@/components/admincomps/main/TestCreator";
 
 export default function AdminMainPage() {
     const section = useDashboardStore((state) => state.section);
@@ -17,6 +18,8 @@ export default function AdminMainPage() {
                 return <Requests />;
             case 'redactor':
                 return <Redactor />;
+            case 'test':
+                return <TestCreator/>;
             default:
                 return null;
         }

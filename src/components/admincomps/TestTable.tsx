@@ -11,7 +11,7 @@ import {
 import * as React from "react";
 import {format} from "date-fns";
 import {Button} from "@/components/ui/button";
-import {useTestRedactorStore} from "@/app/admin/_store/adminpageStore"; // Используем для форматирования дат
+import {useTestRedactorStore} from "@/app/admin/_store/adminpageStore";
 
 export interface Tests {
     id: number;

@@ -8,14 +8,7 @@ export async function POST(req: Request) {
         // Логируем полученные данные
         console.log('Полученные данные:', {title, minScore, maxScore, links, testId});
 
-        // Проверка на наличие обязательных полей
-        if (!title || !minScore || !maxScore || !links || !testId) {
-            console.log('Ошибка: обязательные поля отсутствуют');
-            return NextResponse.json(
-                {message: 'Текст ответа и балл обязательны'},
-                {status: 400}
-            );
-        }
+
 
         // Создание нового теста в базе данных
         const newResult = await prisma.result.create({

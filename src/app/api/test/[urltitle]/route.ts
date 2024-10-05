@@ -49,10 +49,12 @@ export async function POST(request: Request) {
             }
         }
 
+        const testId = answers[0].testId; // Получаем testId из первого ответа
+
         // Находим результат на основе общего балла
         const result = await prisma.result.findFirst({
             where: {
-                testId: answers[0].testId, // Убедитесь, что вы передаете testId
+                testId: testId, // Используем testId
                 minScore: { lte: totalScore },
                 maxScore: { gte: totalScore },
             },

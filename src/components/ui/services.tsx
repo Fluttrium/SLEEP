@@ -6,6 +6,7 @@ import createGlobe from "cobe";
 import { motion } from "framer-motion";
 import { IconBrandYoutubeFilled } from "@tabler/icons-react";
 import Link from "next/link";
+import { Title } from "../shared/ui/title";
 
 export function FeaturesSectionDemo() {
   const features = [
@@ -21,27 +22,27 @@ export function FeaturesSectionDemo() {
       title: "Для пациентов",
       description: (
         <>
-          <ul>
-            <li>
-              <Link href="/diagnostics" className="text-blue-500 hover:underline">
-                Диагностика
-              </Link>
-              <ImageGallery images={["/budkovaya_3.png", "/budkovaya_3.png", "/budkovaya_3.png"]} />
-            </li>
-            <li>
-              <Link href="/consultations" className="text-blue-500 hover:underline">
-                Консультации
-              </Link>
-              <ImageGallery images={["/thumb_1534_437_437_0_0_crop.png", "/thumb_1534_437_437_0_0_crop.png", "/thumb_1534_437_437_0_0_crop.png"]} />
-            </li>
-            <li>
-              <Link href="/treatment" className="text-blue-500 hover:underline">
-                Лечение
-              </Link>
-              <ImageGallery images={["/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg"]} />
-            </li>
-          </ul>
-        </>
+        <ul>
+          <li>
+            <Link href="/diagnostics" className="text-black hover:underline">
+              <Title text="Диагностика" size="md" />
+            </Link>
+            <ImageGallery images={["/budkovaya_3.png", "/budkovaya_3.png", "/budkovaya_3.png"]} />
+          </li>
+          <li>
+            <Link href="/consultations" className="text-black hover:underline">
+              <Title text="Консультации" size="md" />
+            </Link>
+            <ImageGallery images={["/thumb_1534_437_437_0_0_crop.png", "/thumb_1534_437_437_0_0_crop.png", "/thumb_1534_437_437_0_0_crop.png"]} />
+          </li>
+          <li>
+            <Link href="/treatment" className="text-black hover:underline">
+              <Title text="Лечение" size="md" />
+            </Link>
+            <ImageGallery images={["/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg"]} />
+          </li>
+        </ul>
+      </>
       ),
       skeleton: <SkeletonTwo />,
       className: "border-b col-span-1 lg:col-span-2 dark:border-neutral-800",
@@ -214,65 +215,33 @@ export const SkeletonThree = () => {
 };
 
 export const SkeletonFour = ({ className }: { className?: string }) => {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-  
-    useEffect(() => {
-      let phi = 0;
-      let animationFrameId: number;
-  
-      if (!canvasRef.current) return;
-  
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
-  
-      const drawCross = () => {
-        if (!ctx) return;
-  
-        // Очищаем холст
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-        // Настройки креста (увеличены в три раза)
-        const crossSize = 150; // Увеличен до 150
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-  
-        // Сохраняем состояние перед вращением
-        ctx.save();
-  
-        // Перемещаем точку вращения в центр холста
-        ctx.translate(centerX, centerY);
-  
-        // Вращаем крест
-        ctx.rotate(phi);
-  
-        // Рисуем крест
-        ctx.fillStyle = "#FF0000";
-        ctx.fillRect(-crossSize / 2, -crossSize * 2, crossSize, crossSize * 4); // Вертикальная часть
-        ctx.fillRect(-crossSize * 2, -crossSize / 2, crossSize * 4, crossSize); // Горизонтальная часть
-  
-        // Восстанавливаем исходное состояние
-        ctx.restore();
-      };
-  
-      const animate = () => {
-        phi += 0.02; // Скорость вращения
-        drawCross();
-        animationFrameId = requestAnimationFrame(animate);
-      };
-  
-      // Устанавливаем размеры холста
-      canvas.width = 600;
-      canvas.height = 600;
-  
-      animate();
-  
-      return () => {
-        // Очищаем анимацию при демонтировании компонента
-        cancelAnimationFrame(animationFrameId);
-      };
-    }, []);
-  
     return (
-      <canvas ref={canvasRef} className={className} />
+      <div className={cn("relative flex flex-col items-center p-8 gap-6", className)}>
+        {/* Картинка для корпоративных программ */}
+        <Image
+          src="/thumb_1534_437_437_0_0_crop.png" // Замените на нужный путь к изображению
+          alt="Корпоративные программы"
+          width={600}
+          height={400}
+          className="rounded-lg object-cover"
+        />
+  
+        {/* Текстовые блоки */}
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-black dark:text-white">
+            Корпоративные программы
+          </h2>
+          <p className="text-lg font-medium text-neutral-700 dark:text-neutral-300">
+            Хороший сон — основа продуктивности
+          </p>
+          <p className="text-md font-normal text-neutral-600 dark:text-neutral-400 mt-2">
+            271 млрд рублей в месяц — потенциальные потери работодателей от недосыпающих сотрудников
+          </p>
+          <p className="text-md font-normal text-neutral-600 dark:text-neutral-400 mt-2">
+            Мы улучшим сон ваших сотрудников и повысим их продуктивность
+          </p>
+        </div>
+      </div>
     );
   };
+  

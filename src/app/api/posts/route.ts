@@ -9,9 +9,12 @@ export async function GET() {
             where: {
                 published: true,
             },
-        })
+            include: {
+                categories: true, // Загрузка категорий вместе с постами
+            },
+        });
         return NextResponse.json(posts); // Возвращаем JSON с данными
-    } catch (error:any) {
+    } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

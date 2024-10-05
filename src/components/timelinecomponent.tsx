@@ -7,11 +7,21 @@ import {Title} from "@/components/shared/ui/title";
 export function TimelineDemo() {
   const data = [
     {
-      title: "2024",
+      title: "1 Этап",
       content: (
         <div>
-          <Title text="Онлайн-проверка" size="lg" className="text-neutral-800 dark:text-neutral-200 mb-2" />
-          <Title text="Потратьте 3 минуты, чтобы оценить свой профиль риска." size="md" className="text-neutral-800 dark:text-neutral-200 mb-8" />
+          <Title text="Онлайн-проверка" size="2xl" className="text-neutral-800 dark:text-neutral-200 mb-2" />
+          <Title text="✅ Потратьте 3 минуты, чтобы оценить свой профиль риска" size="md" className="text-neutral-800 dark:text-neutral-200 mb-8" />
+          <button className="relative inline-flex items-center justify-center p-2 my-2">
+  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"/>
+  <div
+    style={{ fontWeight: 600 }}
+    className="px-8 py-2 bg-white rounded-full text-lg md:text-xl relative group transition duration-200 text-black hover:bg-transparent hover:text-white"
+  >
+    Пройти тест
+  </div>
+</button>
+
           <div className="grid grid-cols-2 gap-4">
           <Image
   src="/iStock-896820002-1.jpg" // Правильный путь
@@ -46,12 +56,12 @@ export function TimelineDemo() {
       ),
     },
     {
-      title: "Early 2023",
+      title: "2 Этап",
       content: (
         <div>
-             <Title text=" Быстрая запись" size="lg" className="text-neutral-800 dark:text-neutral-200 mb-2" />
-             <Title text="Поговорите с нашей медицинской командой бесплатно менее чем за 24 часа.
-          После этого врач-специалист может назначить тест на сон в домашних условиях." size="md" className="text-neutral-800 dark:text-neutral-200 mb-8" />
+             <Title text=" Быстрая запись" size="2xl" className="text-neutral-800 dark:text-neutral-200 mb-2" />
+             <Title text="✅ Поговорите с нашей медицинской командой бесплатно менее чем за 24 часа после прохождения теста
+          " size="md" className="text-neutral-800 dark:text-neutral-200 mb-8" />
           <div className="grid grid-cols-2 gap-4">
             <Image
               src="/iStock-896820002-1.jpg"
@@ -86,28 +96,15 @@ export function TimelineDemo() {
       ),
     },
     {
-      title: "Changelog",
+      title: "3 этап",
       content: (
         <div>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-4">
-            Deployed 5 new components on Aceternity today
-          </p>
+            <Title text="Проверка сна на дому" size="2xl" className="text-neutral-800 dark:text-neutral-200 mb-2" />
           <div className="mb-8">
-            <div className="flex gap-2 items-center text-neutral-700 dark:text-neutral-300 text-xs md:text-sm">
-              ✅ Card grid component
-            </div>
-            <div className="flex gap-2 items-center text-neutral-700 dark:text-neutral-300 text-xs md:text-sm">
-              ✅ Startup template Aceternity
-            </div>
-            <div className="flex gap-2 items-center text-neutral-700 dark:text-neutral-300 text-xs md:text-sm">
-              ✅ Random file upload lol
-            </div>
-            <div className="flex gap-2 items-center text-neutral-700 dark:text-neutral-300 text-xs md:text-sm">
-              ✅ Himesh Reshammiya Music CD
-            </div>
-            <div className="flex gap-2 items-center text-neutral-700 dark:text-neutral-300 text-xs md:text-sm">
-              ✅ Salman Bhai Fan Club registrations open
-            </div>
+          <Title text="✅ Наша команда приедет к вам домой и поможет установить небольшое устройство для записи сна" size="md" className="text-neutral-800 dark:text-neutral-200 mb-8" />
+          <Title text="✅ Ваш врач сообщит результаты вашего обследования посредством медицинской консультации и может предложить вам соответствующее лечение" size="md" className="text-neutral-800 dark:text-neutral-200 mb-8" />
+          <Title text="✅ Пожизненное сопровождениеМы никогда вас не подведем" size="md" className="text-neutral-800 dark:text-neutral-200 mb-8" />
+          <Title text="✅ Наша команда приедет к вам домой и поможет установить небольшое устройство для записи сна" size="md" className="text-neutral-800 dark:text-neutral-200 mb-8" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <Image

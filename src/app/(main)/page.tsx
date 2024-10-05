@@ -5,6 +5,14 @@ import React from "react";
 import Steps from "@/components/shared/steps";
 import {Container} from "@/components/shared/ui/container";
 import {SleepStats} from "@/components/shared/ui/blocks";
+import { GlareCard } from "@/components/ui/glare-card";
+import TeamCard from "@/components/shared/team";
+import Information from "@/components/shared/information";
+import Footer from "@/components/footer";
+import { BentoGrid } from "@/components/ui/bento-grid";
+import { BentoGridDemo } from "@/components/ui/bento-gridDemo";
+import { FeaturesSectionDemo } from "@/components/ui/services";
+
 
 export default function Home() {
     return (
@@ -100,11 +108,15 @@ export default function Home() {
 
                 {/* Проблемы со сном */}
                 <div id="Проблемы со сном">
-                    <SleepStats/>
-
+                <BentoGridDemo/>
                 </div>
                 <div id='Как мы можем помочь вам'>
                     <Steps/>
+                    <FeaturesSectionDemo/>
+                    <TeamCard/>
+                  <Information/>
+                  <Footer/>
+
                 </div>
             </div>
         </>

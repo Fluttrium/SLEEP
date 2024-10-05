@@ -1,6 +1,8 @@
 import React from 'react';
 import { CheckCircle } from 'lucide-react'; // Используем Lucide для галочки
-import { Title } from './title';
+import { Title } from './ui/title';
+
+
 // Импорт заголовка
 
 interface CardProps {
@@ -50,7 +52,7 @@ export const SleepStats: React.FC = () => {
         backgroundImage="/iStock-896820002-1.jpg"
       />
       <InfoCard
-        title="100%"
+        title="0,9%"
         content="Лиц с инсомнией направляются на когнитивно-поведенческую терапию инсомнии"
         backgroundImage="/iStock-896820002-1.jpg"
       />

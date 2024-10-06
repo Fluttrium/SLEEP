@@ -22,22 +22,23 @@ export function FeaturesSectionDemo() {
       title: "Для пациентов",
       description: (
         <>
-        <ul>
+        <p>Мы собрали все необходимые консультации, методы диагностики и эффективного лечения нарушений сна.</p>
+        <ul className="mt-4">
           <li>
-            <Link href="/diagnostics" className="text-black hover:underline">
+            <Link href="https://telegra.ph/Polisomnografiya-07-27" className="text-black hover:underline">
               <Title text="Диагностика" size="md" />
             </Link>
             <ImageGallery images={["/budkovaya_3.png", "/budkovaya_3.png", "/budkovaya_3.png"]} />
           </li>
           <li>
-            <Link href="/consultations" className="text-black hover:underline">
-              <Title text="Консультации" size="md" />
+            <Link href="/consultations" className="text-black hover:underline mt-2">
+              <Title text="Консультации" size="md" className="mt-4"/>
             </Link>
             <ImageGallery images={["/thumb_1534_437_437_0_0_crop.png", "/thumb_1534_437_437_0_0_crop.png", "/thumb_1534_437_437_0_0_crop.png"]} />
           </li>
           <li>
             <Link href="/treatment" className="text-black hover:underline">
-              <Title text="Лечение" size="md" />
+              <Title text="Лечение" size="md" className="mt-4"/>
             </Link>
             <ImageGallery images={["/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg"]} />
           </li>
@@ -65,14 +66,11 @@ export function FeaturesSectionDemo() {
   ];
 
   return (
-    <div className="relative z-20 py-10 lg:py-40 max-w-7xl mx-auto">
+    <div className="relative z-20 py-2 lg:py-40 max-w-7xl mx-auto">
       <div className="px-8">
         <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-black dark:text-white">
           Наши услуги
         </h4>
-        <p className="text-sm lg:text-base max-w-2xl my-4 mx-auto text-neutral-500 text-center font-normal dark:text-neutral-300">
-          Мы собрали все необходимые консультации, методы диагностики и эффективного лечения нарушений сна
-        </p>
       </div>
       <div className="relative">
         <div className="grid grid-cols-1 lg:grid-cols-6 mt-12 xl:border rounded-md dark:border-neutral-800">

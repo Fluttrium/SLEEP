@@ -40,22 +40,10 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
       className="w-full bg-white dark:bg-neutral-950 font-sans md:px-10"
       ref={containerRef}
     >
-      <div className="max-w-7xl mx-auto py-20 px-4 md:px-8 lg:px-10">
-        
-        <Title
-          text="Как работает наша программа лечения сна"
-          size="xl"
-          className="mb-4 text-black dark:text-white max-w-4xl"
-        />
-         <Title
-          text="Мы разработали уникальную программу, основанную на последних научных
-          исследованиях в области сна, которая поможет вам улучшить его качество"
-          size="lg"
-          className="mb-4 text-black dark:text-white max-w-4xl"
-        />
+      <div className="max-w-7xl mx-auto py-15 px-4 md:px-8 lg:px-10">
       </div>
 
-      <div ref={ref} className="relative max-w-7xl mx-auto pb-20">
+      <div ref={ref} className="relative max-w-7xl mx-auto pb-50">
         {data.map((item, index) => (
           <div
             key={index}

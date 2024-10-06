@@ -35,7 +35,7 @@ export const NewsCard: React.FC<Props> = ({
           </span>
           <Button variant="secondary" className="text-base font-bold">
             <Plus size={20} className="mr-1" />
-            Читать полностью
+            Читать
           </Button>
         </div>
       </Link>

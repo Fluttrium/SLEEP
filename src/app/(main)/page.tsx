@@ -12,6 +12,7 @@ import Footer from "@/components/footer";
 import { BentoGrid } from "@/components/ui/bento-grid";
 import { BentoGridDemo } from "@/components/ui/bento-gridDemo";
 import { FeaturesSectionDemo } from "@/components/ui/services";
+import { Article } from "@/components/shared/ui/article";
 
 
 export default function Home() {
@@ -29,42 +30,7 @@ export default function Home() {
 
                 {/* Статьи */}
                 <div id="Статьи">
-                    <Container>
-                        <div className="flex gap-[60px]">
-                            <div className="flex flex-col gap-16">
-                                <NewsGroupList
-                                    title="Статьи"
-                                    items={[
-                                        {
-                                            id: 1,
-                                            title: "Апноэ во сне",
-                                            imageUrl: "https://www.periodistadigital.com/wp-content/uploads/2018/06/apnea-del-suen-o.jpg",
-                                            body: "Подробное описание статьи о нарушениях сна."
-                                        },
-                                        {
-                                            id: 2,
-                                            title: "Храп как причина плохого сна",
-                                            imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.jpg",
-                                            body: "Советы по улучшению качества сна."
-                                        },
-                                        {
-                                            id: 3, // Исправлено id
-                                            title: "Храп как причина плохого сна",
-                                            imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.",
-                                            body: "Советы по улучшению качества сна."
-                                        },
-                                        {
-                                            id: 4, // Исправлено id
-                                            title: "Храп как причина плохого сна",
-                                            imageUrl: "https://medportal.ru/pictures/article/c9c96a0b-53f2-409d-93a5-0c227b9a88b3/medium.jpg",
-                                            body: "Советы по улучшению качества сна."
-                                        }
-                                    ]}
-                                    categoryId={0}
-                                />
-                            </div>
-                        </div>
-                    </Container>
+                <Article/>
                 </div>
 
                 {/* Проблемы со сном */}
@@ -73,6 +39,7 @@ export default function Home() {
                 </div>
                 <div id='Как мы можем помочь вам'>
                     <Steps/>
+                    <div id="Услуги"></div>
                     <FeaturesSectionDemo/>
                     <TeamCard/>
                   <Information/>

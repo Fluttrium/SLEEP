@@ -10,17 +10,11 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
-
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    
-   
-   
-
     "@hookform/resolvers": "^3.9.0",
     "@prisma/client": "^5.19.1",
     "@radix-ui/react-checkbox": "^1.1.2",
-
     "@radix-ui/react-context-menu": "^2.2.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
@@ -31,33 +25,20 @@
     "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
     "@radix-ui/react-tooltip": "^1.1.2",
-
-
     "@tabler/core": "^1.0.0-beta21",
-
     "@tabler/icons-react": "^3.19.0",
     "@tanstack/react-table": "^8.20.5",
     "@vavt/v3-extension": "^1.3.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cobe": "^0.6.3",
-    "framer-motion": "^11.11.0",
     "date-fns": "^4.1.0",
     "draft-js": "^0.11.7",
-    "framer-motion": "^11.5.5",
-
+    "framer-motion": "^11.11.1",
     "jose": "^5.9.2",
     "lucide-react": "^0.439.0",
     "md-editor-rt": "^4.20.2",
     "next": "^14.2.13",
-
-    "react": "^18",
-    "react-dom": "^18",
-    "react-element-to-jsx-string": "^15.0.0",
-    "react-icons": "^5.3.0",
-    "react-use": "^17.5.1",
-    "tailwind-merge": "^2.5.3",
-
     "next-swagger-doc": "^0.4.0",
     "radix-ui": "^1.0.1",
     "react": "^18.3.1",
@@ -70,8 +51,7 @@
     "swagger-ui-express": "^5.0.1",
     "swagger-ui-react": "^5.17.14",
     "tabler": "^1.0.0",
-    "tailwind-merge": "^2.5.2",
-
+    "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7",
     "ts-node": "^10.9.2",
     "yamljs": "^0.3.0",

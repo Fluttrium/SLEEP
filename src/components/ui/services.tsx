@@ -1,8 +1,7 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import createGlobe from "cobe";
 import { motion } from "framer-motion";
 import { IconBrandYoutubeFilled } from "@tabler/icons-react";
 import Link from "next/link";
@@ -11,42 +10,43 @@ import { Title } from "../shared/ui/title";
 export function FeaturesSectionDemo() {
   const features = [
     {
+      title: "Для пациентов",
+      description: (
+        
+        <>
+          <ul className="mt-4">
+          <div>Мы собрали все необходимые консультации, методы диагностики и эффективного лечения нарушений сна.</div>
+            <li>
+              <Link href="/treatment" className="text-black hover:underline">
+                <Title text="Лечение" size="md" className="mt-4"/>
+              </Link>
+              <ImageGallery images={["/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg"]} />
+            </li>
+            <li>
+              <Link href="/consultations" className="text-black hover:underline mt-2">
+                <Title text="Консультации" size="md" className="mt-4"/>
+              </Link>
+              <ImageGallery images={["/thumb_1534_437_437_0_0_crop.png", "/thumb_1534_437_437_0_0_crop.png", "/thumb_1534_437_437_0_0_crop.png"]} />
+            </li>
+            <li>
+              <Link href="https://telegra.ph/Polisomnografiya-07-27" className="text-black hover:underline">
+                <Title text="Диагностика" size="md" />
+              </Link>
+              <ImageGallery images={["/budkovaya_3.png", "/budkovaya_3.png", "/budkovaya_3.png"]} />
+            </li>
+          </ul>
+        </>
+      ),
+      skeleton: <SkeletonTwo />,
+      className: "border-b col-span-1 lg:col-span-2 dark:border-neutral-800",
+    },
+    {
       title: "Для Врачей и клиник",
       description:
         "Напишите нам, если вы хотите привлекать больше пациентов с нарушениями сна",
       skeleton: <SkeletonOne />,
       className:
         "col-span-1 lg:col-span-4 border-b lg:border-r dark:border-neutral-800",
-    },
-    {
-      title: "Для пациентов",
-      description: (
-        <>
-        <div>Мы собрали все необходимые консультации, методы диагностики и эффективного лечения нарушений сна.</div>
-        <ul className="mt-4">
-          <li>
-            <Link href="https://telegra.ph/Polisomnografiya-07-27" className="text-black hover:underline">
-              <Title text="Диагностика" size="md" />
-            </Link>
-            <ImageGallery images={["/budkovaya_3.png", "/budkovaya_3.png", "/budkovaya_3.png"]} />
-          </li>
-          <li>
-            <Link href="/consultations" className="text-black hover:underline mt-2">
-              <Title text="Консультации" size="md" className="mt-4"/>
-            </Link>
-            <ImageGallery images={["/thumb_1534_437_437_0_0_crop.png", "/thumb_1534_437_437_0_0_crop.png", "/thumb_1534_437_437_0_0_crop.png"]} />
-          </li>
-          <li>
-            <Link href="/treatment" className="text-black hover:underline">
-              <Title text="Лечение" size="md" className="mt-4"/>
-            </Link>
-            <ImageGallery images={["/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg"]} />
-          </li>
-        </ul>
-      </>
-      ),
-      skeleton: <SkeletonTwo />,
-      className: "border-b col-span-1 lg:col-span-2 dark:border-neutral-800",
     },
     {
       title: "Смотрите наше видео на YouTube",
@@ -161,6 +161,17 @@ const ImageGallery = ({ images }: { images: string[] }) => {
   );
 };
 
+// Остальные компоненты остаются без изменений...
+
+
+export const SkeletonTwo = () => {
+  return (
+    <div className="relative flex flex-col items-start p-8 gap-10 h-full overflow-hidden">
+      {/* TODO: Add custom content for SkeletonTwo */}
+    </div>
+  );
+};
+
 export const SkeletonOne = () => {
   return (
     <div className="relative flex py-8 px-2 gap-10 h-full">
@@ -177,14 +188,6 @@ export const SkeletonOne = () => {
       </div>
       <div className="absolute bottom-0 z-40 inset-x-0 h-60 bg-gradient-to-t from-white dark:from-black via-white dark:via-black to-transparent w-full pointer-events-none" />
       <div className="absolute top-0 z-40 inset-x-0 h-60 bg-gradient-to-b from-white dark:from-black via-transparent to-transparent w-full pointer-events-none" />
-    </div>
-  );
-};
-
-export const SkeletonTwo = () => {
-  return (
-    <div className="relative flex flex-col items-start p-8 gap-10 h-full overflow-hidden">
-      {/* TODO: Add custom content for SkeletonTwo */}
     </div>
   );
 };

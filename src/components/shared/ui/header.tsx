@@ -56,8 +56,11 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                 </div>) : (
                     <div className="flex flex-row space-x-4 ">
                         <div>Опрос</div>
+                        <Link href="/aboutUS">
+                            <div className="cursor-pointer">О нас</div>
+                        </Link>
                         <DropdownMenu>
-                            <DropdownMenuTrigger>O нас</DropdownMenuTrigger>
+                            <DropdownMenuTrigger>Услуги</DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuItem>Онлайн Услуги</DropdownMenuItem>
                                 <DropdownMenuSeparator/>

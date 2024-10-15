@@ -22,7 +22,7 @@ export function FeaturesSectionDemo() {
       title: "Для пациентов",
       description: (
         <>
-        <p>Мы собрали все необходимые консультации, методы диагностики и эффективного лечения нарушений сна.</p>
+        <div>Мы собрали все необходимые консультации, методы диагностики и эффективного лечения нарушений сна.</div>
         <ul className="mt-4">
           <li>
             <Link href="https://telegra.ph/Polisomnografiya-07-27" className="text-black hover:underline">
@@ -103,15 +103,15 @@ const FeatureCard = ({
 
 const FeatureTitle = ({ children }: { children?: React.ReactNode }) => {
   return (
-    <p className="max-w-5xl mx-auto text-left tracking-tight text-black dark:text-white text-xl md:text-2xl md:leading-snug">
+    <div className="max-w-5xl mx-auto text-left tracking-tight text-black dark:text-white text-xl md:text-2xl md:leading-snug">
       {children}
-    </p>
+    </div>
   );
 };
 
 const FeatureDescription = ({ children }: { children?: React.ReactNode }) => {
   return (
-    <p
+    <div
       className={cn(
         "text-sm md:text-base max-w-4xl text-left mx-auto",
         "text-neutral-500 text-center font-normal dark:text-neutral-300",
@@ -119,7 +119,7 @@ const FeatureDescription = ({ children }: { children?: React.ReactNode }) => {
       )}
     >
       {children}
-    </p>
+    </div>
   );
 };
 
@@ -229,15 +229,15 @@ export const SkeletonFour = ({ className }: { className?: string }) => {
           <h2 className="text-2xl font-bold text-black dark:text-white">
             Корпоративные программы
           </h2>
-          <p className="text-lg font-medium text-neutral-700 dark:text-neutral-300">
+          <div className="text-lg font-medium text-neutral-700 dark:text-neutral-300">
             Хороший сон — основа продуктивности
-          </p>
-          <p className="text-md font-normal text-neutral-600 dark:text-neutral-400 mt-2">
+          </div>
+          <div className="text-md font-normal text-neutral-600 dark:text-neutral-400 mt-2">
             271 млрд рублей в месяц — потенциальные потери работодателей от недосыпающих сотрудников
-          </p>
-          <p className="text-md font-normal text-neutral-600 dark:text-neutral-400 mt-2">
+          </div>
+          <div className="text-md font-normal text-neutral-600 dark:text-neutral-400 mt-2">
             Мы улучшим сон ваших сотрудников и повысим их продуктивность
-          </p>
+          </div>
         </div>
       </div>
     );

@@ -1,15 +1,10 @@
-import type {Metadata} from "next";
+"use client"
 import {Montserrat_Alternates} from "next/font/google";
 import "./globals.css";
-import {Header} from "@/components/shared/ui/header";
-
+import {SessionProvider} from "next-auth/react";
 
 const sans = Montserrat_Alternates({subsets: ["cyrillic"], weight: ["900", "800", "600", "200"]});
 
-export const metadata: Metadata = {
-    title: "Михаил Бочкарев",
-    description: "Центр здорового сна",
-};
 
 export default function RootLayout({
                                        children,
@@ -19,9 +14,12 @@ export default function RootLayout({
     return (
         <html lang="ru">
         <body className={sans.className}>
-        <Header hasSearch={false}/>
-        {children}
+        <SessionProvider>
+
+            {children}
+        </SessionProvider>
         </body>
+
         </html>
     );
 }

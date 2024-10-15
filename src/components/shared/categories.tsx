@@ -54,12 +54,12 @@ export const Categories: React.FC<Props> = ({ className }) => {
 
   return (
     <div className="relative">
-      <div className={cn('inline-flex gap-1 bg-secondary p-1 rounded-2xl', className)}>
+      <div className={cn('inline-flex gap-1 bg-secondary p-1 rounded-2xl bg-white', className)}>
         {cats.map(({ name, id }) => (
           <a
             className={cn(
               'flex items-center font-bold h-11 rounded-2xl px-5 cursor-pointer',
-              activeId === id ? 'bg-white shadow-md shadow-gray-200 text-primary' : 'bg-transparent'
+              activeId === id ? 'bg-white border border-blue-600 shadow-md shadow-gray-200 text-primary' : 'bg-transparent'
             )}
             onClick={() => scrollToSection(id)} // Используем scrollToSection
             key={id}

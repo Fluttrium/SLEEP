@@ -12,6 +12,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import {Label} from "@/components/ui/label";
+import {useSession} from "next-auth/react";
 
 interface Question {
     id: number;
@@ -39,6 +40,10 @@ export default function Page({params}: { params: { urltitle: string } }) {
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
     const [answers, setAnswers] = useState<{ questionId: number; optionId: number }[]>([]);
     const [resultTitle, setResultTitle] = useState<string | null>(null);
+    const {data: session} = useSession(); // Извлекаем сессию
+
+    // Проверка наличия сессии
+    const userId = session?.user?.id;
 
     useEffect(() => {
         const fetchTest = async () => {
@@ -85,7 +90,7 @@ export default function Page({params}: { params: { urltitle: string } }) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({answers: updatedAnswers}),
+                body: JSON.stringify({answers: updatedAnswers, userId: userId}), // Используем userId
             });
 
             if (response.ok) {
@@ -97,7 +102,7 @@ export default function Page({params}: { params: { urltitle: string } }) {
         }
     };
 
-
+    // Проверки для отображения UI
     if (loading) {
         return <div>Загрузка...</div>;
     }
@@ -111,7 +116,11 @@ export default function Page({params}: { params: { urltitle: string } }) {
     }
 
     if (resultTitle !== null) {
-        return <div>Ваш результат: {resultTitle}</div>;
+        return (
+            <div>
+                <div>Ваш результат: {resultTitle}</div>
+            </div>
+        );
     }
 
     const currentQuestion = test.questions[currentQuestionIndex];

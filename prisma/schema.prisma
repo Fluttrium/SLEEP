@@ -9,17 +9,63 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  name     String
-  role     Role      @default(USER)
-  password String    @default("sleep2024")
-  phone    String
-  surname  String
-  messages Message[]
-  posts    Post[]
-  profile  Profile?
-  results  Result[] // Связь с результатами пользователя
+  id                String              @id @default(cuid())
+  email             String?             @unique
+  name              String?
+  surname           String?
+  phone             String?
+  emailVerified     DateTime?
+  image             String?
+  role              Role                @default(USER)
+  password          String?
+  messages          Message[]
+  posts             Post[]
+  profile           Profile?
+  results           Result[]
+  accounts          Account[]
+  sessions          Session[]
+  verified          Boolean?            @default(false)
+  provider          String?
+  providerId        String?
+  VerificationToken VerificationToken[] @relation("UserToVerificationToken")
+}
+
+model VerificationToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique // Изменено на String
+  createdAt DateTime @default(now())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, name: "UserToVerificationToken")
+
+  @@unique([id, token])
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  oauth_token_secret String?
+  oauth_token        String?
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Message {
@@ -27,14 +73,14 @@ model Message {
   createdAt DateTime @default(now())
   title     String
   body      String
-  authorId  Int
+  authorId  String
   author    User     @relation(fields: [authorId], references: [id])
 }
 
 model Profile {
   id     Int    @id @default(autoincrement())
   bio    String
-  userId Int    @unique
+  userId String @unique
   user   User   @relation(fields: [userId], references: [id])
 }
 
@@ -45,7 +91,7 @@ model Post {
   title      String
   body       String
   published  Boolean    @default(false)
-  authorId   Int
+  authorId   String
   author     User       @relation(fields: [authorId], references: [id])
   categories Category[] @relation("CategoryToPost")
 }
@@ -58,40 +104,40 @@ model Category {
 
 model Test {
   id        Int        @id @default(autoincrement())
-  title     String // Название теста
+  title     String
   urltitle  String     @unique
-  questions Question[] // Вопросы, связанные с этим тестом
-  results   Result[] // Результаты, связанные с этим тестом
+  questions Question[]
+  results   Result[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
 
 model Question {
   id      Int      @id @default(autoincrement())
-  text    String // Текст вопроса
+  text    String
   test    Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
-  testId  Int // Внешний ключ для связи с тестом
-  options Option[] // Варианты ответа
+  testId  Int
+  options Option[]
 }
 
 model Option {
   id         Int      @id @default(autoincrement())
-  text       String // Текст варианта ответа
-  score      Int // Балл, который начисляется за этот вариант ответа
+  text       String
+  score      Int
   question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  questionId Int // Внешний ключ для связи с вопросом
+  questionId Int
 }
 
 model Result {
   id       Int      @id @default(autoincrement())
-  title    String // Название результата
-  minScore Int // Минимальное количество баллов для достижения этого результата
-  maxScore Int // Максимальное количество баллов для достижения этого результата
-  links    String[] // Ссылки на статьи, связанные с этим результатом
+  title    String
+  minScore Int
+  maxScore Int
+  links    String[]
   test     Test     @relation(fields: [testId], references: [id])
-  testId   Int // Внешний ключ для связи с тестом
-  user     User?    @relation(fields: [userId], references: [id]) // Связь с пользователем
-  userId   Int? // Обратите внимание на вопросительный знак
+  testId   Int
+  user     User?    @relation(fields: [userId], references: [id])
+  userId   String?
 }
 
 enum Role {

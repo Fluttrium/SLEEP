@@ -277,10 +277,10 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
 
     return (
         <div className="relative h-full">
-            <div className="absolute bottom-0 right-0 rounded-3xl pr-10 pb-10">
+            <div className="absolute bottom-0 right-0 rounded-3xl pr-10 pb-10 z-50">
                 <Dialog>
                     <DialogTrigger asChild>
-                        <Button size='default'>
+                        <Button size='default' variant='secondary' className='border-blue-700 border-4'>
                             <Plus/>
                         </Button>
                     </DialogTrigger>

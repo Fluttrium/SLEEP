@@ -43,15 +43,23 @@ import {
 
 
 export type Users = {
-    id: string
-    name: string
-    surname: string
-    email: string
-    phone: string
-    statusReport: string
-    statusResult: string
+    id: string;
+    name: string;
+    surname: string;
+    email: string;
+    phone: string;
+    statusReport: string;
+    statusResult: string;
+    messageTitle: string; // Заголовок сообщения
+    messages: {
+        id: number;
+        createdAt: string;
+        title: string;
+        body: string;
+        authorId: string;
+    }[]; // Новый тип для сообщений
+};
 
-}
 
 export const columns: ColumnDef<Users>[] = [
     {
@@ -113,11 +121,16 @@ export const columns: ColumnDef<Users>[] = [
         ),
     },
     {
-        accessorKey: "statusReport",
+        accessorKey: "messages",
         header: "Сообщения",
-        cell: ({row}) => (
-            <div className="capitalize">{row.getValue("statusReport")}</div>
-        ),
+        cell: ({row}) => {
+            const messages: Users['messages'] = row.getValue("messages"); // Используем тип из интерфейса Users
+            return (
+                <div className="capitalize">
+                    {messages.length > 0 ? messages[0].title : "Нет сообщений"}
+                </div>
+            );
+        },
     },
     {
         accessorKey: "statusResult",
@@ -307,38 +320,13 @@ export function Users() {
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    Нет результатов.
+                                    No data.
                                 </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
                 </Table>
             </motion.div>
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} из{" "}
-                    {table.getFilteredRowModel().rows.length} строк выбрано.
-                </div>
-                <div className="flex flex-row items-center space-x-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        Назад
-                    </Button>
-                    <div>{table.getState().pagination.pageIndex + 1}</div>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                    >
-                        Следующая
-                    </Button>
-                </div>
-            </div>
         </motion.div>
     )
 }

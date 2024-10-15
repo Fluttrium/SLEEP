@@ -31,26 +31,30 @@ export default function Home() {
 
                     <Hero/>
                 </div>
+                <div id="Услуги">
+                    <FeaturesSectionDemo/>
+                    </div>
+
+                    {/* Проблемы со сном */}
+                <div id="Нарушение сна">
+                <SleepStats/>
+                </div>
 
                 {/* Статьи */}
                 <div id="Статьи">
                     <Article/>
                 </div>
 
-                {/* Проблемы со сном */}
-                <div id="Проблемы со сном">
-                    <SleepStats/>
-                </div>
-
+               
                 <div id='Как мы можем помочь вам'>
                     <Steps/>
-                    <div id="Услуги"></div>
-                    <FeaturesSectionDemo/>
+                </div>
+                    <div id="Команда">
                     <TeamCard/>
+                    </div>
+                   
                     <Information/>
                     <Footer/>
-
-                </div>
             </div>
         </>
     );

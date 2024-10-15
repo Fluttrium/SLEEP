@@ -38,7 +38,7 @@ export const TopBar: React.FC<Props> = ({ className }) => {
 
   return (
     <motion.div
-      className={cn('fixed top-0 pt-5  flex items-center justify-center shadow-black/5 z-10', className)}
+      className={cn('fixed top-0 pt-5 flex items-center justify-center shadow-black/5 z-50', className)} // Увеличен z-index до 50
       initial={{ scaleY: 0 }}
       animate={controls}
       style={{ transformOrigin: 'top' }} // Задаем точку опоры для анимации

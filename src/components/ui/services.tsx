@@ -1,8 +1,7 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import createGlobe from "cobe";
 import { motion } from "framer-motion";
 import { IconBrandYoutubeFilled } from "@tabler/icons-react";
 import Link from "next/link";
@@ -11,42 +10,69 @@ import { Title } from "../shared/ui/title";
 export function FeaturesSectionDemo() {
   const features = [
     {
+      title: "Для пациентов",
+      description: (
+        <>
+          <p>
+            Мы собрали все необходимые консультации, методы диагностики и
+            эффективного лечения нарушений сна.
+          </p>
+          <ul className="mt-4">
+            <li>
+              <Link
+                href="https://telegra.ph/Polisomnografiya-07-27"
+                className="text-black hover:underline"
+              >
+                <Title text="Диагностика" size="md" />
+              </Link>
+              <ImageGallery
+                images={[
+                  "/budkovaya_3.png",
+                  "/budkovaya_3.png",
+                  "/budkovaya_3.png",
+                ]}
+              />
+            </li>
+            <li>
+              <Link
+                href="/consultations"
+                className="text-black hover:underline mt-2"
+              >
+                <Title text="Консультации" size="md" className="mt-4" />
+              </Link>
+              <ImageGallery
+                images={[
+                  "/thumb_1534_437_437_0_0_crop.png",
+                  "/thumb_1534_437_437_0_0_crop.png",
+                  "/thumb_1534_437_437_0_0_crop.png",
+                ]}
+              />
+            </li>
+            <li>
+              <Link href="/treatment" className="text-black hover:underline">
+                <Title text="Лечение" size="md" className="mt-4" />
+              </Link>
+              <ImageGallery
+                images={[
+                  "/chto-takoe-sipap-terapiya.jpg",
+                  "/chto-takoe-sipap-terapiya.jpg",
+                  "/chto-takoe-sipap-terapiya.jpg",
+                ]}
+              />
+            </li>
+          </ul>
+        </>
+      ),
+      skeleton: <SkeletonTwo />,
+      className: "border-b col-span-1 lg:col-span-2 dark:border-neutral-800",
+    },
+    {
       title: "Для Врачей и клиник",
       description:
         "Напишите нам, если вы хотите привлекать больше пациентов с нарушениями сна",
       skeleton: <SkeletonOne />,
       className:
         "col-span-1 lg:col-span-4 border-b lg:border-r dark:border-neutral-800",
-    },
-    {
-      title: "Для пациентов",
-      description: (
-        <>
-        <p>Мы собрали все необходимые консультации, методы диагностики и эффективного лечения нарушений сна.</p>
-        <ul className="mt-4">
-          <li>
-            <Link href="https://telegra.ph/Polisomnografiya-07-27" className="text-black hover:underline">
-              <Title text="Диагностика" size="md" />
-            </Link>
-            <ImageGallery images={["/budkovaya_3.png", "/budkovaya_3.png", "/budkovaya_3.png"]} />
-          </li>
-          <li>
-            <Link href="/consultations" className="text-black hover:underline mt-2">
-              <Title text="Консультации" size="md" className="mt-4"/>
-            </Link>
-            <ImageGallery images={["/thumb_1534_437_437_0_0_crop.png", "/thumb_1534_437_437_0_0_crop.png", "/thumb_1534_437_437_0_0_crop.png"]} />
-          </li>
-          <li>
-            <Link href="/treatment" className="text-black hover:underline">
-              <Title text="Лечение" size="md" className="mt-4"/>
-            </Link>
-            <ImageGallery images={["/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg"]} />
-          </li>
-        </ul>
-      </>
-      ),
-      skeleton: <SkeletonTwo />,
-      className: "border-b col-span-1 lg:col-span-2 dark:border-neutral-800",
     },
     {
       title: "Смотрите наше видео на YouTube",
@@ -66,7 +92,7 @@ export function FeaturesSectionDemo() {
   ];
 
   return (
-    <div className="relative z-20 py-2 lg:py-40 max-w-7xl mx-auto">
+    <div className="relative z-10 py-2 lg:py-40 max-w-7xl mx-auto"> {/* Установите z-index на 10 */}
       <div className="px-8">
         <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-black dark:text-white">
           Наши услуги
@@ -137,7 +163,7 @@ const ImageGallery = ({ images }: { images: string[] }) => {
       zIndex: 100,
     },
   };
-  
+
   return (
     <div className="flex flex-row flex-wrap gap-4 mt-4">
       {images.map((image, idx) => (
@@ -153,7 +179,7 @@ const ImageGallery = ({ images }: { images: string[] }) => {
             alt={`image-${idx}`}
             width={150}
             height={150}
-            className="rounded-lg object-cover flex-shrink-0"
+            className="rounded-lg object-cover"
           />
         </motion.div>
       ))}
@@ -213,33 +239,32 @@ export const SkeletonThree = () => {
 };
 
 export const SkeletonFour = ({ className }: { className?: string }) => {
-    return (
-      <div className={cn("relative flex flex-col items-center p-8 gap-6", className)}>
-        {/* Картинка для корпоративных программ */}
-        <Image
-          src="/thumb_1534_437_437_0_0_crop.png" // Замените на нужный путь к изображению
-          alt="Корпоративные программы"
-          width={600}
-          height={400}
-          className="rounded-lg object-cover"
-        />
-  
-        {/* Текстовые блоки */}
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-black dark:text-white">
-            Корпоративные программы
-          </h2>
-          <p className="text-lg font-medium text-neutral-700 dark:text-neutral-300">
-            Хороший сон — основа продуктивности
-          </p>
-          <p className="text-md font-normal text-neutral-600 dark:text-neutral-400 mt-2">
-            271 млрд рублей в месяц — потенциальные потери работодателей от недосыпающих сотрудников
-          </p>
-          <p className="text-md font-normal text-neutral-600 dark:text-neutral-400 mt-2">
-            Мы улучшим сон ваших сотрудников и повысим их продуктивность
-          </p>
-        </div>
+  return (
+    <div className={cn("relative flex flex-col items-center p-8 gap-6", className)}>
+      {/* Картинка для корпоративных программ */}
+      <Image
+        src="/thumb_1534_437_437_0_0_crop.png" // Замените на нужный путь к изображению
+        alt="Корпоративные программы"
+        width={600}
+        height={400}
+        className="rounded-lg object-cover"
+      />
+
+      {/* Текстовые блоки */}
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-black dark:text-white">
+          Корпоративные программы
+        </h2>
+        <p className="text-lg font-medium text-neutral-700 dark:text-neutral-300">
+          Хороший сон — основа продуктивности
+        </p>
+        <p className="text-md font-normal text-neutral-600 dark:text-neutral-400 mt-2">
+          271 млрд рублей в месяц — потенциальные потери работодателей от недосыпающих сотрудников
+        </p>
+        <p className="text-md font-normal text-neutral-600 dark:text-neutral-400 mt-2">
+          Мы улучшим сон ваших сотрудников и повысим их продуктивность
+        </p>
       </div>
-    );
-  };
-  
+    </div>
+  );
+};

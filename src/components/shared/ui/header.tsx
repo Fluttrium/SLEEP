@@ -36,7 +36,6 @@ export const Header: React.FC<Props> = ({ className, hasSearch }) => {
     return (
         <header className={cn('border-b bg-background w-full', className)}>
             <Container className="flex items-center justify-between py-4 md:py-8 mx-auto px-4">
-                {/* Бургер-меню для мобильной версии (слева) */}
                 {/* Левая часть */}
                 <Link href="/signin" className="flex items-center gap-2 md:gap-4">
                     <Image src="/sleeplogo.png" alt="Logo" width={50} height={50} />
@@ -47,7 +46,7 @@ export const Header: React.FC<Props> = ({ className, hasSearch }) => {
                 </Link>
 
                 {/* Десктопная версия */}
-                <div className={`hidden md:flex flex-1 mx-4 md:mx-10 ${isOpen ? 'block' : 'hidden'}`}>
+                <div className={`hidden md:flex flex-1 mx-4 md:mx-10`}>
                     {hasSearch ? (
                         <div className="flex-1 mx-4 md:mx-10">
                             <div className="md:hidden">
@@ -116,16 +115,25 @@ export const Header: React.FC<Props> = ({ className, hasSearch }) => {
 
             {/* Меню для мобильной версии */}
             {isOpen && (
-                <div className="md:hidden bg-white shadow-md p-4">
+                <div className="md:hidden bg-white shadow-lg p-4 rounded-b-md">
                     <div className="flex flex-col space-y-2">
-                        <Link href="/aboutUS">О нас</Link>
-                        <Link href="/">Опрос</Link>
-                        <Link href="/signin">Войти</Link>
-                        <Link href="/profile">Личный кабинет</Link>
-                        <Link href="https://telegra.ph/Polisomnografiya-07-27">Методы Диагностики</Link>
-                        <Link href="/">Услуги</Link>
-                        <Link href="/">Врачи</Link>
-                        <Link href="/">Лечение нарушения сна</Link>
+                        <Link href="/aboutUS" className="p-2 rounded hover:bg-gray-100">О нас</Link>
+                        <Link href="/" className="p-2 rounded hover:bg-gray-100">Опрос</Link>
+                        <Link href="/profile" className="p-2 rounded hover:bg-gray-100">Личный кабинет</Link>
+                        <DropdownMenu>
+    <DropdownMenuTrigger className="p-2 rounded hover:bg-gray-100 text-left">Услуги</DropdownMenuTrigger>
+    <DropdownMenuContent className="left-0"> {/* Обеспечивает выравнивание по левому краю */}
+        <DropdownMenuItem>Онлайн Услуги</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+            <Link href="https://telegra.ph/Polisomnografiya-07-27">
+                Методы Диагностики
+            </Link>
+        </DropdownMenuItem>
+    </DropdownMenuContent>
+</DropdownMenu>
+                        <Link href="/" className="p-2 rounded hover:bg-gray-100">Врачи</Link>
+                        <Link href="/" className="p-2 rounded hover:bg-gray-100">Лечение нарушения сна</Link>
                     </div>
                 </div>
             )}

@@ -10,7 +10,20 @@ interface Props {
 
 export const TopBar: React.FC<Props> = ({ className }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const controls = useAnimation();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,6 +48,9 @@ export const TopBar: React.FC<Props> = ({ className }) => {
       controls.start({ scaleY: 0, transition: { duration: 0.5 } });
     }
   }, [isVisible, controls]);
+
+  // Если мобильное устройство, скрываем TopBar
+  if (isMobile) return null;
 
   return (
     <motion.div

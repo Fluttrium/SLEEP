@@ -64,7 +64,11 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                             <DropdownMenuContent>
                                 <DropdownMenuItem>Онлайн Услуги</DropdownMenuItem>
                                 <DropdownMenuSeparator/>
-                                <DropdownMenuItem>Методы Диагностики</DropdownMenuItem>
+                                <DropdownMenuItem>
+  <Link href="https://telegra.ph/Polisomnografiya-07-27">
+    Методы Диагностики
+  </Link>
+</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                         <div>Врачи</div>

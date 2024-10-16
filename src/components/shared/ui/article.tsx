@@ -11,7 +11,7 @@ export const Article: React.FC = () => {
           <div className="flex flex-col md:flex-row gap-6">
               <div className="flex-1">
                   <NewsGroupList
-                      title="Статьи"
+                      title="Здоровый сон"
                       items={[
                           {
                               id: 1,

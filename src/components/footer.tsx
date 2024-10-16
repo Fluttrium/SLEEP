@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebookF, faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
+import { faFacebookF, faTwitter, faInstagram, faTelegram } from "@fortawesome/free-brands-svg-icons"; // Импортируем иконку Telegram
 
 export const Footer: React.FC = () => {
   return (
@@ -11,13 +11,13 @@ export const Footer: React.FC = () => {
         {/* Ссылки */}
         <div className="flex flex-col space-y-4 text-center">
           <Link href="/" className="text-lg font-medium hover:text-blue-500 transition">
-            Home
+            Главная
           </Link>
           <Link href="/take-the-test" className="text-lg font-medium hover:text-blue-500 transition">
-            Take the test
+            Пройти Тест
           </Link>
           <Link href="/doctors" className="text-lg font-medium hover:text-blue-500 transition">
-            Врачи
+            Услуги
           </Link>
         </div>
 
@@ -30,14 +30,8 @@ export const Footer: React.FC = () => {
 
         {/* Социальные сети */}
         <div className="flex space-x-6 pt-4">
-          <Link href="https://facebook.com" target="_blank" aria-label="Facebook">
-            <FontAwesomeIcon icon={faFacebookF} className="text-2xl hover:text-blue-500 transition" />
-          </Link>
-          <Link href="https://twitter.com" target="_blank" aria-label="Twitter">
-            <FontAwesomeIcon icon={faTwitter} className="text-2xl hover:text-blue-500 transition" />
-          </Link>
-          <Link href="https://instagram.com" target="_blank" aria-label="Instagram">
-            <FontAwesomeIcon icon={faInstagram} className="text-2xl hover:text-blue-500 transition" />
+          <Link href="https://web.telegram.org/k/#@Mikhail_V_Bochkarev" target="_blank" aria-label="Telegram">
+            <FontAwesomeIcon icon={faTelegram} className="text-2xl hover:text-blue-500 transition" /> {/* Добавляем иконку Telegram */}
           </Link>
         </div>
       </div>

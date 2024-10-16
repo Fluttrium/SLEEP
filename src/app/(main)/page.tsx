@@ -41,7 +41,7 @@ export default function Home() {
                 </div>
 
                 {/* Статьи */}
-                <div id="Статьи">
+                <div id="Здоровый сон">
                     <Article/>
                 </div>
 

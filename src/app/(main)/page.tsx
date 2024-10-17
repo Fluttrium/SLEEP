@@ -14,6 +14,7 @@ import {BentoGrid} from "@/components/ui/bento-grid";
 import {BentoGridDemo} from "@/components/ui/bento-gridDemo";
 import {FeaturesSectionDemo} from "@/components/ui/services";
 import {Article} from "@/components/shared/ui/article";
+import {PostPageComp} from "@/components/postsforuser/PostPageComp";
 
 
 
@@ -32,6 +33,7 @@ export default function Home() {
                     <Hero/>
                 </div>
                 <div id="Услуги">
+
                     <FeaturesSectionDemo/>
                     </div>
 
@@ -41,15 +43,18 @@ export default function Home() {
                 </div>
 
                 {/* Статьи */}
-                <div id="Здоровый сон">
-                    <Article/>
+                <div id="Статьи">
+                    <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-black dark:text-white py-4">
+                        Изучите проблемы со сном подробнее
+                    </h4>
+                    <PostPageComp/>
                 </div>
 
-               
+
                 <div id='Как мы можем помочь вам'>
                     <Steps/>
                 </div>
-                    <div id="Команда">
+                <div id="Команда">
                     <TeamCard/>
                     </div>
                    

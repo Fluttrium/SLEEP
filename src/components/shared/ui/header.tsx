@@ -1,15 +1,15 @@
 'use client';
 
-import { cn } from "@/lib/utils";
+import {cn} from "@/lib/utils";
 import Link from "next/link";
-import { Container } from './container';
+import {Container} from './container';
 import Image from 'next/image';
-import { Button } from "../../ui/button";
-import { ArrowRight, User, Search, Menu, X } from "lucide-react";
-import { SearchInput } from "./search-input";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import {Button} from "../../ui/button";
+import {ArrowRight, User, Search, Menu, X} from "lucide-react";
+import {SearchInput} from "./search-input";
+import {useSession} from "next-auth/react";
+import {useRouter} from "next/navigation";
+import {useState} from "react";
 
 import {
     DropdownMenu,
@@ -24,9 +24,9 @@ interface Props {
     hasSearch: boolean;
 }
 
-export const Header: React.FC<Props> = ({ className, hasSearch }) => {
+export const Header: React.FC<Props> = ({className, hasSearch}) => {
     const router = useRouter();
-    const { data: session } = useSession();
+    const {data: session} = useSession();
     const [isOpen, setIsOpen] = useState(false); // Состояние для бургер-меню
 
     const toggleMenu = () => {
@@ -38,7 +38,7 @@ export const Header: React.FC<Props> = ({ className, hasSearch }) => {
             <Container className="flex items-center justify-between py-4 md:py-8 mx-auto px-4">
                 {/* Левая часть */}
                 <Link href="/signin" className="flex items-center gap-2 md:gap-4">
-                    <Image src="/sleeplogo.png" alt="Logo" width={50} height={50} />
+                    <Image src="/sleeplogo.png" alt="Logo" width={50} height={50}/>
                     <div className="hidden md:block">
                         <h1 className="text-xl md:text-2xl uppercase font-black">Михаил Бочкарев</h1>
                         <p className="text-xs md:text-sm text-gray-400 leading-3">Здоровый сон возможен</p>
@@ -50,10 +50,10 @@ export const Header: React.FC<Props> = ({ className, hasSearch }) => {
                     {hasSearch ? (
                         <div className="flex-1 mx-4 md:mx-10">
                             <div className="md:hidden">
-                                <Search size={24} className="text-gray-500" />
+                                <Search size={24} className="text-gray-500"/>
                             </div>
                             <div className="hidden md:block">
-                                <SearchInput />
+                                <SearchInput/>
                             </div>
                         </div>
                     ) : (
@@ -66,7 +66,7 @@ export const Header: React.FC<Props> = ({ className, hasSearch }) => {
                                 <DropdownMenuTrigger>Услуги</DropdownMenuTrigger>
                                 <DropdownMenuContent>
                                     <DropdownMenuItem>Онлайн Услуги</DropdownMenuItem>
-                                    <DropdownMenuSeparator />
+                                    <DropdownMenuSeparator/>
                                     <DropdownMenuItem>
                                         <Link href="https://telegra.ph/Polisomnografiya-07-27">
                                             Методы Диагностики
@@ -85,13 +85,16 @@ export const Header: React.FC<Props> = ({ className, hasSearch }) => {
                     {!session ? (
                         <Link href='/signin'>
                             <Button variant="outline" className="flex items-center gap-1 text-xs md:text-sm">
-                                <User size={14} />
+                                <User size={14}/>
                                 <span className="hidden md:inline">Войти</span>
                             </Button>
                         </Link>
                     ) : (
-                        <Button className="flex items-center gap-1 text-xs md:text-sm" variant='outline' onClick={() => { router.push('/profile') }}>
-                            <User size={14} />
+                        <Button className="flex items-center gap-1 text-xs md:text-sm" variant='outline'
+                                onClick={() => {
+                                    router.push('/profile')
+                                }}>
+                            <User size={14}/>
                             <span className="hidden md:inline">Личный кабинет</span>
                         </Button>
                     )}
@@ -101,13 +104,13 @@ export const Header: React.FC<Props> = ({ className, hasSearch }) => {
                             <Button type="submit" className="w-full h-8 md:h-10 text-xs md:text-sm">
                                 <span className="hidden md:inline">Пройти тест</span>
                                 <span className="md:hidden">Тест</span>
-                                <ArrowRight className="w-4 md:w-5 ml-1 md:ml-2" />
+                                <ArrowRight className="w-4 md:w-5 ml-1 md:ml-2"/>
                             </Button>
                         </Link>
                     </div>
                     <div className="md:hidden ml-auto">
                         <Button variant="outline" onClick={toggleMenu}>
-                            {isOpen ? <X size={24} /> : <Menu size={24} />}
+                            {isOpen ? <X size={24}/> : <Menu size={24}/>}
                         </Button>
                     </div>
                 </div>
@@ -121,17 +124,18 @@ export const Header: React.FC<Props> = ({ className, hasSearch }) => {
                         <Link href="/" className="p-2 rounded hover:bg-gray-100">Опрос</Link>
                         <Link href="/profile" className="p-2 rounded hover:bg-gray-100">Личный кабинет</Link>
                         <DropdownMenu>
-    <DropdownMenuTrigger className="p-2 rounded hover:bg-gray-100 text-left">Услуги</DropdownMenuTrigger>
-    <DropdownMenuContent className="left-0"> {/* Обеспечивает выравнивание по левому краю */}
-        <DropdownMenuItem>Онлайн Услуги</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-            <Link href="https://telegra.ph/Polisomnografiya-07-27">
-                Методы Диагностики
-            </Link>
-        </DropdownMenuItem>
-    </DropdownMenuContent>
-</DropdownMenu>
+                            <DropdownMenuTrigger
+                                className="p-2 rounded hover:bg-gray-100 text-left">Услуги</DropdownMenuTrigger>
+                            <DropdownMenuContent className="left-0"> {/* Обеспечивает выравнивание по левому краю */}
+                                <DropdownMenuItem>Онлайн Услуги</DropdownMenuItem>
+                                <DropdownMenuSeparator/>
+                                <DropdownMenuItem>
+                                    <Link href="https://telegra.ph/Polisomnografiya-07-27">
+                                        Методы Диагностики
+                                    </Link>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                         <Link href="/" className="p-2 rounded hover:bg-gray-100">Врачи</Link>
                         <Link href="/" className="p-2 rounded hover:bg-gray-100">Лечение нарушения сна</Link>
                     </div>

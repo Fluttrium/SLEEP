@@ -65,7 +65,10 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                             <DropdownMenu>
                                 <DropdownMenuTrigger>Услуги</DropdownMenuTrigger>
                                 <DropdownMenuContent>
-                                    <DropdownMenuItem>Онлайн Услуги</DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                    <Link href="/online-service">
+                                <div className="cursor-pointer">Онлайн Услуги</div>
+                            </Link></DropdownMenuItem>
                                     <DropdownMenuSeparator/>
                                     <DropdownMenuItem>
                                         <Link href="https://telegra.ph/Polisomnografiya-07-27">
@@ -74,8 +77,24 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
-                            <div>Врачи</div>
-                            <div>Лечение нарушения сна</div>
+                            <Link href="/doctors">
+                                <div className="cursor-pointer">Врачи</div>
+                            </Link>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger>Лечение нарушения сна</DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuItem>
+                                    <Link href="/cpap">
+                                <div className="cursor-pointer">Сипап терапия</div>
+                            </Link></DropdownMenuItem>
+                                    <DropdownMenuSeparator/>
+                                    <DropdownMenuItem>
+                                        <Link href="https://telegra.ph/Polisomnografiya-07-27">
+                                            Методы Диагностики
+                                        </Link>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
                     )}
                 </div>
@@ -124,18 +143,21 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                         <Link href="/" className="p-2 rounded hover:bg-gray-100">Опрос</Link>
                         <Link href="/profile" className="p-2 rounded hover:bg-gray-100">Личный кабинет</Link>
                         <DropdownMenu>
-                            <DropdownMenuTrigger
-                                className="p-2 rounded hover:bg-gray-100 text-left">Услуги</DropdownMenuTrigger>
-                            <DropdownMenuContent className="left-0"> {/* Обеспечивает выравнивание по левому краю */}
-                                <DropdownMenuItem>Онлайн Услуги</DropdownMenuItem>
-                                <DropdownMenuSeparator/>
-                                <DropdownMenuItem>
-                                    <Link href="https://telegra.ph/Polisomnografiya-07-27">
-                                        Методы Диагностики
-                                    </Link>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+  <DropdownMenuTrigger className="p-2 rounded hover:bg-gray-100 text-left">
+    Услуги
+  </DropdownMenuTrigger>
+  <DropdownMenuContent className="left-0">
+      <Link href="/online-service" className="p-2 rounded hover:bg-gray-100">
+        Онлайн курсы
+      </Link>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem>
+      <Link href="https://telegra.ph/Polisomnografiya-07-27">
+        Методы Диагностики
+      </Link>
+    </DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
                         <Link href="/" className="p-2 rounded hover:bg-gray-100">Врачи</Link>
                         <Link href="/" className="p-2 rounded hover:bg-gray-100">Лечение нарушения сна</Link>
                     </div>

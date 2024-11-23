@@ -1,7 +1,7 @@
 "use client"
 import React, {useEffect, useState} from "react";
 import {PostsCard} from "@/components/postsforuser/PostCard";
-import {Progress} from "@/components/ui/progress";
+
 import {useRouter} from "next/navigation";
 
 
@@ -53,7 +53,7 @@ export function PostPageComp() {
     }, []);
 
     if (!posts) {
-        return <Progress value={progress}/>;
+        return <progress value={progress}/>;
     }
 
     const handleCardClick = (title: string) => {

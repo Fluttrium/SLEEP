@@ -54,3 +54,24 @@ export const usePostRedactorStore = create<PostStore>((set) => ({
     setIsCreatingPost: (value) => set({ isCreatingPost: value }),
     setCreatedTestPost: (post) => set({ createdPost: post }),
 }));
+
+interface UserStore {
+    id: string;
+    name: string;
+    surname: string;
+    password?: string; // Если не нужно хранить пароль, сделайте его необязательным
+
+    // Методы для обновления состояния
+    setUser: (user: { id: string; name: string; surname: string; password?: string }) => void;
+    clearUser: () => void;
+}
+
+export const useUserStore = create<UserStore>((set) => ({
+    id: "",
+    name: "",
+    surname: "",
+    password: "",
+    setUser: (user) => set({ id: user.id, name: user.name, surname: user.surname, password: user.password }),
+    // Очистка данных пользователя
+    clearUser: () => set({ id: "", name: "", surname: "", password: "" }),
+}));

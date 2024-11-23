@@ -1,16 +1,16 @@
-import { NextResponse, NextRequest } from "next/server";
-import { SignJWT } from "jose";
-import { PrismaClient, User } from "@prisma/client";
+import {NextResponse, NextRequest} from "next/server";
+import {SignJWT} from "jose";
+import {PrismaClient, User} from "@prisma/client";
 
 // Инициализация Prisma Client
 const prisma = new PrismaClient();
 
 // Функция для получения пользователя по имени (или email)
- async function giveUser(username: string): Promise<User | null> {
+async function giveUser(username: string): Promise<User | null> {
     try {
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
             where: {
-                email: username,  // Замени на 'username', если это используется для аутентификации
+                email: username,
             },
         });
         return user;
@@ -21,35 +21,29 @@ const prisma = new PrismaClient();
 }
 
 export async function POST(request: NextRequest) {
-    const { username, password } = (await request.json()) as { username: string; password: string };
+    const {username, password} = (await request.json()) as { username: string; password: string };
 
     // Получаем учетные данные из базы данных
     const user = await giveUser(username);
 
-    if (user && user.password === password) { // Проверка пароля (учитывай хеширование)
+    if (user && user.password === password) { // Проверка пароля (помните о хешировании паролей)
         try {
             // Создание JWT токена
-            const token = await new SignJWT({ username: user.name })
-                .setProtectedHeader({ alg: "HS256" })
+            const token = await new SignJWT({username: user.name})
+                .setProtectedHeader({alg: "HS256"})
                 .setExpirationTime("30m")
-                .sign(Buffer.from("your_secret_key")); // Замени на твой секретный ключ
+                .sign(Buffer.from("your_secret_key")); // Замените на ваш секретный ключ
 
             // Установка токена в HTTP-only cookie
-            const response = NextResponse.json({ message: "Authentication successful" });
-            response.cookies.set("token", token, { httpOnly: true, path: "/" });
+            const response = NextResponse.json( user);
+            response.cookies.set("token", token, {httpOnly: true, path: "/"});
 
-            return response;
+            return response; // Возвращаем объект user в ответе
         } catch (error) {
-            console.error("Error signing token:", error);
-            return NextResponse.json(
-                { message: "Error creating token" },
-                { status: 500 }
-            );
+            console.error("Ошибка при создании токена:", error);
+            return NextResponse.json({message: "Ошибка при создании токена"}, {status: 500});
         }
     } else {
-        return NextResponse.json(
-            { message: "Invalid credentials" },
-            { status: 401 }
-        );
+        return NextResponse.json({message: "Неверные учетные данные"}, {status: 401});
     }
 }

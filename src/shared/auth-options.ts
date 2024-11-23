@@ -84,6 +84,8 @@ export const authOptions: AuthOptions = {
                         verified: true,
                         provider: account?.provider,
                         providerId: account?.providerAccountId,
+                        registrationDate: new Date(),
+
                     },
                 });
             }

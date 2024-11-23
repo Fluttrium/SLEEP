@@ -1,12 +1,11 @@
-"use client";
+"use client"
 
-import { useRouter } from "next/navigation"; // Импортируем useRouter
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {useForm} from "react-hook-form";
+import {z} from "zod";
 
-import { toast } from "@/components/hooks/use-toast";
-import { Button } from "@/components/ui/button";
+import {toast} from "@/components/hooks/use-toast";
+import {Button} from "@/components/ui/button";
 import {
     Form,
     FormControl,
@@ -15,7 +14,9 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import {Input} from "@/components/ui/input";
+import {useUserStore} from "@/app/admin/_store/adminpageStore";
+import {User} from "@prisma/client";
 
 const FormSchema = z.object({
     username: z.string().min(2, {
@@ -27,7 +28,7 @@ const FormSchema = z.object({
 });
 
 export function LoginAdminForm() {
-    const router = useRouter(); // Инициализируем useRouter
+
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -35,31 +36,44 @@ export function LoginAdminForm() {
             password: "",
         },
     });
+    const {setUser, name} = useUserStore();
 
-    const { handleSubmit, formState: { isSubmitting } } = form;
+    const {handleSubmit, formState: {isSubmitting}} = form;
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         try {
-            const response = await fetch('/api/useradmin/login', {
-                method: 'POST',
+            const response = await fetch("/api/useradmin/login", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(data),
             });
 
-            const result = await response.json();
+            const result: User | { message: string } = await response.json();
 
-            if (response.ok) {
+            console.log(result);
+
+            if (response.ok && result && "id" in result) {
+
+                setUser({
+                    id: result.id,
+                    name: result.name ?? "",
+                    surname: result.surname ?? "",
+                    password: "",
+                });
+
                 toast({
                     title: "Успешный вход",
-                    description: result.message,
+                    description: "Вы успешно вошли в систему.",
                 });
-                router.push('/admin'); // Перенаправление на /admin/panel
+
+
+
             } else {
                 toast({
                     title: "Ошибка входа",
-                    description: result.message || "Пожалуйста, проверьте ваши учетные данные.",
+                    description: "Пожалуйста, проверьте ваши учетные данные.",
                 });
             }
         } catch (error) {
@@ -75,30 +89,31 @@ export function LoginAdminForm() {
         <section className="h-screen flex justify-center items-center">
             <div className="w-80 items-center justify-center border-2 border-blue-600 rounded-3xl">
                 <Form {...form}>
-                    <form onSubmit={handleSubmit(onSubmit)} className="justify-center flex space-y-6 flex-col px-3 py-5">
+                    <form onSubmit={handleSubmit(onSubmit)}
+                          className="justify-center flex space-y-6 flex-col px-3 py-5">
                         <FormField
                             control={form.control}
                             name="username"
-                            render={({ field }) => (
-                                <FormItem className='justify-center flex flex-col'>
+                            render={({field}) => (
+                                <FormItem className="justify-center flex flex-col">
                                     <FormLabel className="justify-center">Никнейм</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Логин" {...field} />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
                         <FormField
                             control={form.control}
                             name="password"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Пароль</FormLabel>
                                     <FormControl>
                                         <Input type="password" placeholder="*****" {...field} />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />

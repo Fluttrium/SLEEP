@@ -1,0 +1,11 @@
+/*
+  Warnings:
+
+  - A unique constraint covering the columns `[userId]` on the table `VerificationToken` will be added. If there are existing duplicate values, this will fail.
+
+*/
+-- AlterTable
+ALTER TABLE "VerificationToken" ALTER COLUMN "token" SET DATA TYPE TEXT;
+
+-- CreateIndex
+CREATE UNIQUE INDEX "VerificationToken_userId_key" ON "VerificationToken"("userId");

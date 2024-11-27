@@ -16,7 +16,7 @@ import {useTestRedactorStore} from "@/app/admin/_store/adminpageStore";
 export interface Tests {
     id: number;
     title: string;
-    urltitle:string;
+    urltitle: string;
     questions: any[]; // предполагается, что массив вопросов будет возвращен с сервера
     createdAt: string;
     updatedAt: string;
@@ -42,9 +42,26 @@ export function TestTable() {
         fetchData();
     }, []);
 
+    const handleDeleteClick = async (testId: number) => {
+        try {
+            const response = await fetch(`/api/admin/tests?id=${testId}`, { // Передаём ID через строку запроса
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error(`Ошибка: ${response.statusText}`);
+            }
+
+            setTests(tests.filter(test => test.id !== testId)); // Обновите локальное состояние
+        } catch (error) {
+            console.error("Ошибка при удалении теста:", error);
+        }
+    };
+
+
     const {setIsCreating, setCreatedTestId} = useTestRedactorStore();
 
-    const handleEditClick = (test:Tests) => {
+    const handleEditClick = (test: Tests) => {
         setCreatedTestId(test); // Установите ID теста для редактирования
         setIsCreating(true); // Откройте редактор
     };
@@ -70,7 +87,9 @@ export function TestTable() {
                             <TableCell
                                 className="text-right">{format(new Date(test.updatedAt), "dd.MM.yyyy HH:mm")}</TableCell>
                             <TableCell>
-                                <Button variant="destructive" size="sm">Удалить</Button>
+                                <Button variant="destructive" size="sm" onClick={() => handleDeleteClick(test.id)}>
+                                    Удалить
+                                </Button>
                             </TableCell>
                             <TableCell>
                                 <Button size="sm" onClick={() => handleEditClick(test)}>Редактировать</Button>

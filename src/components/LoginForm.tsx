@@ -23,7 +23,7 @@ interface SignInResponse {
         email: string;
         name: string;
         role: string;
-    } | null; // Убедитесь, что user может быть null
+    } | null;
 }
 
 export function LoginForm() {

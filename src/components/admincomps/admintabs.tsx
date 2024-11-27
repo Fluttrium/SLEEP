@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button"
+"use client";
+
+import {Button} from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -6,17 +8,31 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/card";
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
 import {
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger,
-} from "@/components/ui/tabs"
+} from "@/components/ui/tabs";
+import {useEffect, useState} from "react";
+import {useSession} from "next-auth/react";
+import {useUserStore} from "@/app/admin/_store/adminpageStore";
 
 export function TabsDemo() {
+    const [name, setName] = useState<string>("");
+    const [nick, setNick] = useState<string>("");
+    const {surname} = useUserStore();
+
+
+
+    const handleSave = () => {
+        console.log("Данные сохранены:", {name, nick});
+        // Здесь можно добавить логику для отправки данных на сервер
+    };
+
     return (
         <Tabs defaultValue="account" className="w-[400px] h-max">
             <TabsList className="grid w-full grid-cols-2">
@@ -24,7 +40,7 @@ export function TabsDemo() {
                 <TabsTrigger value="password">Пароль</TabsTrigger>
             </TabsList>
             <TabsContent className="h-max" value="account">
-                <Card >
+                <Card>
                     <CardHeader>
                         <CardTitle>Аккаунт</CardTitle>
                         <CardDescription>
@@ -34,15 +50,24 @@ export function TabsDemo() {
                     <CardContent className="space-y-7">
                         <div className="space-y-1">
                             <Label htmlFor="name">Имя</Label>
-                            <Input id="name" defaultValue="Василий Васильевич" />
+                            <Input
+                                id="name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor="username">Никнейм</Label>
-                            <Input id="username" defaultValue="@vasya" />
+                            <Input
+                                id="username"
+                                value={nick}
+                                onChange={(e) => setNick(e.target.value)}
+                                placeholder={surname}
+                            />
                         </div>
                     </CardContent>
                     <CardFooter>
-                        <Button>Готово</Button>
+                        <Button onClick={handleSave}>Готово</Button>
                     </CardFooter>
                 </Card>
             </TabsContent>
@@ -57,11 +82,11 @@ export function TabsDemo() {
                     <CardContent className="space-y-7">
                         <div className="space-y-1">
                             <Label htmlFor="current">Текущий пароль</Label>
-                            <Input id="current" type="password" />
+                            <Input id="current" type="password"/>
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor="new">Новый пароль</Label>
-                            <Input id="new" type="password" />
+                            <Input id="new" type="password" placeholder={name}/>
                         </div>
                     </CardContent>
                     <CardFooter>
@@ -70,5 +95,5 @@ export function TabsDemo() {
                 </Card>
             </TabsContent>
         </Tabs>
-    )
+    );
 }

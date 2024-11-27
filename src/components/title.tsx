@@ -81,3 +81,5 @@ export function FocusCards({ cards }: { cards: Card[] }) {
     </div>
   );
 }
+
+export { Title };

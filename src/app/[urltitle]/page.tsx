@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import * as React from "react";
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -11,9 +11,10 @@ import {
     CardTitle,
     CardFooter,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { useSession } from "next-auth/react";
-import { useTestStore } from "@/app/[urltitle]/_store/testStore";
+import {Label} from "@/components/ui/label";
+import {useSession} from "next-auth/react";
+import {useTestStore} from "@/app/[urltitle]/_store/testStore";
+import {Progress} from "@/components/ui/progress";
 
 interface Option {
     id: number;
@@ -22,8 +23,8 @@ interface Option {
     diseaseId?: number;
 }
 
-export default function Page({ params }: { params: { urltitle: string } }) {
-    const { data: session } = useSession();
+export default function Page({params}: { params: { urltitle: string } }) {
+    const {data: session} = useSession();
     const userId = session?.user?.id;
 
     const {
@@ -42,6 +43,12 @@ export default function Page({ params }: { params: { urltitle: string } }) {
     const [error, setError] = useState("");
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
     const [resultTitle, setResultTitle] = useState<string | null>(null);
+    const [progress, setProgress] = React.useState(13)
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => setProgress(80), 300)
+        return () => clearTimeout(timer)
+    }, [])
 
     useEffect(() => {
         const fetchTest = async () => {
@@ -94,7 +101,7 @@ export default function Page({ params }: { params: { urltitle: string } }) {
     };
 
     if (loading) {
-        return <div>Загрузка...</div>;
+        return (<div className="flex h-screen w-screen justify-center items-center"><Progress value={progress} className="w-[60%]" /></div>);
     }
 
     if (error) {

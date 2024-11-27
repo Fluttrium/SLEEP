@@ -37,15 +37,24 @@ export async function POST(req: Request) {
             );
         }
 
-        // Если теста с таким URL нет, создаем новый
+        const lastTest = await prisma.test.findFirst({
+            orderBy: { id: 'desc' }, // Получаем последний тест
+            select: { id: true }, // Только поле id
+        });
+
+        const newId = lastTest ? lastTest.id + 1 : 1; // Если тестов нет, начинаем с 1
+
         const newTest = await prisma.test.create({
             data: {
-                title,
-                urltitle,
+                id: newId,  // Устанавливаем новый id
+                title: title,
+                urltitle: urltitle,
             },
         });
 
-        return NextResponse.json(newTest, {status: 201});
+
+
+        return NextResponse.json( {status: 201});
     } catch (error: unknown) {
         if (error instanceof Error) {
             console.error('Ошибка при создании теста:', error.message);

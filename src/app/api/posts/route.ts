@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
                 title,
                 body: content,
                 published: published || false,
-                author: { connect: { id: authorId } }, // Связываем с автором
+
                 categories: {
                     connect: categoryIds?.map((id: number) => ({ id })), // Связываем с категориями
                 },

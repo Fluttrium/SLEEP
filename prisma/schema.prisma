@@ -27,7 +27,7 @@ model User {
   providerId        String?
   verificationToken VerificationToken[] @relation("UserToVerificationToken")
   registrationDate  DateTime            @default(now())
-  results           Result[]            @relation("UserResults") // Прямая связь
+  disease           Disease[]
   firstTestDate     DateTime?
 }
 
@@ -101,14 +101,21 @@ model Category {
   posts Post[] @relation("CategoryToPost")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
+///////////
+
 model Test {
-  id        Int        @id @default(autoincrement())
+  id        Int        @id
   title     String
   urltitle  String     @unique
   questions Question[]
-  results   Result[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  disease   Disease[]
 }
 
 model Question {
@@ -120,25 +127,21 @@ model Question {
 }
 
 model Option {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   text       String
   score      Int
-  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  question   Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId Int
+  minDisease Disease[] @relation("MinDiseases")
+  maxDisease Disease[] @relation("MaxDiseases")
 }
 
-model Result {
-  id       Int      @id @default(autoincrement())
-  title    String
-  minScore Int
-  maxScore Int
-  links    String[]
-  test     Test     @relation(fields: [testId], references: [id])
-  testId   Int
-  users    User[]   @relation("UserResults") // Прямая связь
-}
-
-enum Role {
-  USER
-  ADMIN
+model Disease {
+  id        Int      @id @default(autoincrement())
+  title     String   @unique
+  testId    Int? // Теперь необязательное поле
+  test      Test?    @relation(fields: [testId], references: [id])
+  users     User[]
+  OptionMin Option[] @relation("MinDiseases")
+  OptionMax Option[] @relation("MaxDiseases")
 }

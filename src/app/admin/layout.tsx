@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Montserrat_Alternates } from "next/font/google";
-import "./style.css";
 
 const sans = Montserrat_Alternates({ subsets: ["cyrillic"], weight: '400' });
 

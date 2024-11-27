@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 
 interface TestRedactorProps {
     onClose: () => void;
@@ -38,15 +39,16 @@ interface Options {
     text: string;
     score: number;
     questionId: number;
+    minDisease: Diseas[];
+    maxDisease: Diseas[];
 }
 
-interface Results {
+
+interface Diseas {
     id: number;
     title: string;
-    minScore: number;
-    maxScore: number;
-    links: string[];
     testId: number;
+    test: Tests | null;
 }
 
 export function TestRedactor({onClose, test}: TestRedactorProps) {
@@ -64,12 +66,30 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
     const id = test!.id;
 
     const [loadingResult, setLoadingResult] = useState(false);
-    const [result, setResult] = useState<Results[]>([]);
+    const [result, setResult] = useState<Diseas[]>([]);
     const [errorResult, setErrorResult] = useState('');
     const [resultTitle, setResultTitle] = useState("");
     const [minScoreResult, setMinScoreResult] = useState(0);
     const [maxScoreResult, setMaxScoreResult] = useState(0);
     const [linksResult, setLinksResult] = useState<string[]>([]);
+
+    const [selectedmaxDiseases, setSelectedmaxDiseases] = useState<number[]>([]);
+    const [selectedminDiseases, setSelectedminDiseases] = useState<number[]>([]);
+
+    const handleminDiseaseSelect = (e: React.ChangeEvent<HTMLInputElement>, diseaseId: number) => {
+        setSelectedminDiseases((prev) =>
+            e.target.checked
+                ? [...prev, diseaseId] // Добавляем выбранное значение
+                : prev.filter((id) => id !== diseaseId) // Убираем, если отменили выбор
+        );
+    };
+    const handlemaxDiseaseSelect = (e: React.ChangeEvent<HTMLInputElement>, diseaseId: number) => {
+        setSelectedmaxDiseases((prev) =>
+            e.target.checked
+                ? [...prev, diseaseId] // Добавляем выбранное значение
+                : prev.filter((id) => id !== diseaseId) // Убираем, если отменили выбор
+        );
+    };
 
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -113,7 +133,7 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
         e.preventDefault();
         setOloading(true);
 
-        if (!optionstext || !optionsScore) {
+        if (!optionstext || !optionsScore ) {
             alert("Пожалуйста, заполните все поля");
             setOloading(false);
             return;
@@ -126,9 +146,11 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    questionId: questionId,
+                    questionId,
                     text: optionstext,
-                    score: optionsScore
+                    score: optionsScore,
+                    maxDisease: selectedmaxDiseases, // Передаем массив ID выбранных диагнозов
+                    minDisease: selectedminDiseases, // Передаем массив ID выбранных диагнозов
                 }),
             });
 
@@ -136,12 +158,14 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                 throw new Error("Ошибка при создании варианта");
             }
 
-            setQuestionsText("");
+            setOptionsText("");
+            setSelectedmaxDiseases([]);
+            setSelectedminDiseases([]);
             alert("Вариант успешно создан");
-            fetchOptions(questionId); // Обновляем список вопросов
+            fetchOptions(questionId); // Обновляем список вариантов
         } catch (error) {
             console.error("Ошибка:", error);
-            setError("Ошибка при создании вопроса. Пожалуйста, попробуйте еще раз.");
+            setError("Ошибка при создании варианта. Пожалуйста, попробуйте еще раз.");
         } finally {
             setOloading(false);
         }
@@ -152,7 +176,7 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
         e.preventDefault();
         setLoadingResult(true);
 
-        if (!optionstext || !optionsScore) {
+        if (!resultTitle) {
             alert("Пожалуйста, заполните все поля");
             setOloading(false);
             return;
@@ -166,9 +190,6 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                 },
                 body: JSON.stringify({
                     title: resultTitle,
-                    minScore: minScoreResult,
-                    maxScore: maxScoreResult,
-                    links: linksResult,
                     testId: id
                 }),
             });
@@ -327,26 +348,22 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                 <h2 className="text-2xl py-5 ">Редактор теста <p className="text-primary text-3xl">{test.title}</p></h2>
                 <Dialog>
                     <DialogTrigger asChild>
-                        <Button onClick={fetchResults}>Результаты</Button>
+                        <Button onClick={fetchResults}>Диагнозы </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>Результаты теста </DialogTitle>
+                            <DialogTitle>Диагнозы теста </DialogTitle>
                             <Table>
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>Название</TableHead>
-                                        <TableHead>Диапазон значения</TableHead>
-                                        <TableHead>Ссылки</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {result.length > 0 ? (
-                                        result.map((result: Results) => (
+                                        result.map((result: Diseas) => (
                                             <TableRow key={result.id}>
                                                 <TableCell>{result.title}</TableCell>
-                                                <TableCell>{result.minScore}-{result.maxScore}</TableCell>
-                                                <TableCell>{result.links}</TableCell>
                                             </TableRow>
                                         ))
                                     ) : (
@@ -362,56 +379,18 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                                         </DialogTrigger>
                                         <DialogContent>
                                             <DialogHeader>
-                                                <DialogTitle>Добавление результата для теста</DialogTitle>
+                                                <DialogTitle>Добавление диагнозов для теста </DialogTitle>
                                             </DialogHeader>
                                             <form onSubmit={(e) => handleSubmitResult(e)}
                                                   className="grid gap-4 py-4">
                                                 <div className="grid grid-cols-4 items-center gap-4">
                                                     <Label htmlFor="text" className="text-right">
-                                                        Название результата
+                                                        Название диагноза
                                                     </Label>
                                                     <Input
                                                         id="text"
                                                         value={resultTitle}
                                                         onChange={(e) => setResultTitle(e.target.value)}
-                                                        required
-                                                        className="col-span-3"
-                                                    />
-                                                </div>
-                                                <div className="grid grid-cols-4 items-center gap-4">
-                                                    <Label htmlFor="score" className="text-right">
-                                                        Минимальный бал для результата
-                                                    </Label>
-                                                    <Input
-                                                        id="score"
-                                                        type="number"
-                                                        value={minScoreResult}
-                                                        onChange={(e) => setMinScoreResult(Number(e.target.value))}
-                                                        required
-                                                        className="col-span-3"
-                                                    />
-                                                </div>
-                                                <div className="grid grid-cols-4 items-center gap-4">
-                                                    <Label htmlFor="score" className="text-right">
-                                                        Максимальный бал для результата
-                                                    </Label>
-                                                    <Input
-                                                        id="score"
-                                                        type="number"
-                                                        value={maxScoreResult}
-                                                        onChange={(e) => setMaxScoreResult(Number(e.target.value))}
-                                                        required
-                                                        className="col-span-3"
-                                                    />
-                                                </div>
-                                                <div className="grid grid-cols-4 items-center gap-4">
-                                                    <Label htmlFor="text" className="text-right">
-                                                        Ссылки для страницы представления результата
-                                                    </Label>
-                                                    <Input
-                                                        id="text"
-                                                        value={linksResult}
-                                                        onChange={(e) => setLinksResult([e.target.value])}
                                                         required
                                                         className="col-span-3"
                                                     />
@@ -450,7 +429,7 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                                 <TableCell>
                                     <Dialog>
                                         <DialogTrigger asChild>
-                                            <Button onClick={() => fetchOptions(question.id)}>Варианты</Button>
+                                            <Button onClick={() => [fetchOptions(question.id), fetchResults()]}>Варианты</Button>
                                         </DialogTrigger>
                                         <DialogContent>
                                             <DialogHeader>
@@ -460,6 +439,8 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                                                         <TableRow>
                                                             <TableHead>Текст</TableHead>
                                                             <TableHead>Очки</TableHead>
+                                                            <TableHead>Отнимает очки у диагноза</TableHead>
+                                                            <TableHead>Прибовляет очки у диагноза</TableHead>
                                                         </TableRow>
                                                     </TableHeader>
                                                     <TableBody>
@@ -468,6 +449,18 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                                                                 <TableRow key={option.id}>
                                                                     <TableCell>{option.text}</TableCell>
                                                                     <TableCell>{option.score}</TableCell>
+                                                                    <TableCell>
+                                                                        {option.minDisease.length > 0
+                                                                            ? option.minDisease.map((disease) => <p
+                                                                                key={disease.id}>{disease.title}</p>)
+                                                                            : "Нет данных"}
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        {option.maxDisease.length > 0
+                                                                            ? option.maxDisease.map((disease) => <p
+                                                                                key={disease.id}>{disease.title}</p>)
+                                                                            : "Нет данных"}
+                                                                    </TableCell>
                                                                 </TableRow>
                                                             ))
                                                         ) : (
@@ -507,6 +500,68 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                                                             className="col-span-3"
                                                         />
                                                     </div>
+                                                    <div className="grid grid-cols-4 items-center gap-4">
+                                                        <Label htmlFor="minDisease" className="text-right">
+                                                            Диагноз к которому прибавляются баллы
+                                                        </Label>
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <Button variant="outline">Выбрать</Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent>
+                                                                {result.length > 0 ? (
+                                                                    result.map((disease) => (
+                                                                        <div key={disease.id}
+                                                                             className="flex items-center gap-2">
+                                                                            <input
+                                                                                type="checkbox"
+                                                                                id={`disease-${disease.id}`}
+                                                                                value={disease.id}
+                                                                                checked={selectedmaxDiseases.includes(disease.id)}
+                                                                                onChange={(e) => handlemaxDiseaseSelect(e, disease.id)}
+                                                                            />
+                                                                            <label
+                                                                                htmlFor={`disease-${disease.id}`}>{disease.title}</label>
+                                                                        </div>
+                                                                    ))
+                                                                ) : (
+                                                                    <p>Нет данных</p>
+                                                                )}
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </div>
+                                                    <div className="grid grid-cols-4 items-center gap-4">
+                                                        <Label htmlFor="minDisease" className="text-right">
+                                                            Диагноз у которого убавляются баллы
+                                                        </Label>
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <Button variant="outline">Выбрать</Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent>
+                                                                {result.length > 0 ? (
+                                                                    result.map((disease) => (
+                                                                        <div key={disease.id}
+                                                                             className="flex items-center gap-2">
+                                                                            <input
+                                                                                type="checkbox"
+                                                                                id={`disease-${disease.id}`}
+                                                                                value={disease.id}
+                                                                                checked={selectedminDiseases.includes(disease.id)}
+                                                                                onChange={(e) => handleminDiseaseSelect(e, disease.id)}
+                                                                            />
+                                                                            <label
+                                                                                htmlFor={`disease-${disease.id}`}>{disease.title}</label>
+                                                                        </div>
+                                                                    ))
+                                                                ) : (
+                                                                    <p>Нет данных</p>
+                                                                )}
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </div>
+
+
                                                     <DialogFooter>
                                                         <Button type="submit" disabled={oloading}>
                                                             {oloading ? "Создание..." : "Создать вариант"}

@@ -7,17 +7,17 @@ export async function POST(request: Request) {
         const { testId } = await request.json();
 
         if (typeof testId !== 'number') {
-            return NextResponse.json({ message: 'Неверный questionId' }, { status: 400 });
+            return NextResponse.json({ message: 'Неверный testId' }, { status: 400 });
         }
 
         // Получаем вопросы, связанные с заданным testId
-        const questions = await prisma.result.findMany({
+        const disease = await prisma.disease.findMany({
             where: {
                 testId: testId,
             },
         });
 
-        return NextResponse.json(questions);
+        return NextResponse.json(disease);
     } catch (error) {
         return NextResponse.json({ message: 'Ошибка при получении данных', error }, { status: 500 });
     }

@@ -1,59 +1,52 @@
 "use client";
-import {useEffect, useState} from "react";
-import * as React from "react";
 
-import {Button} from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import * as React from "react";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
+    CardFooter,
 } from "@/components/ui/card";
-import {Label} from "@/components/ui/label";
-import {useSession} from "next-auth/react";
-
-interface Question {
-    id: number;
-    text: string;
-    options: Option[];
-}
+import { Label } from "@/components/ui/label";
+import { useSession } from "next-auth/react";
+import { useTestStore } from "@/app/[urltitle]/_store/testStore";
 
 interface Option {
     id: number;
     text: string;
     score: number;
+    diseaseId?: number;
 }
 
-interface Test {
-    id: number;
-    title: string;
-    questions: Question[];
-}
+export default function Page({ params }: { params: { urltitle: string } }) {
+    const { data: session } = useSession();
+    const userId = session?.user?.id;
 
-export default function Page({params}: { params: { urltitle: string } }) {
-    const [test, setTest] = useState<Test | null>(null);
+    const {
+        testId,
+        questions,
+        diseases,
+        totalScores,
+        currentQuestionIndex,
+        loadTest,
+        answerQuestion,
+        nextQuestion,
+        getFinalResults,
+    } = useTestStore();
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
-    const [answers, setAnswers] = useState<{ questionId: number; optionId: number }[]>([]);
     const [resultTitle, setResultTitle] = useState<string | null>(null);
-    const {data: session} = useSession(); // Извлекаем сессию
-
-    // Проверка наличия сессии
-    const userId = session?.user?.id;
 
     useEffect(() => {
         const fetchTest = async () => {
             try {
-                const response = await fetch(`/api/test/${params.urltitle}`);
-                if (!response.ok) {
-                    throw new Error("Ошибка загрузки теста");
-                }
-                const data = await response.json();
-                setTest(data);
+                await loadTest(params.urltitle);
             } catch (err: any) {
                 setError(err.message);
             } finally {
@@ -62,47 +55,44 @@ export default function Page({params}: { params: { urltitle: string } }) {
         };
 
         fetchTest();
-    }, [params.urltitle]);
+    }, [params.urltitle, loadTest]);
 
-    const handleAnswerSubmit = async () => {
-        const questionId = test!.questions[currentQuestionIndex].id;
+    const handleAnswerSubmit = () => {
+        const currentQuestion = questions[currentQuestionIndex];
 
         if (selectedOption === null) {
             setError("Выберите вариант ответа");
             return;
         }
 
-        // Добавляем текущий ответ в массив
-        const updatedAnswers = [
-            ...answers,
-            {questionId, optionId: selectedOption, testId: test!.id}, // Добавляем testId
-        ];
-        setAnswers(updatedAnswers);
+        // Находим выбранный вариант
+        const selectedOptionData = currentQuestion.options.find(
+            (option) => option.id === selectedOption
+        );
 
-        // Переходим к следующему вопросу или отправляем результаты, если вопросы закончились
-        if (currentQuestionIndex + 1 < test!.questions.length) {
-            setSelectedOption(null); // Сбрасываем выбранный вариант
-            setCurrentQuestionIndex(currentQuestionIndex + 1);
+        if (selectedOptionData) {
+            // Передаем ответ в Zustand
+            answerQuestion(selectedOptionData);
+        }
+
+        // Переходим к следующему вопросу или показываем результат
+        if (currentQuestionIndex + 1 < questions.length) {
+            setSelectedOption(null);
+            nextQuestion();
         } else {
-            // Отправляем ответы на сервер для обработки
-            const response = await fetch(`/api/test/${params.urltitle}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({answers: updatedAnswers, userId: userId}), // Используем userId
-            });
+            const finalResults = getFinalResults(); // Получаем финальные результаты из Zustand
+            console.log("Итоговые результаты:", finalResults);
 
-            if (response.ok) {
-                const resultData = await response.json();
-                setResultTitle(resultData.title); // Установите заголовок результата
-            } else {
-                setError("Ошибка при отправке ответов");
-            }
+            // Отображаем результат
+            setResultTitle(
+                finalResults
+                    .sort((a, b) => b.score - a.score) // Сортировка по убыванию баллов
+                    .map((disease) => `${disease.title}: ${disease.score}`)
+                    .join(", ")
+            );
         }
     };
 
-    // Проверки для отображения UI
     if (loading) {
         return <div>Загрузка...</div>;
     }
@@ -111,30 +101,33 @@ export default function Page({params}: { params: { urltitle: string } }) {
         return <div>Ошибка: {error}</div>;
     }
 
-    if (!test || test.questions.length === 0) {
-        return <div>Тест или вопросы не найдены</div>;
+    if (!questions.length) {
+        return <div>Тест не найден или не содержит вопросов</div>;
     }
 
-    if (resultTitle !== null) {
-        return (
-            <div>
-                <div>Ваш результат: {resultTitle}</div>
-            </div>
-        );
+    if (resultTitle) {
+        return <div>Ваш результат: {resultTitle}</div>;
     }
 
-    const currentQuestion = test.questions[currentQuestionIndex];
+    const currentQuestion = questions[currentQuestionIndex];
+
+    // Промежуточные результаты
+    const intermediateResults = Object.entries(totalScores)
+        .map(([diseaseId, score]) => {
+            const disease = diseases.find((d) => d.id === parseInt(diseaseId));
+            return disease ? `${disease.title}: ${score}` : null;
+        })
+        .filter(Boolean)
+        .join(", ");
 
     return (
-        <div className='flex flex-col justify-center items-center w-screen h-screen'>
-            {/* Отображаем прогресс прохождения теста */}
+        <div className="flex flex-col justify-center items-center w-screen h-screen">
             <div className="mb-4 text-center font-bold">
-                Вопрос {currentQuestionIndex + 1} из {test.questions.length}
+                Вопрос {currentQuestionIndex + 1} из {questions.length}
             </div>
 
             <Card className="w-[350px]">
                 <CardHeader>
-                    <CardTitle>{test.title}</CardTitle>
                     <CardDescription>{currentQuestion.text}</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -145,7 +138,7 @@ export default function Page({params}: { params: { urltitle: string } }) {
                                 {currentQuestion.options.map((option) => (
                                     <div key={option.id} className="flex items-center">
                                         <input
-                                            type="checkbox"
+                                            type="radio"
                                             id={option.id.toString()}
                                             checked={selectedOption === option.id}
                                             onChange={() => setSelectedOption(option.id)}
@@ -167,6 +160,12 @@ export default function Page({params}: { params: { urltitle: string } }) {
                     <Button onClick={handleAnswerSubmit}>Ответить</Button>
                 </CardFooter>
             </Card>
+
+            {/* Отображение промежуточных результатов */}
+            <div className="mt-8 text-center">
+                <h2 className="font-bold">Промежуточные результаты:</h2>
+                <div>{intermediateResults}</div>
+            </div>
         </div>
     );
 }

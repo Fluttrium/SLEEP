@@ -37,7 +37,7 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
         <header className={cn('border-b bg-background w-full', className)}>
             <Container className="flex items-center justify-between py-4 md:py-8 mx-auto px-4">
                 {/* Левая часть */}
-                <Link href="/signin" className="flex items-center gap-2 md:gap-4">
+                <Link href="/" className="flex items-center gap-2 md:gap-4">
                     <Image src="/sleeplogo.png" alt="Logo" width={50} height={50}/>
                     <div className="hidden md:block">
                         <h1 className="text-xl md:text-2xl uppercase font-black">Asleep</h1>

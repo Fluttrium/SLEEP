@@ -29,6 +29,7 @@ model User {
   registrationDate  DateTime            @default(now())
   disease           Disease[]
   firstTestDate     DateTime?
+  specialty         String?
 }
 
 model VerificationToken {
@@ -104,6 +105,7 @@ model Category {
 enum Role {
   USER
   ADMIN
+  DOCTOR
 }
 
 ///////////
@@ -145,3 +147,15 @@ model Disease {
   OptionMin Option[] @relation("MinDiseases")
   OptionMax Option[] @relation("MaxDiseases")
 }
+
+model CPAPMachine {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+

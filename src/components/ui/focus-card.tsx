@@ -39,14 +39,14 @@ export const Card = React.memo(
           {card.title}
         </div>
         <button className="p-[6px] relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-300 to-primary rounded-[64px]" />
-          <div
-            style={{ fontWeight: 600 }}
-            className="px-[128px] py-10 bg-white rounded-[64px] text-4xl relative group transition duration-200 text-black hover:bg-transparent"
-          >
-            Пройти тест
-          </div>
-        </button>
+  <div className="absolute inset-0 bg-gradient-to-r from-blue-300 to-primary rounded-[64px]" />
+  <div
+    style={{ fontWeight: 600 }}
+    className="px-8 py-4 sm:px-16 sm:py-6 bg-white rounded-[64px] text-xl sm:text-4xl relative group transition duration-200 text-black hover:bg-transparent"
+  >
+    Пройти тест
+  </div>
+</button>
       </div>
     </div>
   )

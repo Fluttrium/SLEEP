@@ -1,5 +1,5 @@
-import {PrismaClient} from "@prisma/client";
-import {diseaseDictionary} from "./constans";
+import { PrismaClient } from "@prisma/client";
+import { diseaseDictionary } from "./constans";
 
 const prisma = new PrismaClient();
 
@@ -69,39 +69,36 @@ async function seed() {
 
         console.log("Создан вопрос:", question1);
 
-        // Добавление других вопросов (например, вопрос 2 и 3, аналогично примеру 1)
         const question2 = await prisma.question.create({
-                data: {
-                    text: "Я часто просыпаюсь ночью и не могу снова заснуть",
-                    testId: test.id,
-                    options: {
-                        create: [
-                            {
-                                text: "Да",
-                                score: 1,
-                                maxDisease: {
-                                    connect: [
-                                        {id: flu.id},
-                                        {id: chronic.id}
-                                    ], // Добавляем баллы к заболеваниям
-                                },
+            data: {
+                text: "Я часто просыпаюсь ночью и не могу снова заснуть",
+                testId: test.id,
+                options: {
+                    create: [
+                        {
+                            text: "Да",
+                            score: 1,
+                            maxDisease: {
+                                connect: [
+                                    {id: flu.id},
+                                    {id: chronic.id}
+                                ], // Добавляем баллы к заболеваниям
                             },
-                            {
-                                text: "Нет",
-                                score: -1,
-                                minDisease: {
-                                    connect: [
-
-                                        {id: syndrome.id},
-                                        {id: apnea.id}
-                                    ],
-                                }
-                            },
-                        ],
-                    },
+                        },
+                        {
+                            text: "Нет",
+                            score: -1,
+                            minDisease: {
+                                connect: [
+                                    {id: syndrome.id},
+                                    {id: apnea.id}
+                                ],
+                            }
+                        },
+                    ],
                 },
-            })
-        ;
+            },
+        });
 
         console.log("Создан вопрос 2:", question2);
 

@@ -1,16 +1,15 @@
-import { TopBar } from '@/components/shared/top-bar';
-import { Container } from '@/components/shared/ui/container';
-import { Title } from '@/components/shared/ui/title';
+// pages/cpap-machines.tsx
+
+'use state';
+import CPAPMachineList from "@/components/cpapmachines";
+import Footer from "@/components/footer";
 
 
-import { Suspense } from 'react';
-
-
-export default async function Home() {
-
-
+export default function CPAPMachinesPage() {
   return (
-    <p>Хуй</p>
-     
+    <div>
+      <CPAPMachineList />
+      <Footer/>
+    </div>
   );
 }

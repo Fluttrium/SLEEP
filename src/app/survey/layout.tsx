@@ -7,8 +7,8 @@ import {Header} from "@/components/shared/ui/header";
 const sans = Montserrat_Alternates({subsets: ["cyrillic"], weight: ["900", "800", "600", "200"]});
 
 export const metadata: Metadata = {
-    title: "Asleep",
-    description: "Здоровый сон возможен",
+    title: "Про нас",
+    description: "Центр здорового сна",
 };
 
 export default function RootLayout({

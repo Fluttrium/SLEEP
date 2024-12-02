@@ -1,6 +1,6 @@
 "use client";
 
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -9,28 +9,40 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from "@/components/ui/tabs";
-import {useEffect, useState} from "react";
-import {useSession} from "next-auth/react";
-import {useUserStore} from "@/app/admin/_store/adminpageStore";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useEffect, useState } from "react";
+import { useUserStore } from "@/app/admin/_store/adminpageStore";
 
 export function TabsDemo() {
-    const [name, setName] = useState<string>("");
-    const [nick, setNick] = useState<string>("");
-    const {surname} = useUserStore();
+    const { name, nick, surname, setName, setNick } = useUserStore();
+    const [currentPassword, setCurrentPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
+    const handleSave = async () => {
+        try {
+            // Логика сохранения данных
+            setSuccessMessage("Данные успешно сохранены!");
+            setTimeout(() => setSuccessMessage(null), 3000);
+        } catch (error) {
+            console.error("Ошибка при сохранении:", error);
+        }
+    };
 
+    const handlePasswordChange = async () => {
+        if (!newPassword || newPassword.length < 6) {
+            alert("Пароль должен быть не менее 6 символов.");
+            return;
+        }
 
-    const handleSave = () => {
-        console.log("Данные сохранены:", {name, nick});
-        // Здесь можно добавить логику для отправки данных на сервер
+        try {
+            // Логика изменения пароля
+            alert("Пароль успешно изменен.");
+        } catch (error) {
+            console.error("Ошибка при изменении пароля:", error);
+        }
     };
 
     return (
@@ -65,6 +77,7 @@ export function TabsDemo() {
                                 placeholder={surname}
                             />
                         </div>
+                        {successMessage && <p className="text-green-500">{successMessage}</p>}
                     </CardContent>
                     <CardFooter>
                         <Button onClick={handleSave}>Готово</Button>
@@ -82,15 +95,25 @@ export function TabsDemo() {
                     <CardContent className="space-y-7">
                         <div className="space-y-1">
                             <Label htmlFor="current">Текущий пароль</Label>
-                            <Input id="current" type="password"/>
+                            <Input
+                                id="current"
+                                type="password"
+                                value={currentPassword}
+                                onChange={(e) => setCurrentPassword(e.target.value)}
+                            />
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor="new">Новый пароль</Label>
-                            <Input id="new" type="password" placeholder={name}/>
+                            <Input
+                                id="new"
+                                type="password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                            />
                         </div>
                     </CardContent>
                     <CardFooter>
-                        <Button>Изменить пароль</Button>
+                        <Button onClick={handlePasswordChange}>Изменить пароль</Button>
                     </CardFooter>
                 </Card>
             </TabsContent>

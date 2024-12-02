@@ -4,7 +4,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import {compare, hashSync} from 'bcrypt';
 import {prisma} from "../../prisma/prisma-client";
 import {User as PrismaUS} from "@prisma/client";
-
+import YandexProvider from "next-auth/providers/yandex";
 
 // Расширение типов next-auth
 declare module "next-auth" {
@@ -30,6 +30,12 @@ export const authOptions: AuthOptions = {
             clientId: process.env.GOOGLE_CLIENT_ID || '',
             clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
         }),
+
+        YandexProvider({
+            clientId: process.env.YANDEX_CLIENT_ID || "",
+            clientSecret: process.env.YANDEX_CLIENT_SECRET || ""
+        }),
+
         CredentialsProvider({
             name: 'Credentials',
             credentials: {

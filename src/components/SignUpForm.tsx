@@ -1,7 +1,7 @@
 "use client"
-import { useForm } from "react-hook-form"
+import {useForm} from "react-hook-form"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import {Button} from "@/components/ui/button"
 import {
     Card,
     CardContent,
@@ -9,12 +9,13 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { zodResolver } from "@hookform/resolvers/zod"
+import {Input} from "@/components/ui/input"
+import {Label} from "@/components/ui/label"
+import {zodResolver} from "@hookform/resolvers/zod"
 import * as z from "zod"
 import {registerUser} from "@/app/actions";
 import {useRouter} from "next/navigation";
+import {signIn} from "next-auth/react";
 
 // Схема валидации с помощью zod
 const formSchema = z.object({
@@ -27,7 +28,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export function SignUpForm() {
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+    const {register, handleSubmit, formState: {errors}} = useForm<FormData>({
         resolver: zodResolver(formSchema),
     });
     const router = useRouter();
@@ -104,13 +105,13 @@ export function SignUpForm() {
                         <Button type="submit" className="w-full">
                             Create an account
                         </Button>
-                        <Button variant="outline" className="w-full">
-                            Sign up with GitHub
+                        <Button variant="outline" className="w-full" onClick={() => signIn("yandex")}>
+                            Войти с помощью яндекс
                         </Button>
                     </div>
                     <div className="mt-4 text-center text-sm">
                         Already have an account?{" "}
-                        <Link href="#" className="underline">
+                        <Link href="/signin" className="underline">
                             Sign in
                         </Link>
                     </div>

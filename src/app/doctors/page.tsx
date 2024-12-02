@@ -1,11 +1,13 @@
 "use client";
-import { Form } from "@/components/Form";
-import { GlareCardDemo } from "@/components/ui/glare-cardDemo2";
+
+import DoctorsList from "@/components/DoctorList";
+import Footer from "@/components/footer";
 
 export default function AdminLogin() {
     return (
     <>
-        <Form/>
+        <DoctorsList/>
+        <Footer/>
         </>
     );
 }

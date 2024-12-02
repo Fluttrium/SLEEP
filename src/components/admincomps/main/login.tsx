@@ -17,6 +17,7 @@ import {
 import {Input} from "@/components/ui/input";
 import {useUserStore} from "@/app/admin/_store/adminpageStore";
 import {User} from "@prisma/client";
+import {useRouter} from 'next/navigation';
 
 const FormSchema = z.object({
     username: z.string().min(2, {
@@ -37,7 +38,7 @@ export function LoginAdminForm() {
         },
     });
     const {setUser, name, surname} = useUserStore();
-
+    const router = useRouter();
     const {handleSubmit, formState: {isSubmitting}} = form;
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -62,6 +63,7 @@ export function LoginAdminForm() {
                     surname: result.surname ?? "",
 
                 });
+                router.push("/admin");
                 console.log(name, surname);
 
                 toast({

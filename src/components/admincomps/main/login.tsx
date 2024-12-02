@@ -36,7 +36,7 @@ export function LoginAdminForm() {
             password: "",
         },
     });
-    const {setUser, name} = useUserStore();
+    const {setUser, name, surname} = useUserStore();
 
     const {handleSubmit, formState: {isSubmitting}} = form;
 
@@ -60,8 +60,9 @@ export function LoginAdminForm() {
                     id: result.id,
                     name: result.name ?? "",
                     surname: result.surname ?? "",
-                    password: "",
+
                 });
+                console.log(name, surname);
 
                 toast({
                     title: "Успешный вход",

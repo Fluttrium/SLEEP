@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Tests } from "@/components/admincomps/TestTable";
 import { Category } from "@prisma/client";
+import {createJSONStorage, persist} from "zustand/middleware";
 
 // Интерфейс для постов
 interface Post {
@@ -56,7 +57,6 @@ export const usePostRedactorStore = create<PostStore>((set, get) => ({
     isPostCreated: () => Boolean(get().createdPost), // Производное состояние
 }));
 
-// Стор для управления данными пользователя
 interface UserStore {
     id: string;
     name: string;
@@ -69,20 +69,29 @@ interface UserStore {
     clearUser: () => void;
 }
 
-export const useUserStore = create<UserStore>((set) => ({
-    id: "",
-    name: "",
-    surname: "",
-    nick: "",
-    setUser: (user) =>
-        set({
-            id: user.id,
-            name: user.name,
-            surname: user.surname,
-            nick: user.nick || "",
+
+export const useUserStore = create<UserStore>()(
+    persist(
+        (set) => ({
+            id: "",
+            name: "",
+            surname: "",
+            nick: "",
+            setUser: (user) =>
+                set({
+                    id: user.id,
+                    name: user.name,
+                    surname: user.surname,
+                    nick: user.nick || "",
+                }),
+            setName: (name) => set({ name }),
+            setNick: (nick) => set({ nick }),
+            setSurname: (surname) => set({ surname }),
+            clearUser: () => set({ id: "", name: "", surname: "", nick: "" }),
         }),
-    setName: (name) => set({ name }),
-    setNick: (nick) => set({ nick }),
-    setSurname: (surname) => set({ surname }),
-    clearUser: () => set({ id: "", name: "", surname: "", nick: "" }),
-}));
+        {
+            name: "user-store",
+            storage: createJSONStorage(() => localStorage),
+        }
+    )
+);

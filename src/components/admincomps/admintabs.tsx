@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -9,17 +9,21 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect, useState } from "react";
-import { useUserStore } from "@/app/admin/_store/adminpageStore";
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {useEffect, useState} from "react";
+import {useUserStore} from "@/app/admin/_store/adminpageStore";
 
 export function TabsDemo() {
-    const { name, nick, surname, setName, setNick } = useUserStore();
+    const {name, nick, surname, setName, setNick} = useUserStore();
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+    useEffect(() => {
+        console.log(name, surname);
+    })
 
     const handleSave = async () => {
         try {
@@ -63,6 +67,7 @@ export function TabsDemo() {
                         <div className="space-y-1">
                             <Label htmlFor="name">Имя</Label>
                             <Input
+                                placeholder={name}
                                 id="name"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
@@ -72,7 +77,7 @@ export function TabsDemo() {
                             <Label htmlFor="username">Никнейм</Label>
                             <Input
                                 id="username"
-                                value={nick}
+                                value={surname}
                                 onChange={(e) => setNick(e.target.value)}
                                 placeholder={surname}
                             />

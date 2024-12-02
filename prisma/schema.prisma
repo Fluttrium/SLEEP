@@ -9,34 +9,35 @@ datasource db {
 }
 
 model User {
-  id                String              @id @default(cuid())
-  email             String?             @unique
+  id                String             @id @default(cuid())
+  email             String?            @unique
   name              String?
   surname           String?
   phone             String?
   emailVerified     DateTime?
   image             String?
-  role              Role                @default(USER)
+  role              Role               @default(USER)
   password          String?
-  messages          Message[]
-  profile           Profile?
-  accounts          Account[]
-  sessions          Session[]
-  verified          Boolean?            @default(false)
+  verified          Boolean?           @default(false)
   provider          String?
   providerId        String?
-  verificationToken VerificationToken[] @relation("UserToVerificationToken")
-  registrationDate  DateTime            @default(now())
-  results           Result[]            @relation("UserResults") // Прямая связь
+  registrationDate  DateTime           @default(now())
   firstTestDate     DateTime?
+  specialty         String?
+  accounts          Account[]
+  messages          Message[]
+  profile           Profile?
+  sessions          Session[]
+  verificationToken VerificationToken? @relation("UserToVerificationToken")
+  Disease           Disease[]
 }
 
 model VerificationToken {
   id        Int      @id @default(autoincrement())
-  token     String   @unique // Изменено на String
+  token     String   @unique
   createdAt DateTime @default(now())
   userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, name: "UserToVerificationToken")
+  user      User     @relation("UserToVerificationToken", fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([id, token])
 }
@@ -102,45 +103,57 @@ model Category {
 }
 
 model Test {
-  id        Int        @id @default(autoincrement())
+  id        Int        @id
   title     String
   urltitle  String     @unique
-  questions Question[]
-  results   Result[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  Disease   Disease[]
+  questions Question[]
 }
 
 model Question {
   id      Int      @id @default(autoincrement())
   text    String
-  test    Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
   testId  Int
   options Option[]
+  test    Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
 }
 
 model Option {
-  id         Int      @id @default(autoincrement())
-  text       String
-  score      Int
-  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  questionId Int
+  id                  Int       @id @default(autoincrement())
+  text                String
+  score               Int
+  questionId          Int
+  question            Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  Disease_MaxDiseases Disease[] @relation("MaxDiseases")
+  Disease_MinDiseases Disease[] @relation("MinDiseases")
 }
 
-model Result {
-  id       Int      @id @default(autoincrement())
-  title    String
-  minScore Int
-  maxScore Int
-  links    String[]
-  test     Test     @relation(fields: [testId], references: [id])
-  testId   Int
-  users    User[]   @relation("UserResults") // Прямая связь
+model CPAPMachine {
+  id          String   @id
+  name        String
+  description String
+  price       Float
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model Disease {
+  id                 Int      @id @default(autoincrement())
+  title              String   @unique
+  testId             Int?
+  Test               Test?    @relation(fields: [testId], references: [id])
+  User               User[]
+  Option_MaxDiseases Option[] @relation("MaxDiseases")
+  Option_MinDiseases Option[] @relation("MinDiseases")
 }
 
 enum Role {
   USER
   ADMIN
+  DOCTOR
 }
 
 model Story {

@@ -11,7 +11,7 @@
     "delete": "ts-node prisma/delete.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.703.0",
+    "@aws-sdk/client-s3": "^3.705.0",
     "@faker-js/faker": "^9.2.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",

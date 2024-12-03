@@ -24,6 +24,16 @@ export function TabsDemo() {
     const [nick, setNick] = useState<string>("");
     const {surname, id} = useUserStore();
     const [image, setImage] = useState<File | null>(null);
+    const [doctorData, setDoctorData] = useState({
+        name: "",
+        surname: "",
+        specialty: "",
+        image: null as File | null,
+        email: "",
+        phone: "",
+        description: "",
+        password: "",
+    });
 
 
     const handleSave = () => {
@@ -31,9 +41,58 @@ export function TabsDemo() {
         // Здесь можно добавить логику для отправки данных на сервер
     };
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setImage(e.target.files[0]);
+    // Обработчик изменения полей формы
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const {id, value, files} = e.target;
+        setDoctorData((prev) => ({
+            ...prev,
+            [id]: files ? files[0] : value, // Если это input type="file", берём первый файл
+        }));
+    };
+
+// Обработчик загрузки данных
+    const handleUploadDoctor = async () => {
+        // Проверка, что изображение обязательно загружено
+        if (!doctorData.image) {
+            alert("Пожалуйста, выберите изображение.");
+            return;
+        }
+
+        // Формируем данные для отправки
+        const formData = new FormData();
+        Object.entries(doctorData).forEach(([key, value]) => {
+            if (value) {
+                formData.append(key, value as string | Blob); // Добавляем только не пустые значения
+            }
+        });
+
+        try {
+            // Отправляем данные на сервер
+            const response = await fetch("/api/admin/adddoctor", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (response.ok) {
+                alert("Доктор успешно добавлен!");
+                // Очищаем форму после успешной отправки
+                setDoctorData({
+                    name: "",
+                    surname: "",
+                    specialty: "",
+                    image: null,
+                    email: "",
+                    phone: "",
+                    description: "",
+                    password: "",
+                });
+            } else {
+                const errorData = await response.json();
+                alert(`Ошибка: ${errorData.message || "Не удалось добавить доктора"}`);
+            }
+        } catch (error) {
+            console.error("Ошибка:", error);
+            alert("Произошла ошибка при добавлении доктора.");
         }
     };
 
@@ -68,11 +127,11 @@ export function TabsDemo() {
     handleSave()
 
     return (
-        <Tabs defaultValue="account" className="w-[400px] h-max">
+        <Tabs defaultValue="account" className="w-[500px] h-max">
             <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="account">Аккаунт</TabsTrigger>
                 <TabsTrigger value="password">Пароль</TabsTrigger>
-                <TabsTrigger value="image">Image</TabsTrigger>
+                <TabsTrigger value="doctor">Добавить доктора</TabsTrigger>
             </TabsList>
             <TabsContent className="h-max" value="account">
                 <Card>
@@ -126,23 +185,91 @@ export function TabsDemo() {
                     </CardContent>
                     <CardFooter>
                         <Button>Изменить пароль</Button>
-                        <Button>Изменить пароль</Button>
                     </CardFooter>
                 </Card>
             </TabsContent>
-            <TabsContent value="image">
+
+            <TabsContent value="doctor">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Image</CardTitle>
+                        <CardTitle>Добавить доктора</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-7">
                         <div className="space-y-1">
-                            <Label htmlFor="new">Новый Image</Label>
-                            <Input id="new" type="file" accept="image/*" onChange={handleImageChange}/>
+                            <Label htmlFor="name">Имя</Label>
+                            <Input
+                                id="name"
+                                type="text"
+                                value={doctorData.name}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <Label htmlFor="surname">Фамилия</Label>
+                            <Input
+                                id="surname"
+                                type="text"
+                                value={doctorData.surname}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <Label htmlFor="specialty">Специальность</Label>
+                            <Input
+                                id="specialty"
+                                type="text"
+                                value={doctorData.specialty}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <Label htmlFor="email">Email</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                value={doctorData.email}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <Label htmlFor="phone">Телефон</Label>
+                            <Input
+                                id="phone"
+                                type="tel"
+                                value={doctorData.phone}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <Label htmlFor="description">Описание</Label>
+                            <Input
+                                id="description"
+                                type="text"
+                                value={doctorData.description}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <Label htmlFor="password">Пароль</Label>
+                            <Input
+                                id="password"
+                                type="password"
+                                value={doctorData.password}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <Label htmlFor="image">Фото</Label>
+                            <Input
+                                id="image"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleInputChange}
+                            />
                         </div>
                     </CardContent>
                     <CardFooter>
-                        <Button onClick={handleUploadImage}>Загрузить фото</Button>
+                        <Button onClick={handleUploadDoctor}>Добавить доктора</Button>
                     </CardFooter>
                 </Card>
             </TabsContent>

@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
+CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN', 'DOCTOR');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -17,6 +17,8 @@ CREATE TABLE "User" (
     "providerId" TEXT,
     "registrationDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "firstTestDate" TIMESTAMP(3),
+    "specialty" TEXT,
+    "description" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -89,6 +91,7 @@ CREATE TABLE "Post" (
     "title" TEXT NOT NULL,
     "body" TEXT NOT NULL,
     "published" BOOLEAN NOT NULL DEFAULT false,
+    "image" TEXT,
 
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
 );
@@ -103,7 +106,7 @@ CREATE TABLE "Category" (
 
 -- CreateTable
 CREATE TABLE "Test" (
-    "id" SERIAL NOT NULL,
+    "id" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
     "urltitle" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -135,9 +138,22 @@ CREATE TABLE "Option" (
 CREATE TABLE "Disease" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
-    "testId" INTEGER NOT NULL,
+    "testId" INTEGER,
 
     CONSTRAINT "Disease_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "CPAPMachine" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
+    "image" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "CPAPMachine_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -189,6 +205,9 @@ CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
 CREATE UNIQUE INDEX "Test_urltitle_key" ON "Test"("urltitle");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Disease_title_key" ON "Disease"("title");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_CategoryToPost_AB_unique" ON "_CategoryToPost"("A", "B");
 
 -- CreateIndex
@@ -234,7 +253,7 @@ ALTER TABLE "Question" ADD CONSTRAINT "Question_testId_fkey" FOREIGN KEY ("testI
 ALTER TABLE "Option" ADD CONSTRAINT "Option_questionId_fkey" FOREIGN KEY ("questionId") REFERENCES "Question"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Disease" ADD CONSTRAINT "Disease_testId_fkey" FOREIGN KEY ("testId") REFERENCES "Test"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Disease" ADD CONSTRAINT "Disease_testId_fkey" FOREIGN KEY ("testId") REFERENCES "Test"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_CategoryToPost" ADD CONSTRAINT "_CategoryToPost_A_fkey" FOREIGN KEY ("A") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;

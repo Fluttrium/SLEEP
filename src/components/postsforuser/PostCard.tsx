@@ -13,7 +13,7 @@ export function PostsCard({ author, title, description, categories, image }: Pos
     const descriptionHtml = marked(description);
 
     return (
-        <div className="max-w-xs w-full group/card">
+        <div className="max-full w-full group/card">
             <div className="cursor-pointer overflow-hidden relative card h-96 rounded-md shadow-xl max-w-sm mx-auto flex flex-col justify-between p-4">
                 {image && (
                     <img

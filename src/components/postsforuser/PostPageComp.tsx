@@ -2,23 +2,28 @@
 import React, {useEffect, useState} from "react";
 import {PostsCard} from "@/components/postsforuser/PostCard";
 import {useRouter} from "next/navigation";
+import {Button} from "@/components/ui/button";
+
+interface Cat {
+    id: number;
+    name: string;
+}
 
 export type Post = {
     id: number;
-    createdAt: Date;
-    updatedAt: Date;
     title: string;
     body: string;
     published: boolean;
-    authorId: string;
-    categories?: string[];
     imageUrl?: string;
+    categories?: string[];
 };
 
 export function PostPageComp() {
     const [posts, setPosts] = useState<Post[] | null>(null);
+    const [categories, setCategories] = useState<Cat[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null); // Состояние для выбранной категории
     const [progress, setProgress] = useState(0);
-    const [error, setError] = useState<string | null>(null); // Добавим состояние для ошибок
+    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
     const fetchPosts = async () => {
@@ -35,6 +40,20 @@ export function PostPageComp() {
         }
     };
 
+    const fetchCategories = async () => {
+        try {
+            const response = await fetch("/api/articles/cat");
+            if (!response.ok) {
+                throw new Error("Не удалось загрузить категории");
+            }
+            const data: Cat[] = await response.json();
+            setCategories(data);
+        } catch (error) {
+            setError(error instanceof Error ? error.message : "Неизвестная ошибка");
+            console.error("Ошибка при получении категорий:", error);
+        }
+    };
+
     useEffect(() => {
         const interval = setInterval(() => {
             setProgress((oldProgress) => {
@@ -46,7 +65,7 @@ export function PostPageComp() {
             });
         }, 300);
 
-        fetchPosts().then(() => {
+        Promise.all([fetchPosts(), fetchCategories()]).then(() => {
             setProgress(100);
         });
 
@@ -71,14 +90,41 @@ export function PostPageComp() {
         );
     }
 
+    // Фильтруем посты на основе выбранной категории
+    const filteredPosts = selectedCategory
+        ? posts.filter((post) => post.categories?.includes(selectedCategory))
+        : posts;
+
     const handleCardClick = (title: string) => {
         router.push(`/articles/${title}`);
     };
 
+    const handleCategoryClick = (categoryName: string) => {
+        setSelectedCategory((prev) => (prev === categoryName ? null : categoryName)); // Сбрасываем, если категория уже выбрана
+    };
+
     return (
         <section className="w-screen h-screen px-4 pt-10 pb-20 sm:pb-0 overflow-y-auto">
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {posts.map((post) => (
+            {/* Отображаем категории */}
+            <div className="h-9 w-full flex my-6 gap-4">
+                {categories.map((category) => (
+                    <Button
+                        key={category.id}
+                        className={`px-4 py-2 rounded-md transition ${
+                            selectedCategory === category.name
+                                ? "bg-blue-500 text-white"
+                                : "bg-gray-200 hover:bg-gray-300"
+                        }`}
+                        onClick={() => handleCategoryClick(category.name)}
+                    >
+                        {category.name}
+                    </Button>
+                ))}
+            </div>
+
+            {/* Отображаем посты */}
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
+                {filteredPosts.map((post) => (
                     <div
                         key={post.id}
                         onClick={() => handleCardClick(post.title)}

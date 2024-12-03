@@ -30,6 +30,7 @@ model User {
   disease           Disease[]
   firstTestDate     DateTime?
   specialty         String?
+  description       String?
 }
 
 model VerificationToken {

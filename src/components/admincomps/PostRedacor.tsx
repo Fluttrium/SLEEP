@@ -9,6 +9,7 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/c
 import {Plus} from "lucide-react";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
+import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 
 
 config({
@@ -101,7 +102,7 @@ config({
 
 
 export function PostRedacor() {
-    const {createdPost, setCreatedTestPost, setIsCreatingPost} = usePostRedactorStore();
+    const {createdPost, setCreatedPost, setIsCreatingPost} = usePostRedactorStore();
     const [text, setText] = React.useState(() => createdPost ? createdPost.body || "" : "");
     const [language] = React.useState("rus");
     const toolbarex: ToolbarNames[] = ['github', 'htmlPreview'];
@@ -110,6 +111,8 @@ export function PostRedacor() {
     const [error, setError] = useState('');
     const [categories, setCategories] = useState<Category[]>([]);
     const [categories2, setCategories2] = useState<Category[]>([]);// Хранение категорий
+    const [image, setImage] = useState<File | null>(null);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     const fetchCategoriesbyPost = async () => {
         if (!createdPost) return; // Если пост не создан, ничего не делать
@@ -124,8 +127,11 @@ export function PostRedacor() {
     };
 
 
+
+
     React.useEffect(() => {
-        fetchCategoriesbyPost(); // Получаем категории при первом рендере
+        fetchCategoriesbyPost();
+        setImageUrl(createdPost!.image || "");
     }, [createdPost]); // Зависимость от createdPost
 
     const handleSave = async () => {
@@ -137,7 +143,7 @@ export function PostRedacor() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({id, title, body: text}),
+            body: JSON.stringify({id, title, body: text, imageUrl: imageUrl}),
         });
 
         if (response.ok) {
@@ -215,7 +221,7 @@ export function PostRedacor() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ categoryId }),
+                body: JSON.stringify({categoryId}),
             });
 
             if (response.ok) {
@@ -231,16 +237,59 @@ export function PostRedacor() {
         }
     };
 
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setImage(e.target.files[0]);
+        }
+    };
+
+    const handleUploadImage = async () => {
+        if (!image) {
+            alert("Пожалуйста, выберите изображение.");
+            return;
+        }
+
+        if (!createdPost?.id) {
+            alert("Ошибка: пост не найден.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", image);
+        formData.append("id", createdPost.id.toString());
+
+        try {
+            const response = await fetch("/api/upload/post", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert(`Фото успешно загружено! ${data.fileUrl}`);
+                setImageUrl(data.fileUrl);
+            } else {
+                alert("Ошибка загрузки изображения.");
+            }
+        } catch (error) {
+            console.error("Ошибка загрузки:", error);
+            alert("Произошла ошибка при загрузке изображения.");
+        }
+    };
+
+
+
     return (
         <div className="relative flex flex-col h-full">
-            <div className="absolute top-0 left-0">
+            <div className="absolute top-0 left-0 space-x-2.5">
+
                 <Button variant="destructive" onClick={() => {
-                    setCreatedTestPost(null);
+                    setCreatedPost(null);
                     setIsCreatingPost(false);
                 }}>
                     Закрыть
                 </Button>
-                <Button onClick={handleSave}>
+                <Button className='px-4' onClick={handleSave}>
                     Сохранить
                 </Button>
                 <Dialog>
@@ -321,7 +370,8 @@ export function PostRedacor() {
                                     <TableRow key={category.id}>
                                         <TableCell>{category.name}</TableCell>
                                         <TableCell>
-                                            <Button onClick={() => handleAddCategoryToPost(category.id)}>Добавить</Button>
+                                            <Button
+                                                onClick={() => handleAddCategoryToPost(category.id)}>Добавить</Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -329,6 +379,38 @@ export function PostRedacor() {
                         </Table>
                     </DialogContent>
                 </Dialog>
+
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button className='px-4' onClick={handleSave}>
+                            Добавть обложку
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent aria-describedby="dialog-description">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Image</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-7">
+                                <div className="space-y-1">
+                                    <Label htmlFor="new">Новый Image</Label>
+                                    <Input id="new" type="file" accept="image/*" onChange={handleImageChange}/>
+                                </div>
+                            </CardContent>
+                            <CardFooter>
+                                <Button onClick={handleUploadImage}>Загрузить фото</Button>
+                                <img
+                                    src={imageUrl!} // Укажите путь к изображению
+                                    alt="Описание изображения"
+                                    width={400} // Ширина изображения
+                                    height={500} // Высота изображения
+                                />
+                            </CardFooter>
+
+                        </Card>
+                    </DialogContent>
+                </Dialog>
+
             </div>
 
             <div className="flex-grow mt-10 overflow-hidden">

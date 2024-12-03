@@ -5,6 +5,7 @@ import { TimelineDemo } from '../timelinecomponent';
 import { Title } from "@/components/shared/ui/title";
 import { GlareCard } from '../ui/glare-card';
 import { GlareCardDemo } from '../ui/glare-cardDemo';
+import Footer from '../footer';
 
 const TeamCard = () => {
   return (

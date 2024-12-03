@@ -20,14 +20,14 @@ export function FeaturesSectionDemo() {
                             нарушений сна.
                         </div>
                         <li>
-                            <Link href="/treatment" className="text-black hover:underline">
+                            <Link href="/articles" className="text-black hover:underline">
                                 <Title text="Лечение" size="md" className="mt-4"/>
                             </Link>
                             <ImageGallery
                                 images={["/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg"]}/>
                         </li>
                         <li>
-                            <Link href="/consultations" className="text-black hover:underline mt-2">
+                            <Link href="/doctors" className="text-black hover:underline mt-2">
                                 <Title text="Консультации" size="md" className="mt-4"/>
                             </Link>
                             <ImageGallery
@@ -219,7 +219,7 @@ export const SkeletonThree = () => {
                 <div className="flex flex-1 w-full h-full flex-col space-y-2 relative">
                     <IconBrandYoutubeFilled className="h-20 w-20 absolute z-10 inset-0 text-red-500 m-auto"/>
                     <Image
-                        src="/IMAGE 2024-10-03 11:52:23.jpg"
+                        src="/Снимок экрана 2024-12-01 в 15.12.22.png"
                         alt="header"
                         width={800}
                         height={800}

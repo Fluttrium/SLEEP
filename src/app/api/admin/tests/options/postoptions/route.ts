@@ -3,7 +3,7 @@ import {prisma} from "../../../../../../../prisma/prisma-client";
 
 export async function POST(req: Request) {
     try {
-        const {questionId, text, score} = await req.json(); // Получаем данные из тела запроса
+        const {questionId, text, score, maxDisease, minDisease} = await req.json(); // Получаем данные из тела запроса
 
         // Логируем полученные данные
         console.log('Полученные данные:', {text, questionId});
@@ -17,17 +17,22 @@ export async function POST(req: Request) {
             );
         }
 
-        // Создание нового теста в базе данных
+        // Создание нового варианта в базе данных
         const newTest = await prisma.option.create({
             data: {
                 questionId,
                 text,
                 score,
-
+                maxDisease: {
+                    connect: maxDisease.map((id: any) => ({ id })) // Используем connect для связывания с записями по ID
+                },
+                minDisease: {
+                    connect: minDisease.map((id: any) => ({ id }))
+                },
             },
         });
 
-        // Возвращаем созданный тест
+        // Возвращаем созданный вариант
         return NextResponse.json(newTest, {status: 201});
     } catch (error: unknown) {
         if (error instanceof Error) {

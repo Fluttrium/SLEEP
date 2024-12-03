@@ -37,10 +37,10 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
         <header className={cn('border-b bg-background w-full', className)}>
             <Container className="flex items-center justify-between py-4 md:py-8 mx-auto px-4">
                 {/* Левая часть */}
-                <Link href="/signin" className="flex items-center gap-2 md:gap-4">
+                <Link href="/" className="flex items-center gap-2 md:gap-4">
                     <Image src="/sleeplogo.png" alt="Logo" width={50} height={50}/>
                     <div className="hidden md:block">
-                        <h1 className="text-xl md:text-2xl uppercase font-black">Михаил Бочкарев</h1>
+                        <h1 className="text-xl md:text-2xl uppercase font-black">Asleep</h1>
                         <p className="text-xs md:text-sm text-gray-400 leading-3">Здоровый сон возможен</p>
                     </div>
                 </Link>
@@ -58,7 +58,9 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                         </div>
                     ) : (
                         <div className="flex flex-row space-x-4">
-                            <div>Опрос</div>
+                            <Link href="/survey">
+                                <div className="cursor-pointer">Опрос</div>
+                            </Link>
                             <Link href="/aboutUS">
                                 <div className="cursor-pointer">О нас</div>
                             </Link>
@@ -95,6 +97,9 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
+                            <Link href="/articles">
+                                <div className="cursor-pointer">Блог</div>
+                            </Link>
                         </div>
                     )}
                 </div>
@@ -160,6 +165,9 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
 </DropdownMenu>
                         <Link href="/" className="p-2 rounded hover:bg-gray-100">Врачи</Link>
                         <Link href="/" className="p-2 rounded hover:bg-gray-100">Лечение нарушения сна</Link>
+                        <Link href="/articles">
+                                <div className="cursor-pointer">Блог</div>
+                            </Link>
                     </div>
                 </div>
             )}

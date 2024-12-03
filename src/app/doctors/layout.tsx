@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className={sans.className}>
-        <Header />
+        <Header hasSearch={false}/>
         {children}</body>
     </html>
   );

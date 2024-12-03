@@ -3,22 +3,29 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     try {
-        // Извлекаем testId из тела запроса
+        // Извлекаем questionId из тела запроса
         const { questionId } = await request.json();
 
-        if (typeof questionId !== 'number') {
-            return NextResponse.json({ message: 'Неверный questionId' }, { status: 400 });
+        if (typeof questionId !== "number") {
+            return NextResponse.json({ message: "Неверный questionId" }, { status: 400 });
         }
 
-        // Получаем вопросы, связанные с заданным testId
-        const questions = await prisma.option.findMany({
-            where: {
-                questionId: questionId,
+        // Получаем все данные об опциях, включая связанные записи
+        const options = await prisma.option.findMany({
+            where: { questionId },
+            include: {
+                maxDisease: true, // Загружаем связанные записи maxDisease
+                minDisease: true, // Загружаем связанные записи minDisease
             },
         });
 
-        return NextResponse.json(questions);
+        // Возвращаем полученные данные без изменений
+        return NextResponse.json(options);
     } catch (error) {
-        return NextResponse.json({ message: 'Ошибка при получении данных', error }, { status: 500 });
+        console.error("Ошибка при получении данных:", error);
+        return NextResponse.json(
+            { message: "Ошибка при получении данных", error },
+            { status: 500 }
+        );
     }
 }

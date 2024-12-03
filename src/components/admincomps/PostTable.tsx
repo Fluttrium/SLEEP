@@ -37,7 +37,7 @@ export function PostTable() {
     const [loading, setLoading] = React.useState(true);
     const [newPostTitle, setNewPostTitle] = React.useState("");
 
-    const {setIsCreatingPost, setCreatedTestPost} = usePostRedactorStore();
+    const {setIsCreatingPost, setCreatedPost} = usePostRedactorStore();
 
     const fetchData = async () => {
         try {
@@ -111,7 +111,7 @@ export function PostTable() {
     }, []);
 
     const handleEditClick = (post: Post) => {
-        setCreatedTestPost(post);
+        setCreatedPost(post);
         setIsCreatingPost(true);
     };
 

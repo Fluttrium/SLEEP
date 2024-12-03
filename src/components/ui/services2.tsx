@@ -171,7 +171,7 @@ export const SkeletonThree = () => {
                 <div className="flex flex-1 w-full h-full flex-col space-y-2 relative">
                     <IconBrandYoutubeFilled className="h-20 w-20 absolute z-10 inset-0 text-red-500 m-auto"/>
                     <Image
-                        src="/Снимок экрана 2024-11-19 в 16.35.58.png"
+                        src="/Снимок экрана 2024-12-01 в 15.32.48.png"
                         alt="header"
                         width={800}
                         height={800}
@@ -201,7 +201,7 @@ export const SkeletonFour = ({ className }: { className?: string }) => {
         </div>
 
         <Image
-          src="/thumb_1534_437_437_0_0_crop.png" // Замените на нужный путь к изображению
+          src="/Снимок экрана 2024-12-01 в 15.12.22.png" // Замените на нужный путь к изображению
           alt="Корпоративные программы"
           width={600}
           height={400}

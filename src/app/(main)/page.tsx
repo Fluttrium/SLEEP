@@ -51,9 +51,9 @@ export default function Home() {
                 </div>
 
 
-                <div id='Как мы можем помочь вам'>
-                    <Steps/>
-                </div>
+                <div id="Как мы можем помочь вам" className="mt-10 sm:mt-20 md:mt-20 lg:mt-20">
+    <Steps />
+</div>
                 <div id="Команда">
                     <TeamCard/>
                     </div>

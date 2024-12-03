@@ -90,14 +90,14 @@ export function LoginForm() {
                             Войти
                         </Button>
                         <Link href='/'>
-                            <Button variant="outline" className="w-full">
+                            <Button variant="outline" className="w-full" onClick={() => signIn("yandex")}>
                                 Войдите с помощью Яндекс
                             </Button>
                         </Link>
                     </div>
                     <div className="mt-4 text-center text-sm">
                         Еще нет аккаунта?{" "}
-                        <Link href="/register" className="underline">
+                        <Link href="/signup" className="underline">
                             Зарегистрироваться
                         </Link>
                     </div>

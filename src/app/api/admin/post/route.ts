@@ -18,7 +18,7 @@ export async function GET() {
 // Обработчик для обновления поста
 export async function PUT(req: Request) {
     try {
-        const {id, title, body} = await req.json();
+        const {id, title, body, imageUrl} = await req.json();
 
         if (!id || !title || !body) {
             return NextResponse.json(
@@ -27,9 +27,11 @@ export async function PUT(req: Request) {
             );
         }
 
+        const image = imageUrl;
+
         const updatedPost = await prisma.post.update({
             where: {id},
-            data: {title, body},
+            data: {title, body, image},
         });
 
         return NextResponse.json(updatedPost, {status: 200});

@@ -79,3 +79,13 @@
         --chart-5: 340 75% 55%;
     }
 }
+
+.scrollbar-hide {
+    -ms-overflow-style: none; /* IE и Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari и Opera */
+  }
+  

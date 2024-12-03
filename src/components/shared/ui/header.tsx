@@ -27,7 +27,8 @@ interface Props {
 export const Header: React.FC<Props> = ({className, hasSearch}) => {
     const router = useRouter();
     const {data: session} = useSession();
-    const [isOpen, setIsOpen] = useState(false); // Состояние для бургер-меню
+    const [isOpen, setIsOpen] = useState(false);
+    const [search, setSearch] = useState(false)// Состояние для бургер-меню
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
@@ -47,14 +48,20 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
 
                 {/* Десктопная версия */}
                 <div className={`hidden md:flex flex-1 mx-4 md:mx-10`}>
-                    {hasSearch ? (
-                        <div className="flex-1 mx-4 md:mx-10">
-                            <div className="md:hidden">
-                                <Search size={24} className="text-gray-500"/>
-                            </div>
-                            <div className="hidden md:block">
-                                <SearchInput/>
-                            </div>
+                    {search ? (
+                        <div className="flex-1 justify-between flex-row mx-4 md:mx-10">
+
+
+                                <>
+                                    <div className="md:hidden">
+                                        <Search size={24} className="text-gray-500"/>
+                                    </div>
+                                    <div className="hidden md:block">
+                                        <SearchInput/>
+                                    </div>
+                                </>
+
+
                         </div>
                     ) : (
                         <div className="flex flex-row space-x-4">
@@ -65,12 +72,12 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                                 <div className="cursor-pointer">О нас</div>
                             </Link>
                             <DropdownMenu>
-                                <DropdownMenuTrigger>Услуги</DropdownMenuTrigger>
+                            <DropdownMenuTrigger>Услуги</DropdownMenuTrigger>
                                 <DropdownMenuContent>
                                     <DropdownMenuItem>
-                                    <Link href="/online-service">
-                                <div className="cursor-pointer">Онлайн Услуги</div>
-                            </Link></DropdownMenuItem>
+                                        <Link href="/online-service">
+                                            <div className="cursor-pointer">Онлайн Услуги</div>
+                                        </Link></DropdownMenuItem>
                                     <DropdownMenuSeparator/>
                                     <DropdownMenuItem>
                                         <Link href="https://telegra.ph/Polisomnografiya-07-27">
@@ -86,9 +93,9 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                                 <DropdownMenuTrigger>Лечение нарушения сна</DropdownMenuTrigger>
                                 <DropdownMenuContent>
                                     <DropdownMenuItem>
-                                    <Link href="/cpap">
-                                <div className="cursor-pointer">Сипап терапия</div>
-                            </Link></DropdownMenuItem>
+                                        <Link href="/cpap">
+                                            <div className="cursor-pointer">Сипап терапия</div>
+                                        </Link></DropdownMenuItem>
                                     <DropdownMenuSeparator/>
                                     <DropdownMenuItem>
                                         <Link href="https://telegra.ph/Polisomnografiya-07-27">
@@ -106,6 +113,10 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
 
                 {/* Правая часть */}
                 <div className="flex items-center gap-2 md:gap-3">
+                    {hasSearch && ( <Button className="rounded-3xl" onClick={() => setSearch((prev) => !prev)}>
+                        <Search size={24} className="text-gray-500"/>
+                    </Button>) }
+
                     {!session ? (
                         <Link href='/signin'>
                             <Button variant="outline" className="flex items-center gap-1 text-xs md:text-sm">
@@ -123,7 +134,9 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                         </Button>
                     )}
 
+
                     <div>
+
                         <Link href="/signin">
                             <Button type="submit" className="w-full h-8 md:h-10 text-xs md:text-sm">
                                 <span className="hidden md:inline">Пройти тест</span>
@@ -148,26 +161,26 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                         <Link href="/" className="p-2 rounded hover:bg-gray-100">Опрос</Link>
                         <Link href="/profile" className="p-2 rounded hover:bg-gray-100">Личный кабинет</Link>
                         <DropdownMenu>
-  <DropdownMenuTrigger className="p-2 rounded hover:bg-gray-100 text-left">
-    Услуги
-  </DropdownMenuTrigger>
-  <DropdownMenuContent className="left-0">
-      <Link href="/online-service" className="p-2 rounded hover:bg-gray-100">
-        Онлайн курсы
-      </Link>
-    <DropdownMenuSeparator />
-    <DropdownMenuItem>
-      <Link href="https://telegra.ph/Polisomnografiya-07-27">
-        Методы Диагностики
-      </Link>
-    </DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>
+                            <DropdownMenuTrigger className="p-2 rounded hover:bg-gray-100 text-left">
+                                Услуги
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="left-0">
+                                <Link href="/online-service" className="p-2 rounded hover:bg-gray-100">
+                                    Онлайн курсы
+                                </Link>
+                                <DropdownMenuSeparator/>
+                                <DropdownMenuItem>
+                                    <Link href="https://telegra.ph/Polisomnografiya-07-27">
+                                        Методы Диагностики
+                                    </Link>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                         <Link href="/" className="p-2 rounded hover:bg-gray-100">Врачи</Link>
                         <Link href="/" className="p-2 rounded hover:bg-gray-100">Лечение нарушения сна</Link>
                         <Link href="/articles">
-                                <div className="cursor-pointer">Блог</div>
-                            </Link>
+                            <div className="cursor-pointer">Блог</div>
+                        </Link>
                     </div>
                 </div>
             )}

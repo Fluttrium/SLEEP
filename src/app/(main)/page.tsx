@@ -17,7 +17,6 @@ import {Article} from "@/components/shared/ui/article";
 import {PostPageComp} from "@/components/postsforuser/PostPageComp";
 
 
-
 export default function Home() {
 
     return (
@@ -35,11 +34,11 @@ export default function Home() {
                 <div id="Услуги">
 
                     <FeaturesSectionDemo/>
-                    </div>
+                </div>
 
-                    {/* Проблемы со сном */}
+                {/* Проблемы со сном */}
                 <div id="Нарушение сна">
-                <SleepStats/>
+                    <SleepStats/>
                 </div>
 
                 {/* Статьи */}
@@ -52,14 +51,14 @@ export default function Home() {
 
 
                 <div id="Как мы можем помочь вам" className="mt-10 sm:mt-20 md:mt-20 lg:mt-20">
-    <Steps />
-</div>
+                    <Steps/>
+                </div>
                 <div id="Команда">
                     <TeamCard/>
-                    </div>
-                   
-                    <Information/>
-                    <Footer/>
+                </div>
+
+                <Information/>
+                <Footer/>
             </div>
         </>
     );

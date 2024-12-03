@@ -2,7 +2,7 @@
 import {Montserrat_Alternates} from "next/font/google";
 import "./globals.css";
 import {SessionProvider} from "next-auth/react";
-import { ThemeProvider } from "next-themes";
+import {ThemeProvider} from "next-themes";
 
 const sans = Montserrat_Alternates({subsets: ["cyrillic"], weight: ["900", "800", "600", "200"]});
 

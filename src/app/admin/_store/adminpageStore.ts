@@ -1,10 +1,10 @@
-import { create } from 'zustand';
-import {Tests} from "@/components/admincomps/TestTable";
-import {Category, } from "@prisma/client";
+import { create } from "zustand";
+import { Tests } from "@/components/admincomps/TestTable";
+import { Category } from "@prisma/client";
+import {createJSONStorage, persist} from "zustand/middleware";
 
+// Интерфейс для постов
 interface Post {
-
-
     id: number;
     createdAt: Date;
     updatedAt: Date;
@@ -15,21 +15,23 @@ interface Post {
     categories: Category[];
 }
 
+// Стор для управления секциями дашборда
 interface DashboardState {
     section: string;
     setSection: (section: string) => void;
 }
 
 export const useDashboardStore = create<DashboardState>((set) => ({
-    section: 'requests',
+    section: "requests",
     setSection: (section) => set({ section }),
 }));
 
+// Стор для редактирования тестов
 interface TestStore {
     isCreating: boolean;
     createdTestId: Tests | null;
     setIsCreating: (value: boolean) => void;
-    setCreatedTestId: (id: Tests| null) => void;
+    setCreatedTestId: (id: Tests | null) => void;
 }
 
 export const useTestRedactorStore = create<TestStore>((set) => ({
@@ -39,39 +41,57 @@ export const useTestRedactorStore = create<TestStore>((set) => ({
     setCreatedTestId: (test) => set({ createdTestId: test }),
 }));
 
-
-
+// Стор для редактирования постов
 interface PostStore {
     isCreatingPost: boolean;
     createdPost: Post | null;
     setIsCreatingPost: (value: boolean) => void;
-    setCreatedTestPost: (id: Post | null) => void;
+    setCreatedPost: (post: Post | null) => void;
 }
 
-export const usePostRedactorStore = create<PostStore>((set) => ({
+export const usePostRedactorStore = create<PostStore>((set, get) => ({
     isCreatingPost: false,
     createdPost: null,
     setIsCreatingPost: (value) => set({ isCreatingPost: value }),
-    setCreatedTestPost: (post) => set({ createdPost: post }),
+    setCreatedPost: (post) => set({ createdPost: post }),
+    isPostCreated: () => Boolean(get().createdPost), // Производное состояние
 }));
 
 interface UserStore {
     id: string;
     name: string;
     surname: string;
-    password?: string; // Если не нужно хранить пароль, сделайте его необязательным
-
-    // Методы для обновления состояния
-    setUser: (user: { id: string; name: string; surname: string; password?: string }) => void;
+    nick: string;
+    setUser: (user: { id: string; name: string; surname: string; nick?: string }) => void;
+    setName: (name: string) => void;
+    setNick: (nick: string) => void;
+    setSurname: (surname: string) => void;
     clearUser: () => void;
 }
 
-export const useUserStore = create<UserStore>((set) => ({
-    id: "",
-    name: "",
-    surname: "",
-    password: "",
-    setUser: (user) => set({ id: user.id, name: user.name, surname: user.surname, password: user.password }),
-    // Очистка данных пользователя
-    clearUser: () => set({ id: "", name: "", surname: "", password: "" }),
-}));
+
+export const useUserStore = create<UserStore>()(
+    persist(
+        (set) => ({
+            id: "",
+            name: "",
+            surname: "",
+            nick: "",
+            setUser: (user) =>
+                set({
+                    id: user.id,
+                    name: user.name,
+                    surname: user.surname,
+                    nick: user.nick || "",
+                }),
+            setName: (name) => set({ name }),
+            setNick: (nick) => set({ nick }),
+            setSurname: (surname) => set({ surname }),
+            clearUser: () => set({ id: "", name: "", surname: "", nick: "" }),
+        }),
+        {
+            name: "user-store",
+            storage: createJSONStorage(() => localStorage),
+        }
+    )
+);

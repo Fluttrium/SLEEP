@@ -94,6 +94,7 @@ model Post {
   body       String
   published  Boolean    @default(false)
   categories Category[] @relation("CategoryToPost")
+  image      String?
 }
 
 model Category {
@@ -157,5 +158,3 @@ model CPAPMachine {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
-
-

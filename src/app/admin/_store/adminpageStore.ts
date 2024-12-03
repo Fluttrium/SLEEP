@@ -13,6 +13,7 @@ interface Post {
     published: boolean;
     authorId: number;
     categories: Category[];
+    image?: string;
 }
 
 // Стор для управления секциями дашборда

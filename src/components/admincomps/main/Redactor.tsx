@@ -10,7 +10,7 @@ import 'md-editor-rt/lib/style.css';
 import {PostRedacor} from "@/components/admincomps/PostRedacor";
 
 export function Redactor() {
-    const { isCreatingPost, setIsCreatingPost, setCreatedTestPost } = usePostRedactorStore();
+    const { isCreatingPost, setIsCreatingPost, setCreatedPost } = usePostRedactorStore();
 
 
     return (

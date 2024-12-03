@@ -20,7 +20,7 @@ export async function GET() {
             title: post.title,
             body: post.body,
             published: post.published,
-            categories: post.categories.map(category => category.name), // Предположим, у вас есть поле `name` в категориях
+            categories: post.categories.map(category => category.name), // Преобразуем объекты категорий в строки
         }));
 
         return NextResponse.json(formattedPosts);

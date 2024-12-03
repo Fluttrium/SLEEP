@@ -13,47 +13,66 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {useEffect, useState} from "react";
+import {useSession} from "next-auth/react";
 import {useUserStore} from "@/app/admin/_store/adminpageStore";
 
 export function TabsDemo() {
-    const {name, nick, surname, setName, setNick} = useUserStore();
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [name, setName] = useState<string>("");
+    const [nick, setNick] = useState<string>("");
+    const {surname, id} = useUserStore();
+    const [image, setImage] = useState<File | null>(null);
 
-    useEffect(() => {
-        console.log(name, surname);
-    })
 
-    const handleSave = async () => {
-        try {
-            // Логика сохранения данных
-            setSuccessMessage("Данные успешно сохранены!");
-            setTimeout(() => setSuccessMessage(null), 3000);
-        } catch (error) {
-            console.error("Ошибка при сохранении:", error);
+    const handleSave = () => {
+        console.log("Данные сохранены:", {name, nick});
+        // Здесь можно добавить логику для отправки данных на сервер
+    };
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setImage(e.target.files[0]);
         }
     };
 
-    const handlePasswordChange = async () => {
-        if (!newPassword || newPassword.length < 6) {
-            alert("Пароль должен быть не менее 6 символов.");
+    const handleUploadImage = async () => {
+        if (!image) {
+            alert("Пожалуйста, выберите изображение.");
             return;
         }
 
+        const formData = new FormData()
+        formData.append("file", image);
+        formData.append("id", id);
+
         try {
-            // Логика изменения пароля
-            alert("Пароль успешно изменен.");
+            const response = await fetch("/api/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert(`Фото успешно загружено! ${data.fileUrl}`);
+            } else {
+                alert("Ошибка загрузки изображения.");
+            }
         } catch (error) {
-            console.error("Ошибка при изменении пароля:", error);
+            console.error("Ошибка загрузки:", error);
+            alert("Произошла ошибка при загрузке изображения.");
         }
     };
 
+    handleSave()
+
     return (
         <Tabs defaultValue="account" className="w-[400px] h-max">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="account">Аккаунт</TabsTrigger>
                 <TabsTrigger value="password">Пароль</TabsTrigger>
+                <TabsTrigger value="image">Image</TabsTrigger>
             </TabsList>
             <TabsContent className="h-max" value="account">
                 <Card>
@@ -67,7 +86,6 @@ export function TabsDemo() {
                         <div className="space-y-1">
                             <Label htmlFor="name">Имя</Label>
                             <Input
-                                placeholder={name}
                                 id="name"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
@@ -77,12 +95,11 @@ export function TabsDemo() {
                             <Label htmlFor="username">Никнейм</Label>
                             <Input
                                 id="username"
-                                value={surname}
+                                value={nick}
                                 onChange={(e) => setNick(e.target.value)}
                                 placeholder={surname}
                             />
                         </div>
-                        {successMessage && <p className="text-green-500">{successMessage}</p>}
                     </CardContent>
                     <CardFooter>
                         <Button onClick={handleSave}>Готово</Button>
@@ -100,25 +117,32 @@ export function TabsDemo() {
                     <CardContent className="space-y-7">
                         <div className="space-y-1">
                             <Label htmlFor="current">Текущий пароль</Label>
-                            <Input
-                                id="current"
-                                type="password"
-                                value={currentPassword}
-                                onChange={(e) => setCurrentPassword(e.target.value)}
-                            />
+                            <Input id="current" type="password"/>
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor="new">Новый пароль</Label>
-                            <Input
-                                id="new"
-                                type="password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                            />
+                            <Input id="new" type="password" placeholder={name}/>
                         </div>
                     </CardContent>
                     <CardFooter>
-                        <Button onClick={handlePasswordChange}>Изменить пароль</Button>
+                        <Button>Изменить пароль</Button>
+                        <Button>Изменить пароль</Button>
+                    </CardFooter>
+                </Card>
+            </TabsContent>
+            <TabsContent value="image">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Image</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-7">
+                        <div className="space-y-1">
+                            <Label htmlFor="new">Новый Image</Label>
+                            <Input id="new" type="file" accept="image/*" onChange={handleImageChange}/>
+                        </div>
+                    </CardContent>
+                    <CardFooter>
+                        <Button onClick={handleUploadImage}>Загрузить фото</Button>
                     </CardFooter>
                 </Card>
             </TabsContent>

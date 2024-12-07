@@ -112,14 +112,21 @@ enum Role {
 
 ///////////
 
+model DefaultTest {
+  id        Int    @id @default(autoincrement()) // Уникальный идентификатор
+  test      Test   @relation("DefaultTestRelation", fields: [testTitle], references: [title])
+  testTitle String @unique // Связь с Test.title
+}
+
 model Test {
-  id        Int        @id
-  title     String
-  urltitle  String     @unique
-  questions Question[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  disease   Disease[]
+  id          Int          @id @default(autoincrement())
+  title       String       @unique
+  urltitle    String       @unique
+  questions   Question[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  disease     Disease[]
+  defaultTest DefaultTest? @relation("DefaultTestRelation")
 }
 
 model Question {

@@ -16,18 +16,92 @@ import {
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {motion} from "framer-motion";
-import {TestTable} from "@/components/admincomps/TestTable";
+import {Tests, TestTable} from "@/components/admincomps/TestTable";
 import {Button} from "@/components/ui/button";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useTestRedactorStore} from "@/app/admin/_store/adminpageStore";
 import {TestRedactor} from "@/components/admincomps/TestRedactor";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 
 export function TestCreator() {
     const [testName, setTestName] = useState("Тест на апноэ");
     const [testUrl, setTestUrl] = useState("localhost/");
+
+    const [defTest, setDefTest] = useState<string>();
+    const [tests, setTests] = useState<{ id: number; title: string }[]>([]);
+    const [selectedTest, setSelectedTest] = useState<number | null>(null); // Для хранения ID выбранного теста
     const [loading, setLoading] = useState(false);
 
     const {isCreating, createdTestId, setIsCreating, setCreatedTestId} = useTestRedactorStore();
+
+    const fetchDefaultTest = async () => {
+        try {
+            const response = await fetch("/api/admin/tests/deftest");
+            const data = await response.json();
+            setDefTest(data); // Установить имя текущего дефолтного теста
+        } catch (error) {
+            console.error("Ошибка при получении данных:", error);
+        }
+    };
+
+
+    useEffect(() => {
+
+
+        const fetchTests = async () => {
+            try {
+                const response = await fetch("/api/admin/tests");
+                const data = await response.json();
+                setTests(data); // Установить список тестов
+            } catch (error) {
+                console.error("Ошибка при получении данных:", error);
+            }
+        };
+
+        fetchDefaultTest();
+        fetchTests();
+    }, []);
+
+    const handleSave = async () => {
+        if (selectedTest === null) {
+            alert("Пожалуйста, выберите тест");
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const response = await fetch(`/api/admin/tests/deftest`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({id: selectedTest}), // Отправка ID выбранного теста
+            });
+
+            if (!response.ok) {
+                throw new Error(`Ошибка: ${response.statusText}`);
+            }
+
+
+
+            alert("Основной тест успешно обновлён");
+            fetchDefaultTest();
+        } catch (error) {
+            console.error("Ошибка при сохранении основного теста:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -60,7 +134,7 @@ export function TestCreator() {
             setTestName("");
             setTestUrl("");
             alert("Тест успешно создан");
-            setIsCreating(true); // Установите состояние в true, чтобы открыть редактор
+            setIsCreating(true);
             // Откройте редактор теста, если это необходимо
         } catch (error) {
             console.error("Ошибка:", error);
@@ -89,6 +163,51 @@ export function TestCreator() {
                 ) : (
                     <div>
                         <div className='absolute right-0 top-0 pt-10'>
+
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button size="lg">Основной тест</Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[425px]">
+                                    <DialogHeader>
+                                        <DialogTitle>Выбор основного теста</DialogTitle>
+                                        <DialogDescription>
+                                            Выберите тест из списка, чтобы сделать его основным.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="outline">{defTest || "Тест не выбран"}</Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="w-56">
+                                            <DropdownMenuRadioGroup
+                                                value={selectedTest ? selectedTest.toString() : ""}
+                                                onValueChange={(value) => setSelectedTest(Number(value))} // Устанавливаем ID выбранного теста
+                                            >
+                                                {tests.length > 0 ? (
+                                                    tests.map((test) => (
+                                                        <DropdownMenuRadioItem
+                                                            key={test.id}
+                                                            value={test.id.toString()}
+                                                        >
+                                                            {test.title}
+                                                        </DropdownMenuRadioItem>
+                                                    ))
+                                                ) : (
+                                                    <DropdownMenuRadioItem value="no-tests" disabled>
+                                                        Нет созданных тестов
+                                                    </DropdownMenuRadioItem>
+                                                )}
+                                            </DropdownMenuRadioGroup>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                    <DialogFooter>
+                                        <Button onClick={handleSave} disabled={loading}>
+                                            {loading ? "Сохранение..." : "Сохранить"}
+                                        </Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
                             <Dialog>
                                 <DialogTrigger asChild>
                                     <Button size='lg'>Создать тест</Button>

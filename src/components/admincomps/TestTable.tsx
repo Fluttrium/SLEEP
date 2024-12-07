@@ -17,7 +17,7 @@ export interface Tests {
     id: number;
     title: string;
     urltitle: string;
-    questions: any[]; // предполагается, что массив вопросов будет возвращен с сервера
+    questions: any[];
     createdAt: string;
     updatedAt: string;
 }

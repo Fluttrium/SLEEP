@@ -27,12 +27,17 @@ export function GlareCardDemo3() {
     <>
       {/* Карточка, которая отображается на мобильных экранах */}
       {isMobile ? (
+       <Link href="/doctors">
         <GlareCard className="flex flex-col items-center justify-center">
+           
           <img
             className="h-full w-full absolute inset-0 object-cover"
-            src="IMAGE 2024-10-03 11:52:23.jpg"
+            src="/IMG_0940.JPG"
           />
+         
         </GlareCard>
+         </Link>
+        
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* Карточки для планшетов и десктопов */}
@@ -60,13 +65,14 @@ export function GlareCardDemo3() {
               </span>
             </GlareCard>
           </Link>
-
+          <Link href="/doctors">
           <GlareCard className="flex flex-col items-center justify-center">
             <img
               className="h-full w-full absolute inset-0 object-cover"
               src="/IMG_0940.JPG"
             />
           </GlareCard>
+          </Link>
 
           <GlareCard className="flex flex-col items-start justify-end py-8 px-6">
             <p className="font-bold text-white text-lg">

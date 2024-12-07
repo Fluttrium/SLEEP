@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import React from "react";
 import { BentoGrid, BentoGridItem } from "./bento-grid";
-import { IconUserHeart } from "@tabler/icons-react";
+import { IconAlertCircle, IconCheck, IconClock, IconEye, IconMoon, IconSun, IconUserHeart } from "@tabler/icons-react";
 
 export function BentoGridDemo() {
   const [isMobile, setIsMobile] = useState(false);
@@ -60,49 +60,49 @@ const items = [
     title: "Более 60 нарушений сна",
     description: "Бессонница и сонливость - основные симптомы всех нарушений сна",
     header: <Skeleton />,
-    icon: <IconUserHeart className="h-8 w-8 text-neutral-500" />,
+    icon: <IconMoon className="h-8 w-8 text-neutral-500" />, // Луна
     backgroundImage: "/pensive-senior-man-thinking-something-while-sitting-awake-late-night-bedroom.jpg",
   },
   {
     title: "18,1%",
     description: "Распространенность синдрома апноэ во сне в РФ",
     header: <Skeleton />,
-    icon: <IconUserHeart className="h-8 w-8 text-neutral-500" />,
+    icon: <IconAlertCircle className="h-8 w-8 text-neutral-500" />, // Восклицательный знак
     backgroundImage: "/handsome-young-man-morning-yawning-weekend-time.jpg",
   },
   {
     title: "39%",
     description: "Россиян испытывают избыточную дневную сонливость",
     header: <Skeleton />,
-    icon: <IconUserHeart className="h-8 w-8 text-neutral-500" />,
+    icon: <IconSun className="h-8 w-8 text-neutral-500" />, // Солнце
     backgroundImage: "/portrait-yawning-student-girl-desk.jpg",
   },
   {
     title: "100%",
     description: "Жизнеугрожающие заболевания, такие как синдром апноэ во сне, не выявляются врачами",
     header: <Skeleton />,
-    icon: <IconUserHeart className="h-8 w-8 text-neutral-500" />,
+    icon: <IconEye className="h-8 w-8 text-neutral-500" />, // Глаз
     backgroundImage: "/sick-woman-feeling-temperature-touching-forehead-with-hand.jpg",
   },
   {
     title: "9,7 лет",
     description: "Среднее время постановки диагноза нарколепсии от появления симптомов",
     header: <Skeleton />,
-    icon: <IconUserHeart className="h-8 w-8 text-neutral-500" />,
+    icon: <IconClock className="h-8 w-8 text-neutral-500" />, // Часы
     backgroundImage: "/narcolepsya.png",
   },
   {
     title: "Сомнология",
     description: "Специализация по нарушениям сна, отсутствующая в России",
     header: <Skeleton />,
-    icon: <IconUserHeart className="h-8 w-8 text-neutral-500" />,
+    icon: <IconCheck className="h-8 w-8 text-neutral-500" />, // Галочка
     backgroundImage: "/somnology.png",
   },
   {
     title: "Развитие апноэ обструктивного типа увеличивается с возрастом.",
     description: "От остановок дыхания во сне страдают примерно 3-7% мужчин и 2-5% женщин",
     header: <Skeleton />,
-    icon: <IconUserHeart className="h-8 w-8 text-neutral-500" />,
+    icon: <IconUserHeart className="h-8 w-8 text-neutral-500" />, // Сердце пользователя
     backgroundImage: "/iStock-896820002-1.jpg",
   },
 ];

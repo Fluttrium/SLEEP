@@ -30,7 +30,7 @@ export function GlareCardDemo4() {
         <GlareCard className="flex flex-col items-center justify-center">
           <img
             className="h-full w-full absolute inset-0 object-cover"
-            src="IMAGE 2024-10-03 11:52:23.jpg"
+            src="/budkofaja.jpeg"
           />
         </GlareCard>
       ) : (

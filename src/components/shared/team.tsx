@@ -6,6 +6,9 @@ import { Title } from "@/components/shared/ui/title";
 import { GlareCard } from '../ui/glare-card';
 import { GlareCardDemo } from '../ui/glare-cardDemo';
 import Footer from '../footer';
+import { GlareCardDemo4 } from '../ui/glare-cardDemo4';
+import { GlareCardDemo3 } from '../ui/glare-cardDemo3';
+import { GlareCardDemo5 } from '../ui/glare-cardDemo5';
 
 const TeamCard = () => {
   return (
@@ -14,6 +17,12 @@ const TeamCard = () => {
         Наша команда
       </h4>
       <GlareCardDemo />
+      <hr className="my-8 w-1/2 border-t-2 border-gray-300 dark:border-gray-700" />
+      <GlareCardDemo5 />
+      <hr className="my-8 w-1/2 border-t-2 border-gray-300 dark:border-gray-700" />
+      <GlareCardDemo3 />
+      <hr className="my-8 w-1/2 border-t-2 border-gray-300 dark:border-gray-700" />
+      <GlareCardDemo4 />
     </div>
   );
 };

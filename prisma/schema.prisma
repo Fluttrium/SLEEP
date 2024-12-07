@@ -9,36 +9,36 @@ datasource db {
 }
 
 model User {
-  id                String              @id @default(cuid())
-  email             String?             @unique
+  id                String             @id @default(cuid())
+  email             String?            @unique
   name              String?
   surname           String?
   phone             String?
   emailVerified     DateTime?
   image             String?
-  role              Role                @default(USER)
+  role              Role               @default(USER)
   password          String?
-  messages          Message[]
-  profile           Profile?
-  accounts          Account[]
-  sessions          Session[]
-  verified          Boolean?            @default(false)
+  verified          Boolean?           @default(false)
   provider          String?
   providerId        String?
-  verificationToken VerificationToken[] @relation("UserToVerificationToken")
-  registrationDate  DateTime            @default(now())
-  disease           Disease[]
+  registrationDate  DateTime           @default(now())
   firstTestDate     DateTime?
   specialty         String?
   description       String?
+  accounts          Account[]
+  messages          Message[]
+  profile           Profile?
+  sessions          Session[]
+  verificationToken VerificationToken? @relation("UserToVerificationToken")
+  DiseaseToUser     DiseaseToUser[]
 }
 
 model VerificationToken {
   id        Int      @id @default(autoincrement())
-  token     String   @unique // Изменено на String
+  token     String   @unique
   createdAt DateTime @default(now())
   userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, name: "UserToVerificationToken")
+  user      User     @relation("UserToVerificationToken", fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([id, token])
 }
@@ -88,73 +88,65 @@ model Profile {
 }
 
 model Post {
-  id         Int        @id @default(autoincrement())
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  title      String
-  body       String
-  published  Boolean    @default(false)
-  categories Category[] @relation("CategoryToPost")
-  image      String?
+  id             Int              @id @default(autoincrement())
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  title          String
+  body           String
+  published      Boolean          @default(false)
+  image          String?
+  CategoryToPost CategoryToPost[]
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
-  name  String
-  posts Post[] @relation("CategoryToPost")
+  id             Int              @id @default(autoincrement())
+  name           String
+  CategoryToPost CategoryToPost[]
 }
-
-enum Role {
-  USER
-  ADMIN
-  DOCTOR
-}
-
-///////////
 
 model DefaultTest {
-  id        Int    @id @default(autoincrement()) // Уникальный идентификатор
+  id        Int    @id @default(autoincrement())
+  testTitle String @unique
   test      Test   @relation("DefaultTestRelation", fields: [testTitle], references: [title])
-  testTitle String @unique // Связь с Test.title
 }
 
 model Test {
   id          Int          @id @default(autoincrement())
   title       String       @unique
   urltitle    String       @unique
-  questions   Question[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  disease     Disease[]
   defaultTest DefaultTest? @relation("DefaultTestRelation")
+  disease     Disease[]
+  questions   Question[]
 }
 
 model Question {
   id      Int      @id @default(autoincrement())
   text    String
-  test    Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
   testId  Int
   options Option[]
+  test    Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
 }
 
 model Option {
-  id         Int       @id @default(autoincrement())
-  text       String
-  score      Int
-  question   Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  questionId Int
-  minDisease Disease[] @relation("MinDiseases")
-  maxDisease Disease[] @relation("MaxDiseases")
+  id          Int           @id @default(autoincrement())
+  text        String
+  score       Int
+  questionId  Int
+  question    Question      @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  MaxDiseases MaxDiseases[]
+  MinDiseases MinDiseases[]
 }
 
 model Disease {
-  id        Int      @id @default(autoincrement())
-  title     String   @unique
-  testId    Int? // Теперь необязательное поле
-  test      Test?    @relation(fields: [testId], references: [id])
-  users     User[]
-  OptionMin Option[] @relation("MinDiseases")
-  OptionMax Option[] @relation("MaxDiseases")
+  id            Int             @id @default(autoincrement())
+  title         String          @unique
+  testId        Int?
+  test          Test?           @relation(fields: [testId], references: [id])
+  DiseaseToUser DiseaseToUser[]
+  MaxDiseases   MaxDiseases[]
+  MinDiseases   MinDiseases[]
 }
 
 model CPAPMachine {
@@ -165,4 +157,54 @@ model CPAPMachine {
   image       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model CategoryToPost {
+  A        Int
+  B        Int
+  Category Category @relation(fields: [A], references: [id], onDelete: Cascade)
+  Post     Post     @relation(fields: [B], references: [id], onDelete: Cascade)
+
+  @@id([A, B], map: "_CategoryToPost_AB_pkey")
+  @@index([B], map: "_CategoryToPost_B_index")
+  @@map("_CategoryToPost")
+}
+
+model DiseaseToUser {
+  A       Int
+  B       String
+  Disease Disease @relation(fields: [A], references: [id], onDelete: Cascade)
+  User    User    @relation(fields: [B], references: [id], onDelete: Cascade)
+
+  @@id([A, B], map: "_DiseaseToUser_AB_pkey")
+  @@index([B], map: "_DiseaseToUser_B_index")
+  @@map("_DiseaseToUser")
+}
+
+model MaxDiseases {
+  A       Int
+  B       Int
+  Disease Disease @relation(fields: [A], references: [id], onDelete: Cascade)
+  Option  Option  @relation(fields: [B], references: [id], onDelete: Cascade)
+
+  @@id([A, B], map: "_MaxDiseases_AB_pkey")
+  @@index([B], map: "_MaxDiseases_B_index")
+  @@map("_MaxDiseases")
+}
+
+model MinDiseases {
+  A       Int
+  B       Int
+  Disease Disease @relation(fields: [A], references: [id], onDelete: Cascade)
+  Option  Option  @relation(fields: [B], references: [id], onDelete: Cascade)
+
+  @@id([A, B], map: "_MinDiseases_AB_pkey")
+  @@index([B], map: "_MinDiseases_B_index")
+  @@map("_MinDiseases")
+}
+
+enum Role {
+  USER
+  ADMIN
+  DOCTOR
 }

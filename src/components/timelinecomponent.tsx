@@ -30,7 +30,7 @@ export function TimelineDemo() {
           </button>
           <div className="grid grid-cols-2 gap-4">
             <Image
-              src="/iStock-896820002-1.jpg"
+              src="/side-view-professional-male-working-from-home.jpg"
               alt="startup template"
               width={500}
               height={500}
@@ -56,7 +56,7 @@ export function TimelineDemo() {
           />
           <div className="grid grid-cols-2 gap-4">
             <Image
-              src="/iStock-896820002-1.jpg"
+              src="/freepik__a-young-woman-with-long-brown-hair-wearing-a-green__99559.jpeg"
               alt="cards template"
               width={500}
               height={500}
@@ -82,7 +82,7 @@ export function TimelineDemo() {
           />
           <div className="grid grid-cols-2 gap-4">
             <Image
-              src="/iStock-896820002-1.jpg"
+              src="/p687251.jpg"
               alt="cards template"
               width={500}
               height={500}
@@ -120,7 +120,7 @@ export function TimelineDemo() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <Image
-              src="/iStock-896820002-1.jpg"
+              src="/freepik__a-middleaged-caucasian-man-lying-on-a-hospital-bed__54176.jpeg"
               alt="cards template"
               width={500}
               height={500}

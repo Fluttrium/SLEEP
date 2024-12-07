@@ -3,6 +3,8 @@ import React from "react";
 import Link from "next/link";
 import { GlareCardDemo } from "@/components/ui/glare-cardDemo";
 import { GlareCardDemo3 } from "@/components/ui/glare-cardDemo3";
+import { GlareCardDemo4 } from "@/components/ui/glare-cardDemo4";
+import { GlareCardDemo5 } from "@/components/ui/glare-cardDemo5";
 
 const AboutUsPage = () => {
   return (
@@ -52,6 +54,10 @@ const TeamCard = () => {
       <GlareCardDemo />
       <hr className="my-8 w-1/2 border-t-2 border-gray-300 dark:border-gray-700" />
       <GlareCardDemo3 />
+      <hr className="my-8 w-1/2 border-t-2 border-gray-300 dark:border-gray-700" />
+      <GlareCardDemo4 />
+      <hr className="my-8 w-1/2 border-t-2 border-gray-300 dark:border-gray-700" />
+      <GlareCardDemo5 />
     </div>
   );
 };

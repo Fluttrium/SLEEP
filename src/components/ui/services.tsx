@@ -24,21 +24,21 @@ export function FeaturesSectionDemo() {
                                 <Title text="Лечение" size="md" className="mt-4"/>
                             </Link>
                             <ImageGallery
-                                images={["/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg", "/chto-takoe-sipap-terapiya.jpg"]}/>
+                                images={["/lechenie1.1.png", "/lechenie2.png", "/chto-takoe-sipap-terapiya.jpg"]}/>
                         </li>
                         <li>
                             <Link href="/doctors" className="text-black hover:underline mt-2">
                                 <Title text="Консультации" size="md" className="mt-4"/>
                             </Link>
                             <ImageGallery
-                                images={["/thumb_1534_437_437_0_0_crop.png", "/thumb_1534_437_437_0_0_crop.png", "/thumb_1534_437_437_0_0_crop.png"]}/>
+                                images={["/consultation.png", "/consultation2.png", "/consultation3.png"]}/>
                         </li>
                         <li>
                             <Link href="https://telegra.ph/Polisomnografiya-07-27"
                                   className="text-black hover:underline">
                                 <Title text="Диагностика" size="md"/>
                             </Link>
-                            <ImageGallery images={["/budkovaya_3.png", "/budkovaya_3.png", "/budkovaya_3.png"]}/>
+                            <ImageGallery images={["/budkovaya_3.png", "/diagnostica.png", "/diagnostica2.png"]}/>
                         </li>
                     </ul>
                 </>
@@ -153,25 +153,28 @@ const ImageGallery = ({images}: { images: string[] }) => {
     };
 
     return (
-        <div className="flex flex-row flex-wrap gap-4 mt-4">
-            {images.map((image, idx) => (
-                <motion.div
-                    key={idx}
-                    variants={imageVariants}
-                    whileHover="whileHover"
-                    whileTap="whileTap"
-                    className="rounded-xl p-1 bg-white dark:bg-neutral-800 dark:border-neutral-700 border border-neutral-100 flex-shrink-0 overflow-hidden"
-                >
-                    <Image
-                        src={image}
-                        alt={`image-${idx}`}
-                        width={150}
-                        height={150}
-                        className="rounded-lg object-cover flex-shrink-0"
-                    />
-                </motion.div>
-            ))}
-        </div>
+        <div className="flex flex-wrap gap-4 mt-4 justify-center">
+    {images.map((image, idx) => (
+        <motion.div
+            key={idx}
+            variants={imageVariants}
+            whileHover="whileHover"
+            whileTap="whileTap"
+            className="rounded-xl p-1 bg-white dark:bg-neutral-800 dark:border-neutral-700 border border-neutral-100 overflow-hidden"
+            style={{ width: "150px", height: "150px" }} // Фиксированный размер контейнера
+        >
+            <Image
+                src={image}
+                alt={`image-${idx}`}
+                width={150}
+                height={150}
+                className="rounded-lg object-cover mx-auto"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }} // Масштабируем изображение внутри контейнера
+            />
+        </motion.div>
+    ))}
+</div>
+
     );
 };
 
@@ -194,8 +197,8 @@ export const SkeletonOne = () => {
                     <Image
                         src="/doctor-hospital-medical-health-medicine-teamwork-clinic-healthcare-laptop-computer-care-team-black-diversity-multiracial-unity-african-american-asian-nurse_772720-4760.jpg.avif"
                         alt="header"
-                        width={800}
-                        height={800}
+                        width={400}
+                        height={400}
                         className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
                     />
                 </div>

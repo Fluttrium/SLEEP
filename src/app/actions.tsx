@@ -16,7 +16,7 @@ async function sendVerificationEmail(email: string, token: string) {
 
     await sendEmail(
         email,
-        'Ножи СПБ / 📝 Подтверждение регистрации',
+        'Asleep || Подтверждение почтового ящика ',
         htmlContent
     );
 }

@@ -1,17 +1,14 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../../../../../prisma/prisma-client";
 
 export async function GET(request: Request, { params }: { params: { urltitle: string } }) {
     try {
         const urltitle = params.urltitle;
 
         if (!urltitle) {
-            return NextResponse.json({ message: 'Неверный идентификатор теста' }, { status: 400 });
+            return NextResponse.json({ message: "Invalid test identifier" }, { status: 400 });
         }
 
-        // Запрос к базе данных для получения теста с вопросами, опциями и связанными заболеваниями
         const test = await prisma.test.findUnique({
             where: { urltitle },
             include: {
@@ -19,9 +16,9 @@ export async function GET(request: Request, { params }: { params: { urltitle: st
                     include: {
                         options: {
                             include: {
-                                minDisease: true,  // Включаем связанные минимальные заболевания
-                                maxDisease: true   // Включаем связанные максимальные заболевания
-                            }
+                                MinDiseases: { include: { Disease: true } },
+                                MaxDiseases: { include: { Disease: true } },
+                            },
                         },
                     },
                 },
@@ -29,15 +26,12 @@ export async function GET(request: Request, { params }: { params: { urltitle: st
         });
 
         if (!test) {
-            return NextResponse.json({ message: 'Тест не найден' }, { status: 404 });
+            return NextResponse.json({ message: "Test not found" }, { status: 404 });
         }
 
-        // Возвращаем JSON с заголовками
-        const response = NextResponse.json(test, { status: 200 });
-        response.headers.set('Content-Type', 'application/json; charset=utf-8');
-
-        return response;
+        return NextResponse.json(test, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ message: 'Ошибка при получении данных', error: String(error) }, { status: 500 });
+        console.error("Error fetching test data:", error);
+        return NextResponse.json({ message: "Error fetching data", error: String(error) }, { status: 500 });
     }
 }

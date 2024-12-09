@@ -1,4 +1,8 @@
-import { Button } from "@/components/ui/button"
+"use client";
+
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -6,71 +10,111 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from "@/components/ui/tabs"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TestChart } from "@/components/ui/chart2";
 
 export function UserProfile() {
+    const { data: session } = useSession();
+
+    useEffect(() => {
+        const syncResultsWithServer = async () => {
+            // Проверяем, есть ли результаты в localStorage
+            const storedResults = localStorage.getItem("testResults");
+
+            if (storedResults && session?.user?.id) {
+                try {
+                    const resultsArray = JSON.parse(storedResults);
+
+                    // Отправляем результаты на сервер
+                    const response = await fetch("/api/user/test", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            userId: session.user.id,
+                            results: resultsArray,
+                        }),
+                    });
+
+                    if (response.ok) {
+                        console.log("Results successfully synced with the server.");
+                        localStorage.removeItem("testResults"); // Очищаем localStorage после успешной отправки
+                    } else {
+                        console.error("Failed to sync results with the server.");
+                    }
+                } catch (error) {
+                    console.error("Error syncing results with the server:", error);
+                }
+            }
+        };
+
+        if (session) {
+            syncResultsWithServer();
+        }
+    }, [session]);
+
     return (
-        <div>
-            <Tabs defaultValue="account" className="w-[400px]">
+        <div className="flex flex-row w-screen h-full justify-between px-10 py-11">
+            <Tabs defaultValue="account" className="w-1/3">
                 <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="account">Account</TabsTrigger>
-                    <TabsTrigger value="password">Password</TabsTrigger>
+                    <TabsTrigger value="account">Аккаунт</TabsTrigger>
+                    <TabsTrigger value="password">Пароль</TabsTrigger>
                 </TabsList>
                 <TabsContent value="account">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Account</CardTitle>
+                            <CardTitle>Аккаунт</CardTitle>
                             <CardDescription>
-                                Make changes to your account here. Click save when you&apos;re done.
+                                Внесите изменения в свой аккаунт здесь. Нажмите "Сохранить", когда
+                                закончите.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-2">
                             <div className="space-y-1">
-                                <Label htmlFor="name">Name</Label>
-                                <Input id="name" defaultValue="Pedro Duarte" />
+                                <Label htmlFor="name">Имя</Label>
+                                <Input id="name" defaultValue="" />
                             </div>
                             <div className="space-y-1">
-                                <Label htmlFor="username">Username</Label>
-                                <Input id="username" defaultValue="@peduarte" />
+                                <Label htmlFor="username">Имя пользователя</Label>
+                                <Input id="username" defaultValue="" />
                             </div>
                         </CardContent>
                         <CardFooter>
-                            <Button>Save changes</Button>
+                            <Button>Сохранить изменения</Button>
                         </CardFooter>
                     </Card>
                 </TabsContent>
                 <TabsContent value="password">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Password</CardTitle>
+                            <CardTitle>Пароль</CardTitle>
                             <CardDescription>
-                                Change your password here. After saving, you&apos;ll be logged out.
+                                Измените свой пароль здесь. После сохранения вы будете выведены из
+                                системы.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-2">
                             <div className="space-y-1">
-                                <Label htmlFor="current">Current password</Label>
+                                <Label htmlFor="current">Текущий пароль</Label>
                                 <Input id="current" type="password" />
                             </div>
                             <div className="space-y-1">
-                                <Label htmlFor="new">New password</Label>
+                                <Label htmlFor="new">Новый пароль</Label>
                                 <Input id="new" type="password" />
                             </div>
                         </CardContent>
                         <CardFooter>
-                            <Button>Save password</Button>
+                            <Button>Сохранить пароль</Button>
                         </CardFooter>
                     </Card>
                 </TabsContent>
             </Tabs>
+
+            <TestChart />
         </div>
-    )
+    );
 }

@@ -1,20 +1,21 @@
 "use client";
 
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import * as React from "react";
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
-    CardTitle,
     CardFooter,
 } from "@/components/ui/card";
-import {Label} from "@/components/ui/label";
-import {useSession} from "next-auth/react";
-import {useTestStore} from "@/app/[urltitle]/_store/testStore";
-import {Progress} from "@/components/ui/progress";
+import { Label } from "@/components/ui/label";
+import { useSession } from "next-auth/react";
+import { useTestStore } from "@/app/[urltitle]/_store/testStore";
+import { Progress } from "@/components/ui/progress";
+import { useRouter } from "next/navigation";
+import { TestChart } from "@/components/ui/chart2";
 
 interface Option {
     id: number;
@@ -23,12 +24,11 @@ interface Option {
     diseaseId?: number;
 }
 
-export default function Page({params}: { params: { urltitle: string } }) {
-    const {data: session} = useSession();
-    const userId = session?.user?.id;
+export default function Page({ params }: { params: { urltitle: string } }) {
+    const { data: session } = useSession();
+    const router = useRouter();
 
     const {
-        testId,
         questions,
         diseases,
         totalScores,
@@ -43,12 +43,12 @@ export default function Page({params}: { params: { urltitle: string } }) {
     const [error, setError] = useState("");
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
     const [resultTitle, setResultTitle] = useState<string | null>(null);
-    const [progress, setProgress] = React.useState(13)
+    const [progress, setProgress] = useState(0);
 
-    React.useEffect(() => {
-        const timer = setTimeout(() => setProgress(80), 300)
-        return () => clearTimeout(timer)
-    }, [])
+    useEffect(() => {
+        const timer = setTimeout(() => setProgress(80), 300);
+        return () => clearTimeout(timer);
+    }, []);
 
     useEffect(() => {
         const fetchTest = async () => {
@@ -64,7 +64,7 @@ export default function Page({params}: { params: { urltitle: string } }) {
         fetchTest();
     }, [params.urltitle, loadTest]);
 
-    const handleAnswerSubmit = () => {
+    const handleAnswerSubmit = async () => {
         const currentQuestion = questions[currentQuestionIndex];
 
         if (selectedOption === null) {
@@ -72,36 +72,63 @@ export default function Page({params}: { params: { urltitle: string } }) {
             return;
         }
 
-        // Находим выбранный вариант
         const selectedOptionData = currentQuestion.options.find(
             (option) => option.id === selectedOption
         );
 
         if (selectedOptionData) {
-            // Передаем ответ в Zustand
             answerQuestion(selectedOptionData);
         }
 
-        // Переходим к следующему вопросу или показываем результат
         if (currentQuestionIndex + 1 < questions.length) {
             setSelectedOption(null);
             nextQuestion();
         } else {
-            const finalResults = getFinalResults(); // Получаем финальные результаты из Zustand
-            console.log("Итоговые результаты:", finalResults);
+            const finalResults = getFinalResults();
 
-            // Отображаем результат
-            setResultTitle(
-                finalResults
-                    .sort((a, b) => b.score - a.score) // Сортировка по убыванию баллов
-                    .map((disease) => `${disease.title}: ${disease.score}`)
-                    .join(", ")
-            );
+
+            if (finalResults && Object.keys(finalResults).length > 0) {
+                const resultsArray = Object.entries(finalResults).map(([title, score]) => ({
+                    title,
+                    score,
+                }));
+
+                // Проверяем сессию и отправляем результаты
+                if (session?.user?.id) {
+                    try {
+                        await fetch("/api/user/test", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                userId: session.user.id,
+                                results: resultsArray,
+                            }),
+                        });
+                        localStorage.setItem("testResults", JSON.stringify(resultsArray));
+                        router.push("/profile ");
+                    } catch (error) {
+                        console.error("Ошибка сохранения результатов:", error);
+                    }
+                } else {
+                    setResultTitle(resultsArray[0].title);
+                    localStorage.setItem("testResults", JSON.stringify(resultsArray));
+                    router.push("/signin");
+                }
+            } else {
+                setError("Результаты теста отсутствуют.");
+            }
         }
     };
 
+
     if (loading) {
-        return (<div className="flex h-screen w-screen justify-center items-center"><Progress value={progress} className="w-[60%]" /></div>);
+        return (
+            <div className="flex h-screen w-screen justify-center items-center">
+                <Progress value={progress} className="w-[60%]" />
+            </div>
+        );
     }
 
     if (error) {
@@ -113,12 +140,31 @@ export default function Page({params}: { params: { urltitle: string } }) {
     }
 
     if (resultTitle) {
-        return <div>Ваш результат: {resultTitle}</div>;
+        return session ? (
+            <div className='w-screen h-screen flex items-center justify-center'><TestChart /></div>
+
+        ) : (
+            <div className="flex h-screen w-screen justify-center items-center">
+                <Card className="w-1/3 justify-center">
+                    <CardHeader className="text-2xl text-center font-semibold">
+                        Для просмотра результатов теста необходимо зарегистрироваться на
+                        платформе
+                    </CardHeader>
+                    <CardContent className="flex justify-center">
+                        <Button
+                            onClick={() => router.push("/signin")}
+                            className="text-xl font-semibold"
+                        >
+                            Зарегистрироваться
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
+        );
     }
 
     const currentQuestion = questions[currentQuestionIndex];
 
-    // Промежуточные результаты
     const intermediateResults = Object.entries(totalScores)
         .map(([diseaseId, score]) => {
             const disease = diseases.find((d) => d.id === parseInt(diseaseId));
@@ -126,6 +172,7 @@ export default function Page({params}: { params: { urltitle: string } }) {
         })
         .filter(Boolean)
         .join(", ");
+
 
     return (
         <div className="flex flex-col justify-center items-center w-screen h-screen">
@@ -168,7 +215,6 @@ export default function Page({params}: { params: { urltitle: string } }) {
                 </CardFooter>
             </Card>
 
-            {/* Отображение промежуточных результатов */}
             <div className="mt-8 text-center">
                 <h2 className="font-bold">Промежуточные результаты:</h2>
                 <div>{intermediateResults}</div>

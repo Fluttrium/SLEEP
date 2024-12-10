@@ -89,20 +89,20 @@ model Profile {
 }
 
 model Post {
-  id             Int              @id @default(autoincrement())
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  title          String
-  body           String
-  published      Boolean          @default(false)
-  image          String?
-  CategoryToPost CategoryToPost[]
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  title      String
+  body       String
+  published  Boolean    @default(false)
+  categories Category[] @relation("CategoryToPost")
+  image      String?
 }
 
 model Category {
-  id             Int              @id @default(autoincrement())
-  name           String
-  CategoryToPost CategoryToPost[]
+  id    Int    @id @default(autoincrement())
+  name  String
+  posts Post[] @relation("CategoryToPost")
 }
 
 model DefaultTest {
@@ -158,17 +158,6 @@ model CPAPMachine {
   image       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-}
-
-model CategoryToPost {
-  A        Int
-  B        Int
-  Category Category @relation(fields: [A], references: [id], onDelete: Cascade)
-  Post     Post     @relation(fields: [B], references: [id], onDelete: Cascade)
-
-  @@id([A, B], map: "_CategoryToPost_AB_pkey")
-  @@index([B], map: "_CategoryToPost_B_index")
-  @@map("_CategoryToPost")
 }
 
 model DiseaseToUser {

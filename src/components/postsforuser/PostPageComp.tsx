@@ -96,7 +96,8 @@ export function PostPageComp() {
         : posts;
 
     const handleCardClick = (title: string) => {
-        router.push(`/articles/${title}`);
+        const encodedTitle = encodeURIComponent(title);
+        router.push(`/articles/${encodedTitle}`);
     };
 
     const handleCategoryClick = (categoryName: string) => {

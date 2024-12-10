@@ -25,7 +25,8 @@ export default function Page({params}: { params: { title: string } }) {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const response = await fetch(`/api/posts/${params.title}`);
+                const encodedTitle = encodeURIComponent(params.title);
+                const response = await fetch(`/api/posts/${encodedTitle}`);
                 if (!response.ok) {
                     throw new Error("Ошибка загрузки поста");
                 }

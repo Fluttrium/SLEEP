@@ -134,6 +134,31 @@ export function PostRedacor() {
         setImageUrl(createdPost!.image || "");
     }, [createdPost]); // Зависимость от createdPost
 
+    const onUploadImg = async (files: File[], callback: (urls: string[]) => void) => {
+        try {
+            const formData = new FormData();
+            files.forEach((file) => formData.append("file", file));
+            formData.append("id", createdPost!.id.toString());
+
+            const response = await fetch("/api/upload/post2", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                // Формируем Markdown синтаксис для изображений
+                const markdownImages = files.map(() => `![Uploaded Image](${data.fileUrl})`);
+                callback(markdownImages); // Передаем готовый Markdown
+            } else {
+                console.error("Ошибка загрузки изображения:", await response.json());
+            }
+        } catch (error) {
+            console.error("Ошибка загрузки изображения:", error);
+        }
+    };
+
     const handleSave = async () => {
         if (!createdPost) return;
 
@@ -422,6 +447,7 @@ export function PostRedacor() {
                         onChange={setText}
                         style={{height: '100%', width: '100%'}}
                         previewTheme="default"
+                        onUploadImg={onUploadImg}
                     />
                 </div>
             </div>

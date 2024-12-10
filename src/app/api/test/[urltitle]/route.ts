@@ -16,8 +16,9 @@ export async function GET(request: Request, { params }: { params: { urltitle: st
                     include: {
                         options: {
                             include: {
-                                MinDiseases: { include: { Disease: true } },
-                                MaxDiseases: { include: { Disease: true } },
+                                // Просто загружаем связанные болезни без дополнительных полей:
+                                minDisease: true,
+                                maxDisease: true,
                             },
                         },
                     },

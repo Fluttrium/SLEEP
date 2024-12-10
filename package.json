@@ -7,7 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "ts-node prisma/seed.ts",
     "delete": "ts-node prisma/delete.ts"
   },
   "dependencies": {

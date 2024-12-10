@@ -69,8 +69,7 @@ export function UserProfile() {
                         <CardHeader>
                             <CardTitle>Аккаунт</CardTitle>
                             <CardDescription>
-                                Внесите изменения в свой аккаунт здесь. Нажмите "Сохранить", когда
-                                закончите.
+                                Внесите изменения в свой аккаунт здесь. Нажмите &quot;Сохранить&quot;, когда закончите.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-2">

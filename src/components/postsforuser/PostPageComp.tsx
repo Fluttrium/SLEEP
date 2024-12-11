@@ -23,58 +23,47 @@ export function PostPageComp() {
     const [posts, setPosts] = useState<Post[] | null>(null);
     const [categories, setCategories] = useState<Cat[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-    const [progress, setProgress] = useState(0);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
+    // Функции загрузки данных
+    const fetchPosts = async () => {
+        try {
+            const response = await fetch("/api/articles");
+            if (!response.ok) {
+                throw new Error("Не удалось загрузить посты");
+            }
+            const data: Post[] = await response.json();
+            setPosts(data);
+        } catch (error) {
+            setError(error instanceof Error ? error.message : "Неизвестная ошибка");
+            console.error("Ошибка при получении постов:", error);
+        }
+    };
+
+    const fetchCategories = async () => {
+        try {
+            const response = await fetch("/api/articles/cat");
+            if (!response.ok) {
+                throw new Error("Не удалось загрузить категории");
+            }
+            const data: Cat[] = await response.json();
+            setCategories(data);
+        } catch (error) {
+            setError(error instanceof Error ? error.message : "Неизвестная ошибка");
+            console.error("Ошибка при получении категорий:", error);
+        }
+    };
+
+    // Эффект для загрузки данных при каждом рендере
     useEffect(() => {
-        // Функция для загрузки постов
-        const fetchPosts = async () => {
-            try {
-                const response = await fetch("/api/articles");
-                if (!response.ok) {
-                    throw new Error("Не удалось загрузить посты");
-                }
-                const data: Post[] = await response.json();
-                setPosts(data);
-            } catch (error) {
-                setError(error instanceof Error ? error.message : "Неизвестная ошибка");
-                console.error("Ошибка при получении постов:", error);
-            }
-        };
-
-        // Функция для загрузки категорий
-        const fetchCategories = async () => {
-            try {
-                const response = await fetch("/api/articles/cat");
-                if (!response.ok) {
-                    throw new Error("Не удалось загрузить категории");
-                }
-                const data: Cat[] = await response.json();
-                setCategories(data);
-            } catch (error) {
-                setError(error instanceof Error ? error.message : "Неизвестная ошибка");
-                console.error("Ошибка при получении категорий:", error);
-            }
-        };
-
-        // Параллельное выполнение запросов
         const fetchData = async () => {
-            setProgress(0);
-            setError(null);
+            setError(null); // Сбрасываем ошибку перед новым запросом
             await Promise.all([fetchPosts(), fetchCategories()]);
-            setProgress(100);
         };
 
         fetchData();
-
-        // Периодическое обновление постов
-        const updateInterval = setInterval(() => {
-            fetchPosts();
-        }, 60000); // Обновление каждые 60 секунд
-
-        return () => clearInterval(updateInterval); // Очищаем интервал при размонтировании компонента
-    }, []);
+    });
 
     if (error) {
         return (
@@ -87,7 +76,7 @@ export function PostPageComp() {
     if (!posts) {
         return (
             <div className="w-screen h-screen flex items-center justify-center">
-                <progress value={progress} className="w-1/2 md:w-1/3 lg:w-1/4" />
+                <p>Загрузка...</p>
             </div>
         );
     }

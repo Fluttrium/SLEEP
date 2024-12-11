@@ -1,5 +1,5 @@
-import {NextResponse} from "next/server";
-import {prisma} from "../../../../prisma/prisma-client";
+import { NextResponse } from "next/server";
+import { prisma } from "../../../../prisma/prisma-client";
 
 export async function GET() {
     try {
@@ -8,24 +8,28 @@ export async function GET() {
                 categories: {
                     select: {
                         id: true,
-                        name: true, // Предполагается, что `name` у категорий существует в базе данных
+                        name: true,
                     },
                 },
             },
         });
 
-        // Форматируем ответ, чтобы включить только необходимые поля
         const formattedPosts = posts.map(post => ({
             id: post.id,
             title: post.title,
             body: post.body,
             published: post.published,
             imageUrl: post.image,
-            categories: post.categories.map(category => category.name), // Преобразуем объекты категорий в строки
+            categories: post.categories.map(category => category.name),
         }));
 
-        return NextResponse.json(formattedPosts);
+        // Возвращаем данные с отключением кэширования
+        const response = NextResponse.json(formattedPosts);
+        response.headers.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+        response.headers.set("Pragma", "no-cache");
+        response.headers.set("Expires", "0");
+        return response;
     } catch (error: any) {
-        return NextResponse.json({error: error.message}, {status: 500});
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

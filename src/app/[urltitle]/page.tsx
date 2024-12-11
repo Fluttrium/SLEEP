@@ -96,6 +96,7 @@ export default function Page({ params }: { params: { urltitle: string } }) {
                 // Проверяем сессию и отправляем результаты
                 if (session?.user?.id) {
                     try {
+                        console.log(session.user.email)
                         await fetch("/api/user/test", {
                             method: "POST",
                             headers: {
@@ -106,7 +107,6 @@ export default function Page({ params }: { params: { urltitle: string } }) {
                                 results: resultsArray,
                             }),
                         });
-                        localStorage.setItem("testResults", JSON.stringify(resultsArray));
                         router.push("/profile ");
                     } catch (error) {
                         console.error("Ошибка сохранения результатов:", error);
@@ -114,7 +114,7 @@ export default function Page({ params }: { params: { urltitle: string } }) {
                 } else {
                     setResultTitle(resultsArray[0].title);
                     localStorage.setItem("testResults", JSON.stringify(resultsArray));
-                    router.push("/signin");
+
                 }
             } else {
                 setError("Результаты теста отсутствуют.");
@@ -141,7 +141,7 @@ export default function Page({ params }: { params: { urltitle: string } }) {
 
     if (resultTitle) {
         return session ? (
-            <div className='w-screen h-screen flex items-center justify-center'><TestChart /></div>
+            <div className='w-screen h-screen flex items-center justify-center'><TestChart userId={session.user.id} /></div>
 
         ) : (
             <div className="flex h-screen w-screen justify-center items-center">

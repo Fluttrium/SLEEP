@@ -19,44 +19,6 @@ import { TestChart } from "@/components/ui/chart2";
 export function UserProfile() {
     const { data: session } = useSession();
 
-    useEffect(() => {
-        const syncResultsWithServer = async () => {
-            // Проверяем, есть ли результаты в localStorage
-            const storedResults = localStorage.getItem("testResults");
-
-            if (storedResults && session?.user?.id) {
-                try {
-                    const resultsArray = JSON.parse(storedResults);
-
-                    // Отправляем результаты на сервер
-                    const response = await fetch("/api/user/test", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            userId: session.user.id,
-                            results: resultsArray,
-                        }),
-                    });
-
-                    if (response.ok) {
-                        console.log("Results successfully synced with the server.");
-                        localStorage.removeItem("testResults"); // Очищаем localStorage после успешной отправки
-                    } else {
-                        console.error("Failed to sync results with the server.");
-                    }
-                } catch (error) {
-                    console.error("Error syncing results with the server:", error);
-                }
-            }
-        };
-
-        if (session) {
-            syncResultsWithServer();
-        }
-    }, [session]);
-
     return (
         <div className="flex flex-row w-screen h-full justify-between px-10 py-11">
             <Tabs defaultValue="account" className="w-1/3">
@@ -112,8 +74,7 @@ export function UserProfile() {
                     </Card>
                 </TabsContent>
             </Tabs>
-
-            <TestChart />
+            {session?.user?.id && <TestChart userId={session.user.id} />}
         </div>
     );
 }

@@ -28,6 +28,7 @@ export function TestChart({ userId }: { userId: string }) {
     const [chartData, setChartData] = useState<{ month: string; desktop: number }[]>([]);
 
     useEffect(() => {
+        console.log(userId);
         const fetchData = async () => {
             if (!userId) {
                 console.log("User ID is not provided.");

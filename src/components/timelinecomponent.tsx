@@ -1,9 +1,33 @@
 import Image from "next/image";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Timeline } from "@/components/ui/timeline";
 import { Title } from "@/components/shared/ui/title";
+import Link from "next/link";
 
 export function TimelineDemo() {
+    const [deftest, setDeftest] = useState('')
+
+    useEffect(() => {
+        const fetchDeftest = async () => {
+            try {
+                const response = await fetch('/api/test/deftest');
+                const data = await response.json();
+
+                if (typeof data === 'string') {
+                    // Гарантируем, что значение всегда начинается с "/"
+                    setDeftest(data.startsWith('/') ? data : `/${data}`);
+                } else {
+                    console.error("Некорректный формат ответа:", data);
+                    setDeftest('/'); // Устанавливаем значение по умолчанию
+                }
+            } catch (error) {
+                console.error("Ошибка при загрузке дефолтного теста:", error);
+                setDeftest('/'); // Устанавливаем значение по умолчанию при ошибке
+            }
+        };
+
+        fetchDeftest();
+    }, []);
   const data = [
     {
       title: "1 Этап",
@@ -19,6 +43,7 @@ export function TimelineDemo() {
             size="md"
             className="text-neutral-800 dark:text-neutral-200 mb-8"
           />
+            <Link href={deftest || '/'}>
           <button className="relative inline-flex items-center justify-center p-2 my-2">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full" />
             <div
@@ -28,6 +53,7 @@ export function TimelineDemo() {
               Пройти тест
             </div>
           </button>
+            </Link>
           <div className="grid grid-cols-2 gap-4">
             <Image
               src="/side-view-professional-male-working-from-home.jpg"

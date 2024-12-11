@@ -11,17 +11,11 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Invalid input data" }, { status: 400 });
         }
 
-        const user = await prisma.user.findFirst({
-            where: { providerId: userId },
-        });
 
-        if (!user) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 });
-        }
 
         if (results) {
             await prisma.user.update({
-                where: { id: user.id },
+                where: { id :userId },
                 data: {
                     DisesesList: results.map((item: any) => JSON.stringify(item)),
                 },
@@ -32,7 +26,7 @@ export async function POST(req: Request) {
             );
         } else {
             const result = await prisma.user.findUnique({
-                where: { id: user.id },
+                where: { id: userId },
                 select: { DisesesList: true },
             });
             return NextResponse.json(

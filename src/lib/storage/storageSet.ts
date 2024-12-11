@@ -35,7 +35,8 @@ export const uploadFile = async ({key, file}: FileUploadParams): Promise<string>
         const result = await s3.send(command);
 
         // Возвращаем URL загруженного файла
-        return `https://${bucket}.storage.yandexcloud.net/${key}`;
+        return `https://storage.yandexcloud.net/sleep2/${key}`;
+
     } catch (error) {
         console.error('Ошибка загрузки файла:', error);
         throw new Error('Failed to upload file.');

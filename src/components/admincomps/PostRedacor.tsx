@@ -147,10 +147,7 @@ export function PostRedacor() {
 
             if (response.ok) {
                 const data = await response.json();
-
-                // Формируем Markdown синтаксис для изображений
-                const markdownImages = files.map(() => `![Uploaded Image](${data.fileUrl})`);
-                callback(markdownImages); // Передаем готовый Markdown
+                callback([data.fileUrl]);
             } else {
                 console.error("Ошибка загрузки изображения:", await response.json());
             }

@@ -133,8 +133,8 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
         e.preventDefault();
         setOloading(true);
 
-        if (!optionstext || !optionsScore ) {
-            alert("Пожалуйста, заполните все поля");
+        if (!optionstext.trim()) {
+            alert("Пожалуйста, заполните текст варианта");
             setOloading(false);
             return;
         }
@@ -148,9 +148,9 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                 body: JSON.stringify({
                     questionId,
                     text: optionstext,
-                    score: optionsScore,
-                    maxDisease: selectedmaxDiseases, // Передаем массив ID выбранных диагнозов
-                    minDisease: selectedminDiseases, // Передаем массив ID выбранных диагнозов
+                    score: optionsScore !== undefined ? optionsScore : 0, // Убедитесь, что score передается
+                    maxDisease: selectedmaxDiseases.length > 0 ? selectedmaxDiseases : [],
+                    minDisease: selectedminDiseases.length > 0 ? selectedminDiseases : [],
                 }),
             });
 
@@ -159,6 +159,7 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
             }
 
             setOptionsText("");
+            setOptionsScore(0);
             setSelectedmaxDiseases([]);
             setSelectedminDiseases([]);
             alert("Вариант успешно создан");
@@ -170,6 +171,7 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
             setOloading(false);
         }
     };
+
 
 
     const handleSubmitResult = async (e: React.FormEvent,) => {

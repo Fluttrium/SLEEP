@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { PostsCard } from "@/components/postsforuser/PostCard";
 import { useRouter } from "next/navigation";
@@ -23,47 +22,41 @@ export function PostPageComp() {
     const [posts, setPosts] = useState<Post[] | null>(null);
     const [categories, setCategories] = useState<Cat[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [progress, setProgress] = useState(0);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
-    // Функции загрузки данных
-    const fetchPosts = async () => {
+    // Функция для загрузки данных
+    const fetchData = async () => {
         try {
-            const response = await fetch("/api/articles");
-            if (!response.ok) {
-                throw new Error("Не удалось загрузить посты");
+            setProgress(0);
+            setError(null);
+            const [postsResponse, categoriesResponse] = await Promise.all([
+                fetch("/api/articles", { headers: { "Cache-Control": "no-cache" } }),
+                fetch("/api/articles/cat", { headers: { "Cache-Control": "no-cache" } }),
+            ]);
+
+            if (!postsResponse.ok || !categoriesResponse.ok) {
+                throw new Error("Ошибка загрузки данных");
             }
-            const data: Post[] = await response.json();
-            setPosts(data);
+
+            const [postsData, categoriesData] = await Promise.all([
+                postsResponse.json(),
+                categoriesResponse.json(),
+            ]);
+
+            setPosts(postsData);
+            setCategories(categoriesData);
+            setProgress(100);
         } catch (error) {
             setError(error instanceof Error ? error.message : "Неизвестная ошибка");
-            console.error("Ошибка при получении постов:", error);
+            console.error("Ошибка загрузки данных:", error);
         }
     };
 
-    const fetchCategories = async () => {
-        try {
-            const response = await fetch("/api/articles/cat");
-            if (!response.ok) {
-                throw new Error("Не удалось загрузить категории");
-            }
-            const data: Cat[] = await response.json();
-            setCategories(data);
-        } catch (error) {
-            setError(error instanceof Error ? error.message : "Неизвестная ошибка");
-            console.error("Ошибка при получении категорий:", error);
-        }
-    };
-
-    // Эффект для загрузки данных при каждом рендере
     useEffect(() => {
-        const fetchData = async () => {
-            setError(null); // Сбрасываем ошибку перед новым запросом
-            await Promise.all([fetchPosts(), fetchCategories()]);
-        };
-
         fetchData();
-    });
+    }, []);
 
     if (error) {
         return (
@@ -73,10 +66,10 @@ export function PostPageComp() {
         );
     }
 
-    if (!posts) {
+    if (!posts || progress < 100) {
         return (
             <div className="w-screen h-screen flex items-center justify-center">
-                <p>Загрузка...</p>
+                <progress value={progress} max="100" className="w-1/2 md:w-1/3 lg:w-1/4" />
             </div>
         );
     }
@@ -96,6 +89,7 @@ export function PostPageComp() {
 
     return (
         <section className="w-screen h-screen px-4 pt-10 pb-20 sm:pb-0 overflow-y-auto">
+            {/* Отображаем категории */}
             <div className="h-9 w-full flex my-6 gap-4">
                 {categories.map((category) => (
                     <Button
@@ -112,6 +106,7 @@ export function PostPageComp() {
                 ))}
             </div>
 
+            {/* Отображаем посты */}
             <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
                 {filteredPosts.map((post) => (
                     <div
@@ -124,7 +119,7 @@ export function PostPageComp() {
                             description={post.body}
                             title={post.title}
                             categories={post.categories || []}
-                            image={post.imageUrl}
+                            image={post.imageUrl} // Используем imageUrl для фона
                         />
                     </div>
                 ))}

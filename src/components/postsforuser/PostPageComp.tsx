@@ -1,8 +1,9 @@
 "use client";
-import React, {useEffect, useState} from "react";
-import {PostsCard} from "@/components/postsforuser/PostCard";
-import {useRouter} from "next/navigation";
-import {Button} from "@/components/ui/button";
+
+import React, { useEffect, useState } from "react";
+import { PostsCard } from "@/components/postsforuser/PostCard";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 interface Cat {
     id: number;
@@ -72,6 +73,15 @@ export function PostPageComp() {
         return () => {
             clearInterval(interval);
         };
+    }, []);
+
+    // Periodically fetch posts to keep them updated
+    useEffect(() => {
+        const updateInterval = setInterval(() => {
+            fetchPosts();
+        }, 60000); // Update every 60 seconds
+
+        return () => clearInterval(updateInterval);
     }, []);
 
     if (error) {

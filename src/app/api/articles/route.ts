@@ -5,12 +5,7 @@ export async function GET() {
     try {
         const posts = await prisma.post.findMany({
             include: {
-                categories: {
-                    select: {
-                        id: true,
-                        name: true,
-                    },
-                },
+                categories: true,
             },
         });
 
@@ -31,5 +26,36 @@ export async function GET() {
         return response;
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+}
+
+export async function PUT(req: Request) {
+    try {
+        const {id, title, body, imageUrl} = await req.json();
+
+        if (!id || !title || !body) {
+            return NextResponse.json(
+                {message: 'ID, Название и Содержимое обязательны'},
+                {status: 400}
+            );
+        }
+
+        const image = imageUrl;
+
+        const updatedPost = await prisma.post.update({
+            where: {id},
+            data: {title, body, image},
+        });
+
+        return NextResponse.json(updatedPost, {status: 200});
+    } catch (error: unknown) {
+        console.error('Ошибка при обновлении поста:', error instanceof Error ? error.message : error);
+        return NextResponse.json(
+            {
+                message: 'Ошибка при обновлении поста',
+                error: error instanceof Error ? error.message : 'Неизвестная ошибка'
+            },
+            {status: 500}
+        );
     }
 }

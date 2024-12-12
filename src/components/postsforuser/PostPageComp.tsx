@@ -32,7 +32,7 @@ export function PostPageComp() {
             setProgress(0);
             setError(null);
             const [postsResponse, categoriesResponse] = await Promise.all([
-                fetch("/api/articles", { headers: { "Cache-Control": "no-cache" } }),
+                fetch("/api/admin/post", { headers: { "Cache-Control": "no-cache" } }),
                 fetch("/api/articles/cat", { headers: { "Cache-Control": "no-cache" } }),
             ]);
 

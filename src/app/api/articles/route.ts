@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { prisma } from "../../../../prisma/prisma-client";
+import {NextResponse} from "next/server";
+import {prisma} from "../../../../prisma/prisma-client";
 
 export async function GET() {
     try {
@@ -25,7 +25,7 @@ export async function GET() {
         response.headers.set("Expires", "0");
         return response;
     } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return NextResponse.json({error: error.message}, {status: 500});
     }
 }
 

@@ -18,7 +18,11 @@ export type Post = {
     categories?: string[];
 };
 
-export function PostPageComp() {
+interface PostPageCompProps {
+    showLimited?: boolean; // Новый пропс
+}
+
+export function PostPageComp({ showLimited = false }: PostPageCompProps) {
     const [posts, setPosts] = useState<Post[] | null>(null);
     const [categories, setCategories] = useState<Cat[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -32,11 +36,11 @@ export function PostPageComp() {
             const [postsResponse, categoriesResponse] = await Promise.all([
                 fetch("/api/articles", {
                     headers: { "Cache-Control": "no-cache" },
-                    cache: "no-store", // Важно для предотвращения кэширования на стороне fetch
+                    cache: "no-store",
                 }),
                 fetch("/api/articles/cat", {
                     headers: { "Cache-Control": "no-cache" },
-                    cache: "no-store", // Аналогично
+                    cache: "no-store",
                 }),
             ]);
 
@@ -58,7 +62,6 @@ export function PostPageComp() {
         }
     };
 
-
     useEffect(() => {
         fetchData();
     }, []);
@@ -79,9 +82,13 @@ export function PostPageComp() {
         );
     }
 
+    // Если showLimited=true, показываем только 3 статьи
+    const displayedPosts = showLimited ? posts.slice(0, 3) : posts;
+
+    // Фильтрация постов по категориям (если showLimited=false)
     const filteredPosts = selectedCategory
-        ? posts.filter((post) => post.categories?.includes(selectedCategory))
-        : posts;
+        ? displayedPosts.filter((post) => post.categories?.includes(selectedCategory))
+        : displayedPosts;
 
     const handleCardClick = (title: string) => {
         const encodedTitle = encodeURIComponent(title);
@@ -93,26 +100,28 @@ export function PostPageComp() {
     };
 
     return (
-        <section className="w-screen h-screen px-4 pt-10 pb-20 sm:pb-0 overflow-y-auto">
-            {/* Отображаем категории */}
-            <div className="h-9 w-full flex my-6 gap-4">
-                {categories.map((category) => (
-                    <Button
-                        key={category.id}
-                        className={`px-4 py-2 rounded-md transition ${
-                            selectedCategory === category.name
-                                ? "bg-blue-500 text-white"
-                                : "bg-gray-200 hover:bg-gray-300"
-                        }`}
-                        onClick={() => handleCategoryClick(category.name)}
-                    >
-                        {category.name}
-                    </Button>
-                ))}
-            </div>
+        <section className="w-screen h-screen px-4 pt-10 pb-20 sm:pb-0 overflow-hidden">
+            {/* Отображаем категории, если showLimited = false */}
+            {!showLimited && (
+                <div className="h-9 w-full flex my-6 gap-4">
+                    {categories.map((category) => (
+                        <Button
+                            key={category.id}
+                            className={`px-4 py-2 rounded-md transition ${
+                                selectedCategory === category.name
+                                    ? "bg-blue-500 text-white"
+                                    : "bg-gray-200 hover:bg-gray-300"
+                            }`}
+                            onClick={() => handleCategoryClick(category.name)}
+                        >
+                            {category.name}
+                        </Button>
+                    ))}
+                </div>
+            )}
 
             {/* Отображаем посты */}
-            <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 overflow-y-auto h-full">
                 {filteredPosts.map((post) => (
                     <div
                         key={post.id}
@@ -130,5 +139,6 @@ export function PostPageComp() {
                 ))}
             </div>
         </section>
+
     );
 }

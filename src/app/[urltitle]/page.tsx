@@ -17,12 +17,6 @@ import { Progress } from "@/components/ui/progress";
 import { useRouter } from "next/navigation";
 import { TestChart } from "@/components/ui/chart2";
 
-interface Option {
-    id: number;
-    text: string;
-    score: number;
-    diseaseId?: number;
-}
 
 export default function Page({ params }: { params: { urltitle: string } }) {
     const { data: session } = useSession();
@@ -37,6 +31,7 @@ export default function Page({ params }: { params: { urltitle: string } }) {
         answerQuestion,
         nextQuestion,
         getFinalResults,
+        resetStore,
     } = useTestStore();
 
     const [loading, setLoading] = useState(true);
@@ -48,6 +43,12 @@ export default function Page({ params }: { params: { urltitle: string } }) {
     useEffect(() => {
         const timer = setTimeout(() => setProgress(80), 300);
         return () => clearTimeout(timer);
+    }, []);
+
+    useEffect(() => {
+        // Очистка кеша с названием "testResults" при рендере
+        localStorage.removeItem("testResults");
+        resetStore();
     }, []);
 
     useEffect(() => {
@@ -103,7 +104,7 @@ export default function Page({ params }: { params: { urltitle: string } }) {
                                 "Content-Type": "application/json",
                             },
                             body: JSON.stringify({
-                                userId: session.user.id,
+                                userId: session.user.email,
                                 results: resultsArray,
                             }),
                         });

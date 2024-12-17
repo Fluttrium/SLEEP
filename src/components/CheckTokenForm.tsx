@@ -34,7 +34,7 @@ export function CheckTokenForm() {
 
             const data = await res.json();
             setSuccess(data.message); // Выводим сообщение об успешной верификации
-            router.push('/profile')
+            router.push('/signin')
         } catch (err) {
             setError((err as Error).message);
         }

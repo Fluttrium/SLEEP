@@ -28,17 +28,13 @@ export function TestChart({ userId }: { userId: string }) {
     const [chartData, setChartData] = useState<{ month: string; desktop: number }[]>([]);
 
     useEffect(() => {
-        console.log(userId);
         const fetchData = async () => {
-            if (!userId) {
-                console.log("User ID is not provided.");
-                return;
-            }
+            if (!userId) return console.log("User ID is not provided.");
 
             try {
                 let dataFetched = false;
 
-                // Попробуем загрузить данные с сервера
+                // 1. Попытка загрузить данные с сервера
                 const response = await fetch("/api/user/test", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -58,19 +54,72 @@ export function TestChart({ userId }: { userId: string }) {
                         setChartData(formattedData);
                         localStorage.setItem("testResults", JSON.stringify(formattedData));
                         dataFetched = true;
-                        console.log("Data successfully fetched from server.");
                     }
                 }
 
-                // Если данных нет, проверить локальное хранилище
+                // 2. Если с сервера данных нет, загружаем из localStorage
                 if (!dataFetched) {
                     const storedData = localStorage.getItem("testResults");
+
+                    // Проверка данных из localStorage
                     if (storedData) {
-                        const parsedData = JSON.parse(storedData);
-                        setChartData(parsedData);
-                        console.log("Loaded data from local storage.");
-                    } else {
-                        console.log("No data available locally or from the server.");
+                        let parsedData;
+
+                        try {
+                            // Парсим данные из localStorage
+                            parsedData = JSON.parse(storedData);
+
+                            // Проверяем, что это массив
+                            if (!Array.isArray(parsedData)) {
+                                console.error("Stored data is not a valid array");
+                                return;
+                            }
+                        } catch (e) {
+                            console.error("Error parsing stored data:", e);
+                            return;
+                        }
+
+                        // Отправка данных на сервер
+                        const saveResponse = await fetch("/api/user/test", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ userId, results: parsedData }),
+                        });
+
+                        if (saveResponse.ok) {
+                            let parsedData = JSON.parse(storedData);
+
+                            // Проверка: если данные — массив строк, парсим каждую строку
+                            if (Array.isArray(parsedData)) {
+                                parsedData = parsedData.map((item) => {
+                                    if (typeof item === "string") {
+                                        try {
+                                            return JSON.parse(item); // Парсим строку в объект
+                                        } catch (e) {
+                                            console.error("Error parsing item:", item, e);
+                                        }
+                                    }
+                                    return item; // Возвращаем, если это уже объект
+                                });
+
+                                // Проверяем, что каждый элемент имеет title и score
+                                const validData = parsedData.filter(
+                                    (item: { title: undefined; score: undefined; }) => item?.title !== undefined && item?.score !== undefined
+                                );
+
+                                setChartData(
+                                    validData.map((item: { title: any; score: any; }) => ({
+                                        month: item.title,
+                                        desktop: item.score,
+                                    }))
+                                );
+                                console.log("Loaded and parsed local data:", validData);
+                            }
+                            console.log("Local data successfully sent to server and applied to chart.");
+                        } else {
+                            console.warn("Failed to update server with local data. Using local data only.");
+                            setChartData(parsedData);
+                        }
                     }
                 }
             } catch (error) {

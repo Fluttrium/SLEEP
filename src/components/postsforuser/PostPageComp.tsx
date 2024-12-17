@@ -29,11 +29,15 @@ export function PostPageComp() {
     // Функция для загрузки данных
     const fetchData = async () => {
         try {
-            setProgress(0);
-            setError(null);
             const [postsResponse, categoriesResponse] = await Promise.all([
-                fetch("/api/articles", { headers: { "Cache-Control": "no-cache" } }),
-                fetch("/api/articles/cat", { headers: { "Cache-Control": "no-cache" } }),
+                fetch("/api/articles", {
+                    headers: { "Cache-Control": "no-cache" },
+                    cache: "no-store", // Важно для предотвращения кэширования на стороне fetch
+                }),
+                fetch("/api/articles/cat", {
+                    headers: { "Cache-Control": "no-cache" },
+                    cache: "no-store", // Аналогично
+                }),
             ]);
 
             if (!postsResponse.ok || !categoriesResponse.ok) {
@@ -53,6 +57,7 @@ export function PostPageComp() {
             console.error("Ошибка загрузки данных:", error);
         }
     };
+
 
     useEffect(() => {
         fetchData();

@@ -1,8 +1,7 @@
-import {PostPageComp} from "@/components/postsforuser/PostPageComp";
-export const dynamic = 'force-dynamic'
-export default function PostPage() {
-    return (
-        <PostPageComp/>
-    );
+export const dynamic = "force-dynamic";
 
+import { PostPageComp } from "@/components/postsforuser/PostPageComp";
+
+export default function PostPage() {
+    return <PostPageComp />;
 }

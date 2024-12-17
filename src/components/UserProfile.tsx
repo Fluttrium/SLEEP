@@ -16,6 +16,7 @@ import {TestChart} from "@/components/ui/chart2";
 
 export function UserProfile() {
     const {data: session} = useSession();
+    const email= String(session?.user.email);
 
     return (
         <div className="flex flex-row w-screen h-full justify-between px-10 py-11">
@@ -79,7 +80,7 @@ export function UserProfile() {
                 </div>
             </div>
 
-            {session?.user?.id && <TestChart userId={session.user.id}/>}
+            {session?.user?.id && <TestChart userId={email}/>}
         </div>
     );
 }

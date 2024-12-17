@@ -30,6 +30,7 @@ interface TestStore {
     answerQuestion: (option: QuestionOption) => void;
     nextQuestion: () => void;
     getFinalResults: () => { [title: string]: number };
+    resetStore: () => void;
 }
 
 export const useTestStore = create<TestStore>((set, get) => ({
@@ -137,4 +138,11 @@ export const useTestStore = create<TestStore>((set, get) => ({
         });
         return results;
     },
+
+    resetStore: () => set({
+        questions: [],
+        diseases: [],
+        totalScores: {},
+        currentQuestionIndex: 0,
+    }),
 }));

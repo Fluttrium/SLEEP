@@ -9,9 +9,9 @@ import React, {useEffect, useState} from "react";
 import {Tests} from "@/components/admincomps/TestTable";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Button} from "@/components/ui/button";
-import {Plus} from "lucide-react";
+import {Plus, Settings} from "lucide-react";
 import {
-    Dialog,
+    Dialog, DialogClose,
     DialogContent,
     DialogFooter,
     DialogHeader,
@@ -21,6 +21,7 @@ import {
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
+import {Post, User} from "@prisma/client";
 
 interface TestRedactorProps {
     onClose: () => void;
@@ -49,6 +50,8 @@ interface Diseas {
     title: string;
     testId: number;
     test: Tests | null;
+    posts: Post[];
+    doctors: User[];
 }
 
 export function TestRedactor({onClose, test}: TestRedactorProps) {
@@ -64,17 +67,29 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
     const [error, setError] = useState('');
     const [options, setOptions] = useState<Options[]>([]);
     const id = test!.id;
-
     const [loadingResult, setLoadingResult] = useState(false);
     const [result, setResult] = useState<Diseas[]>([]);
     const [errorResult, setErrorResult] = useState('');
     const [resultTitle, setResultTitle] = useState("");
-    const [minScoreResult, setMinScoreResult] = useState(0);
-    const [maxScoreResult, setMaxScoreResult] = useState(0);
-    const [linksResult, setLinksResult] = useState<string[]>([]);
+    const [doctorsList, setDoctorsList] = useState<User[]>([]);
+    const [desiesDoctor, setDesiesDoctor] = useState<User>();
+    const [postsList, setPostsList] = useState<Post[]>([]);
+    const [desiesPosts, setDesiesPosts] = useState<Post>();
+    const [dloading, setDloading] = useState(false);
 
     const [selectedmaxDiseases, setSelectedmaxDiseases] = useState<number[]>([]);
+
     const [selectedminDiseases, setSelectedminDiseases] = useState<number[]>([]);
+    const handleChange = async (post: Post | null, doctor: User | null) => {
+        console.log("handleChange called with:", post, doctor);
+        if (!doctor || !post) {
+            return setError("Doctor not found");
+        } else {
+            setDesiesDoctor(doctor);
+            setDesiesPosts(post);
+        }
+
+    };
 
     const handleminDiseaseSelect = (e: React.ChangeEvent<HTMLInputElement>, diseaseId: number) => {
         setSelectedminDiseases((prev) =>
@@ -83,6 +98,7 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                 : prev.filter((id) => id !== diseaseId) // Убираем, если отменили выбор
         );
     };
+
     const handlemaxDiseaseSelect = (e: React.ChangeEvent<HTMLInputElement>, diseaseId: number) => {
         setSelectedmaxDiseases((prev) =>
             e.target.checked
@@ -90,7 +106,6 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                 : prev.filter((id) => id !== diseaseId) // Убираем, если отменили выбор
         );
     };
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -172,7 +187,21 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
         }
     };
 
+    const fetchdoctorsnposts = async () => {
+        try {
+            const response = await fetch("/api/admin/tests/getdocnpost")
+            if (!response.ok) {
+                throw new Error('Ошибка при получении данных');
+            }
+            const data = await response.json();
 
+            setDoctorsList(data.doctors);
+            setPostsList(data.posts);
+
+        } catch (error) {
+        }
+
+    }
 
     const handleSubmitResult = async (e: React.FormEvent,) => {
         e.preventDefault();
@@ -208,6 +237,45 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
             setError("Ошибка при создании результата. Пожалуйста, попробуйте еще раз.");
         } finally {
             setLoadingResult(false);
+        }
+    };
+
+    const handleUpdateDesies = async (e: React.FormEvent, diseaseId: number) => {
+        e.preventDefault();
+        setDloading(true);
+
+        if (!desiesDoctor || !desiesDoctor.id || !desiesPosts || !desiesPosts.id) {
+            alert("Выберите врача и статью перед сохранением.");
+            setDloading(false);
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/admin/tests/getdocnpost", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    diseaseId, // ID диагноза
+                    doctor: {id: desiesDoctor.id},
+                    post: {id: desiesPosts.id},
+                }),
+            });
+
+            const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.error || "Ошибка при обновлении диагноза");
+            }
+
+            alert("Обновление успешно выполнено");
+        } catch (error) {
+            console.error("Ошибка:", error);
+            setError("Ошибка при обновлении данных. Пожалуйста, попробуйте ещё раз.");
+        } finally {
+            setDesiesDoctor(undefined);
+            setDesiesPosts(undefined);
+            setDloading(false);
         }
     };
 
@@ -292,6 +360,7 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
 
     useEffect(() => {
         fetchQuestions();
+        fetchdoctorsnposts();
     }, [test]);
 
     if (!test) {
@@ -301,7 +370,8 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
     return (
         <div className="relative h-full">
             <div className="absolute bottom-0 right-0 rounded-3xl pr-10 pb-10 z-50">
-                <Dialog>
+                <Dialog
+                >
                     <DialogTrigger asChild>
                         <Button size='default' variant='secondary' className='border-blue-700 border-4'>
                             <Plus/>
@@ -348,7 +418,8 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
             </div>
             <div className='flex flex-row justify-between items-center'>
                 <h2 className="text-2xl py-5 ">Редактор теста <p className="text-primary text-3xl">{test.title}</p></h2>
-                <Dialog>
+                <Dialog
+                >
                     <DialogTrigger asChild>
                         <Button onClick={fetchResults}>Диагнозы </Button>
                     </DialogTrigger>
@@ -365,7 +436,99 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                                     {result.length > 0 ? (
                                         result.map((result: Diseas) => (
                                             <TableRow key={result.id}>
-                                                <TableCell>{result.title}</TableCell>
+                                                <TableCell
+                                                    className='flex flex-row justify-between mx-3 text-xl'>{result.title}
+
+                                                    <Dialog onOpenChange={(isOpen) => {
+                                                        if (!isOpen) {
+                                                            setDesiesDoctor(undefined); // Сбрасываем выбранного врача
+                                                            setDesiesPosts(undefined); // Сбрасываем выбранную статью
+                                                        }
+                                                    }}>
+                                                        <DialogTrigger asChild>
+                                                            <div
+                                                                className="bg-primary rounded -2xl"
+                                                                onClick={() =>
+                                                                    handleChange(
+                                                                        result.posts.length > 0 ? result.posts[0] : null,
+                                                                        result.doctors.length > 0 ? result.doctors[0] : null
+                                                                    )
+                                                                }
+                                                            >
+                                                                <Settings color="white" className="m-1"/>
+                                                            </div>
+                                                        </DialogTrigger>
+                                                        <DialogContent>
+                                                            <DialogHeader className='text-center text-xl'>
+                                                                Добавьте статью и врача для рекомендации пользователям
+                                                            </DialogHeader>
+                                                            <DialogContent>
+                                                                <form onSubmit={(e) => handleUpdateDesies(e, result.id)}
+                                                                      className="grid gap-4 py-4">
+                                                                    <div
+                                                                        className="flex flex-row  justify-between items-center mx-8">
+                                                                        <Label htmlFor="doctor" className="text-right">
+                                                                            Врач
+                                                                        </Label>
+                                                                        <DropdownMenu>
+                                                                            <DropdownMenuTrigger asChild>
+                                                                                <Button variant="outline">
+                                                                                    {desiesDoctor ? desiesDoctor.name : "выберите доктора"}
+                                                                                </Button>
+                                                                            </DropdownMenuTrigger>
+                                                                            <DropdownMenuContent>
+                                                                                {doctorsList.map((doctor) => (
+                                                                                    <div
+                                                                                        key={doctor.id}
+                                                                                        className="cursor-pointer"
+                                                                                        onClick={() => setDesiesDoctor(doctor)}
+                                                                                    >
+                                                                                        {doctor.name}
+                                                                                    </div>
+                                                                                ))}
+                                                                            </DropdownMenuContent>
+                                                                        </DropdownMenu>
+                                                                    </div>
+
+                                                                    <div
+                                                                        className="flex flex-row  justify-between items-center mx-8">
+                                                                        <Label htmlFor="post" className="text-right">
+                                                                            Статья
+                                                                        </Label>
+                                                                        <DropdownMenu>
+                                                                            <DropdownMenuTrigger asChild>
+                                                                                <Button className='flex '
+                                                                                        variant="outline">
+                                                                                    {desiesPosts ? desiesPosts.title : "выберите статью"}
+                                                                                </Button>
+                                                                            </DropdownMenuTrigger>
+                                                                            <DropdownMenuContent>
+                                                                                {postsList.map((post) => (
+                                                                                    <div
+                                                                                        key={post.id}
+                                                                                        className="cursor-pointer"
+                                                                                        onClick={() => setDesiesPosts(post)}
+                                                                                    >
+                                                                                        {post.title}
+                                                                                    </div>
+                                                                                ))}
+                                                                            </DropdownMenuContent>
+                                                                        </DropdownMenu>
+                                                                    </div>
+
+                                                                    <DialogFooter>
+                                                                        <Button type="submit" disabled={dloading}>
+                                                                            {dloading ? "Сохранение..." : "Сохранить изменения"}
+                                                                        </Button>
+                                                                    </DialogFooter>
+                                                                </form>
+
+
+                                                            </DialogContent>
+
+                                                        </DialogContent>
+                                                    </Dialog>
+                                                </TableCell>
                                             </TableRow>
                                         ))
                                     ) : (
@@ -431,7 +594,8 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                                 <TableCell>
                                     <Dialog>
                                         <DialogTrigger asChild>
-                                            <Button onClick={() => [fetchOptions(question.id), fetchResults()]}>Варианты</Button>
+                                            <Button
+                                                onClick={() => [fetchOptions(question.id), fetchResults()]}>Варианты</Button>
                                         </DialogTrigger>
                                         <DialogContent>
                                             <DialogHeader>

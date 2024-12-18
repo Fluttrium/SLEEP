@@ -15,6 +15,10 @@ export async function POST(request: Request) {
             where: {
                 testId: testId,
             },
+            include: {
+                posts: true,
+                doctors: true// Включает связанные посты
+            },
         });
 
         return NextResponse.json(disease);

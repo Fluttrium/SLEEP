@@ -27,11 +27,13 @@ model User {
   providerId        String?
   verificationToken VerificationToken[] @relation("UserToVerificationToken")
   registrationDate  DateTime            @default(now())
-  disease           Disease[]
+  diseases          Disease[]           @relation("DoctorDiseases")
   firstTestDate     DateTime?
   specialty         String?
-  DisesesList       String[]
   description       String?
+  Disease           Disease?            @relation(fields: [diseaseId], references: [id])
+  diseaseId         Int?
+  DisesesList       String[]
 }
 
 model VerificationToken {
@@ -97,6 +99,8 @@ model Post {
   published  Boolean    @default(false)
   categories Category[] @relation("CategoryToPost")
   image      String?
+  diseaseId  Int? // FK для связи с Disease
+  disease    Disease?   @relation(fields: [diseaseId], references: [id]) // Определение связи здесь
 }
 
 model Category {
@@ -145,11 +149,14 @@ model Option {
 model Disease {
   id        Int      @id @default(autoincrement())
   title     String   @unique
-  testId    Int? // Теперь необязательное поле
+  testId    Int? // Опциональное поле
   test      Test?    @relation(fields: [testId], references: [id])
-  users     User[]
+  doctors   User     @relation("DoctorDiseases", fields: [userId], references: [id]) // Правильная связь с User
+  posts     Post[] // Связь с Post через diseaseId
   OptionMin Option[] @relation("MinDiseases")
   OptionMax Option[] @relation("MaxDiseases")
+  User      User[]
+  userId    String
 }
 
 model CPAPMachine {

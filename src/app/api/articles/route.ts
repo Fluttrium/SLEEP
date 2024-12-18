@@ -15,7 +15,7 @@ export async function GET() {
             title: post.title,
             body: post.body,
             published: post.published,
-            imageUrl: post.image,
+            image: post.image,
             categories: post.categories.map(category => category.name),
         }));
 

@@ -14,7 +14,7 @@ export type Post = {
     title: string;
     body: string;
     published: boolean;
-    imageUrl?: string;
+    image?: string;
     categories?: string[];
 };
 
@@ -133,7 +133,7 @@ export function PostPageComp({ showLimited = false }: PostPageCompProps) {
                             description={post.body}
                             title={post.title}
                             categories={post.categories || []}
-                            image={post.imageUrl} // Используем imageUrl для фона
+                            image={post.image} // Используем imageUrl для фона
                         />
                     </div>
                 ))}

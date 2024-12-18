@@ -142,8 +142,7 @@ export default function Page({ params }: { params: { urltitle: string } }) {
 
     if (resultTitle) {
         return session ? (
-            <div className='w-screen h-screen flex items-center justify-center'><TestChart userId={session.user.id} /></div>
-
+            router.push('/profile')
         ) : (
             <div className="flex h-screen w-screen justify-center items-center">
                 <Card className="w-1/3 justify-center">

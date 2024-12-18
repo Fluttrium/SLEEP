@@ -29,25 +29,10 @@ export async function GET() {
     }
 }
 
-
-export async function POST (req: Request) {
+export async function POST(req: Request) {
     try {
         const body = await req.json();
-
         const { diseaseId, doctor, post } = body;
-
-        await prisma.disease.update({
-            where: { id: diseaseId },
-            data: {
-                doctors: {
-                    set: [], // Удаляет всех связанных пользователей
-                },
-                posts: {
-                    set: [], // Удаляет все связанные посты
-                },
-            },
-        });
-
 
         if (!diseaseId || !doctor?.id || !post?.id) {
             return NextResponse.json(
@@ -56,9 +41,13 @@ export async function POST (req: Request) {
             );
         }
 
-        // Убедимся, что диагноз существует
+        // Убедимся, что диагноз существует и получаем текущие связи
         const existingDisease = await prisma.disease.findUnique({
             where: { id: diseaseId },
+            include: {
+                doctors: true,
+                posts: true,
+            },
         });
 
         if (!existingDisease) {
@@ -68,15 +57,28 @@ export async function POST (req: Request) {
             );
         }
 
-        // Обновляем диагноз, связывая врача и статью
+        // Удаляем все текущие связи
+        await prisma.disease.update({
+            where: { id: diseaseId },
+            data: {
+                doctors: {
+                    disconnect: existingDisease.doctors.map((doctor) => ({ id: doctor.id })), // Указываем ID врачей
+                },
+                posts: {
+                    disconnect: existingDisease.posts.map((post) => ({ id: post.id })), // Указываем ID постов
+                },
+            },
+        });
+
+        // Устанавливаем новые связи
         const updatedDisease = await prisma.disease.update({
             where: { id: diseaseId },
             data: {
                 doctors: {
-                    connect: { id: doctor.id }, // Связываем врача
+                    connect: { id: doctor.id }, // Связываем нового врача
                 },
                 posts: {
-                    connect: { id: post.id }, // Связываем пост
+                    connect: { id: post.id }, // Связываем новый пост
                 },
             },
         });
@@ -93,4 +95,6 @@ export async function POST (req: Request) {
         );
     }
 }
+
+
 

@@ -19,6 +19,7 @@ model User {
   role              Role                @default(USER)
   password          String?
   messages          Message[]
+  consul            Consul[]
   profile           Profile?
   accounts          Account[]
   sessions          Session[]
@@ -80,6 +81,17 @@ model Message {
   body      String
   authorId  String
   author    User     @relation(fields: [authorId], references: [id])
+}
+
+model Consul {
+  id       String   @id @default(cuid())
+  date     DateTime
+  author   User     @relation(fields: [authorId], references: [id])
+  authorId String
+  contact  String
+  name     String
+  coment   String?
+  isRead   Boolean  @default(false)
 }
 
 model Profile {

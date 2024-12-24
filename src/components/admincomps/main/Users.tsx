@@ -1,37 +1,16 @@
-"use client"
+"use client";
 
-import {motion} from "framer-motion"
-import * as React from "react"
-import {
-    CaretSortIcon,
-    ChevronDownIcon,
-    DotsHorizontalIcon,
-} from "@radix-ui/react-icons"
+import { motion } from "framer-motion";
+import * as React from "react";
 import {
     ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
     flexRender,
     getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
     useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
-import {Button} from "@/components/ui/button"
-import {Checkbox} from "@/components/ui/checkbox"
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {Input} from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
     Table,
     TableBody,
@@ -39,8 +18,8 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
-
+} from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 export type Users = {
     id: string;
@@ -48,131 +27,78 @@ export type Users = {
     surname: string;
     email: string;
     phone: string;
-    statusReport: string;
-    statusResult: string;
-    messageTitle: string; // Заголовок сообщения
-    messages: {
+    consul: {
         id: number;
-        createdAt: string;
-        title: string;
+        date: string;
+        name: string;
+        contact: string;
+        isRead: boolean;
         body: string;
-        authorId: string;
-    }[]; // Новый тип для сообщений
+    }[];
 };
 
-
-export const columns: ColumnDef<Users>[] = [
-    {
-        id: "select",
-        header: ({table}) => (
-            <Checkbox
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate")
-                }
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({row}) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
+export const columns: (
+    setDialogData: React.Dispatch<React.SetStateAction<Users["consul"] | null>>,
+    setDialogUserId: React.Dispatch<React.SetStateAction<string | null>>
+) => ColumnDef<Users>[] = (setDialogData, setDialogUserId) => [
     {
         accessorKey: "name",
         header: "Имя",
-        cell: ({row}) => (
-            <div className="capitalize">{row.getValue("name")}</div>
-        ),
+        cell: ({ row }) => <div>{row.getValue("name")}</div>,
     },
     {
         accessorKey: "surname",
         header: "Фамилия",
-        cell: ({row}) => (
-            <div className="capitalize">{row.getValue("surname")}</div>
-        ),
+        cell: ({ row }) => <div>{row.getValue("surname")}</div>,
     },
     {
         accessorKey: "email",
-        header: ({column}) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Email
-                    <CaretSortIcon className="ml-2 h-4 w-4"/>
-                </Button>
-            )
-        },
-        cell: ({row}) => <div className="lowercase">{row.getValue("email")}</div>,
+        header: "Email",
+        cell: ({ row }) => <div>{row.getValue("email")}</div>,
     },
     {
-        accessorKey: "phone",
-        header: "Телефон",
-        cell: ({row}) => (
-            <div className="capitalize">{row.getValue("phone")}</div>
-        ),
-    },
-    {
-        accessorKey: "messages",
+        accessorKey: "consul",
         header: "Сообщения",
-        cell: ({row}) => {
-            const messages: Users['messages'] = row.getValue("messages"); // Используем тип из интерфейса Users
+        cell: ({ row }) => {
+            const messages: Users["consul"] = row.getValue("consul") || [];
+            const unreadMessages = messages.filter((message) => !message.isRead);
+
             return (
-                <div className="capitalize">
-                    {messages.length > 0 ? messages[0].title : "Нет сообщений"}
+                <div>
+                    <span>Всего сообщений: {messages.length}</span>
+                    {unreadMessages.length > 0 && (
+                        <span className="text-red-500 font-semibold">
+                            Есть непрочитанные сообщения
+                        </span>
+                    )}
                 </div>
             );
         },
     },
     {
-        accessorKey: "statusResult",
-        header: "Тест",
-        cell: ({row}) => (
-            <div className="capitalize">{row.getValue("statusResult")}</div>
-        ),
-    },
-    {
         id: "actions",
-        enableHiding: false,
-        cell: ({row}) => {
-            const payment = row.original
-
+        cell: ({ row }) => {
+            const user = row.original;
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Открыть меню</span>
-                            <DotsHorizontalIcon className="h-4 w-4"/>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Действия</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(payment.id)}
-                        >
-                            Скопировать ID
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator/>
-                        <DropdownMenuItem>Посмотреть результат теста</DropdownMenuItem>
-                        <DropdownMenuItem>Посмотреть текст обращения</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            )
+                <Button
+                    onClick={() => {
+                        setDialogData(user.consul);
+                        setDialogUserId(user.id);
+                    }}
+                >
+                    Посмотреть обращения
+                </Button>
+            );
         },
     },
-]
+];
 
 export function Users() {
     const [users, setUsers] = React.useState<Users[]>([]);
     const [loading, setLoading] = React.useState(true);
+    const [dialogData, setDialogData] = React.useState<Users["consul"] | null>(null);
+    const [dialogUserId, setDialogUserId] = React.useState<string | null>(null);
+    const [currentMessageIndex, setCurrentMessageIndex] = React.useState(0);
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -190,36 +116,51 @@ export function Users() {
         fetchData();
     }, []);
 
-    const [sorting, setSorting] = React.useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-    const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = React.useState({})
+    const markAllAsRead = async (userId: string) => {
+        try {
+            const response = await fetch(`/api/admin/messages/${userId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ isRead: true }),
+            });
 
-    const pageSize = 11
+            if (response.ok) {
+                setUsers((prevUsers) =>
+                    prevUsers.map((user) =>
+                        user.id === userId
+                            ? {
+                                ...user,
+                                consul: user.consul.map((message) => ({
+                                    ...message,
+                                    isRead: true,
+                                })),
+                            }
+                            : user
+                    )
+                );
+            } else {
+                console.error("Ошибка при отметке сообщений как прочитанных");
+            }
+        } catch (error) {
+            console.error("Ошибка при выполнении запроса:", error);
+        }
+    };
+
+
+    const handleDialogClose = () => {
+        if (dialogUserId) {
+            markAllAsRead(dialogUserId); // Помечаем все сообщения как прочитанные
+        }
+        setDialogData(null);
+        setDialogUserId(null);
+        setCurrentMessageIndex(0);
+    };
 
     const table = useReactTable({
         data: users,
-        columns,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
+        columns: columns(setDialogData, setDialogUserId),
         getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-        },
-    })
-
-    React.useEffect(() => {
-        table.setPageSize(pageSize)
-    }, [pageSize, table])
+    });
 
     if (loading) {
         return <div>Загрузка...</div>;
@@ -227,83 +168,39 @@ export function Users() {
 
     return (
         <motion.div
-            initial={{opacity: 0, y: 50}}
-            animate={{opacity: 1, y: 0}}
-            transition={{duration: 0.5, ease: "easeOut"}}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
             className="w-full px-5"
         >
-            <div className='text-7xl pl-5'>Пользователи</div>
-            <div className="flex items-center py-4">
-                <Input
-                    placeholder="Поиск..."
-                    value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("name")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns <ChevronDownIcon className="ml-2 h-4 w-4"/>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value: any) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
+            <div className="text-7xl pl-5">Пользователи</div>
             <motion.div
-                initial={{opacity: 0, scale: 0.9}}
-                animate={{opacity: 1, scale: 1}}
-                transition={{duration: 0.5}}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
                 className="rounded-md border"
             >
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead key={header.id}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
-                                        </TableHead>
-                                    )
-                                })}
+                                {headerGroup.headers.map((header) => (
+                                    <TableHead key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
+                                    </TableHead>
+                                ))}
                             </TableRow>
                         ))}
                     </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
-                                <motion.tr
-                                    key={row.id}
-                                    initial={{opacity: 0}}
-                                    animate={{opacity: 1}}
-                                    transition={{delay: row.index * 0.05}}
-                                    className={row.getIsSelected() ? "bg-gray-100" : ""}
-                                >
+                                <TableRow key={row.id}>
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
                                             {flexRender(
@@ -312,21 +209,59 @@ export function Users() {
                                             )}
                                         </TableCell>
                                     ))}
-                                </motion.tr>
+                                </TableRow>
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="h-24 text-center"
-                                >
-                                    No data.
+                                <TableCell colSpan={table.getHeaderGroups()[0].headers.length}>
+                                    Нет данных.
                                 </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
                 </Table>
             </motion.div>
+
+            <Dialog open={!!dialogData} onOpenChange={handleDialogClose}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Текст обращения</DialogTitle>
+                        <DialogDescription>
+                            {dialogData && dialogData.length > 0 ? (
+                                <div>
+                                    <p><strong>Дата:</strong> {dialogData[currentMessageIndex].date}</p>
+                                    <p><strong>Имя:</strong> {dialogData[currentMessageIndex].name}</p>
+                                    <p><strong>Контакт:</strong> {dialogData[currentMessageIndex].contact}</p>
+                                    <div className="flex justify-between mt-4">
+                                        <Button
+                                            onClick={() =>
+                                                setCurrentMessageIndex((prev) =>
+                                                    Math.max(prev - 1, 0)
+                                                )
+                                            }
+                                            disabled={currentMessageIndex === 0}
+                                        >
+                                            Предыдущее
+                                        </Button>
+                                        <Button
+                                            onClick={() =>
+                                                setCurrentMessageIndex((prev) =>
+                                                    Math.min(prev + 1, dialogData.length - 1)
+                                                )
+                                            }
+                                            disabled={currentMessageIndex === dialogData.length - 1}
+                                        >
+                                            Следующее
+                                        </Button>
+                                    </div>
+                                </div>
+                            ) : (
+                                "Сообщения не найдены."
+                            )}
+                        </DialogDescription>
+                    </DialogHeader>
+                </DialogContent>
+            </Dialog>
         </motion.div>
-    )
+    );
 }

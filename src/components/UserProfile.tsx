@@ -41,46 +41,89 @@ export function UserProfile() {
     const [dataFetched, setDataFetched] = useState(false);
 
     // Функция для загрузки данных
+    // Функция для загрузки данных
     const fetchData = async () => {
         if (!userId) return;
 
         try {
             const response = await fetch("/api/user/test", {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({userId}),
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId }),
             });
 
             if (response.ok) {
                 const result = await response.json();
+
                 if (result?.diseasesList?.length > 0) {
+                    // Если сервер вернул данные, форматируем и сохраняем их
                     const formattedData = result.diseasesList.map((item: string) => {
                         const parsedItem = JSON.parse(item);
-                        return {month: parsedItem.title, desktop: parsedItem.score};
+                        return { month: parsedItem.title, desktop: parsedItem.score };
                     });
                     setChartData(formattedData);
                     localStorage.setItem("testResults", JSON.stringify(formattedData));
                     setDataFetched(true);
+                } else {
+                    // Если сервер вернул пустой список, пробуем данные из localStorage
+                    const storedData = localStorage.getItem("testResults");
+                    if (storedData) {
+                        const parsedData = JSON.parse(storedData);
+                        const formattedData = parsedData.map((item: { title: string; score: number }) => ({
+                            month: item.title,
+                            desktop: item.score,
+                        }));
+                        setChartData(formattedData);
+                        setDataFetched(true);
+                    } else {
+                        console.warn("No test results found locally or on the server.");
+                    }
                 }
             } else {
+                console.error("Failed to fetch data from server:", response.statusText);
+
+                // Если запрос не удался, пробуем загрузить данные из localStorage
                 const storedData = localStorage.getItem("testResults");
                 if (storedData) {
                     const parsedData = JSON.parse(storedData);
-                    setChartData(parsedData);
+                    const formattedData = parsedData.map((item: { title: string; score: number }) => ({
+                        month: item.title,
+                        desktop: item.score,
+                    }));
+                    setChartData(formattedData);
                     setDataFetched(true);
+                } else {
+                    console.warn("No test results found locally or on the server.");
                 }
             }
         } catch (error) {
             console.error("Error loading chart data:", error);
+
+            // Если произошла ошибка, пробуем загрузить данные из localStorage
+            const storedData = localStorage.getItem("testResults");
+            if (storedData) {
+                const parsedData = JSON.parse(storedData);
+                const formattedData = parsedData.map((item: { title: string; score: number }) => ({
+                    month: item.title,
+                    desktop: item.score,
+                }));
+                setChartData(formattedData);
+                setDataFetched(true);
+            } else {
+                console.warn("No test results found locally or on the server.");
+            }
         }
     };
+
+
+
 
     // Функция для отправки данных о максимальном диагнозе
     const fetchPostsNDoctors = async () => {
         try {
             const maxDisease = chartData.reduce(
                 (max, current) => (current.desktop > max.desktop ? current : max),
-                { month: "", desktop: -Infinity }
+                {month: "", desktop: -Infinity}
             );
 
             if (maxDisease.desktop === -Infinity) return;
@@ -89,8 +132,8 @@ export function UserProfile() {
 
             const response = await fetch("/api/test/profiletest", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ title: maxDisease.month }),
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({title: maxDisease.month}),
             });
 
             if (response.ok) {

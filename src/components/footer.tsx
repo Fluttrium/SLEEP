@@ -1,8 +1,10 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
+
+import {faFacebookF, faTwitter, faInstagram, faTelegram} from "@fortawesome/free-brands-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faFacebookF, faTwitter, faInstagram, faTelegram} from "@fortawesome/free-brands-svg-icons"; // Импортируем иконку Telegram
+
 
 export const Footer: React.FC = () => {
     const [deftest, setDeftest] = useState('')
@@ -54,8 +56,8 @@ export const Footer: React.FC = () => {
                 {/* Социальные сети */}
                 <div className="flex space-x-6 pt-4">
                     <Link href="https://web.telegram.org/k/#@Mikhail_V_Bochkarev" target="_blank" aria-label="Telegram">
-                        <FontAwesomeIcon icon={faTelegram}
-                                         className="text-2xl hover:text-blue-500 transition"/> {/* Добавляем иконку Telegram */}
+                        <FontAwesomeIcon icon="telegram-plane"
+                                         className="text-2xl hover:text-blue-500 transition" /> {/* Добавляем иконку Telegram */}
                     </Link>
                 </div>
             </div>

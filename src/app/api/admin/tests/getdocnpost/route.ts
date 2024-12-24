@@ -29,6 +29,7 @@ export async function GET() {
     }
 }
 
+
 export async function POST(req: Request) {
     try {
         const body = await req.json();
@@ -41,60 +42,62 @@ export async function POST(req: Request) {
             );
         }
 
-        // Убедимся, что диагноз существует и получаем текущие связи
+        // Проверяем, существует ли диагноз
         const existingDisease = await prisma.disease.findUnique({
             where: { id: diseaseId },
-            include: {
-                doctors: true,
-                posts: true,
-            },
         });
 
         if (!existingDisease) {
-            return NextResponse.json(
-                { error: "Диагноз с таким ID не найден." },
-                { status: 404 }
-            );
+            return NextResponse.json({ error: "Диагноз с таким ID не найден." }, { status: 404 });
         }
 
-        // Удаляем все текущие связи
-        await prisma.disease.update({
-            where: { id: diseaseId },
-            data: {
-                doctors: {
-                    disconnect: existingDisease.doctors.map((doctor) => ({ id: doctor.id })), // Указываем ID врачей
-                },
-                posts: {
-                    disconnect: existingDisease.posts.map((post) => ({ id: post.id })), // Указываем ID постов
-                },
-            },
+        // Проверяем, существует ли врач
+        const existingDoctor = await prisma.user.findUnique({
+            where: { id: doctor.id },
         });
 
-        // Устанавливаем новые связи
-        const updatedDisease = await prisma.disease.update({
-            where: { id: diseaseId },
-            data: {
-                doctors: {
-                    connect: { id: doctor.id }, // Связываем нового врача
-                },
-                posts: {
-                    connect: { id: post.id }, // Связываем новый пост
-                },
-            },
+        if (!existingDoctor) {
+            return NextResponse.json({ error: "Врач с таким ID не найден." }, { status: 404 });
+        }
+
+        // Проверяем, существует ли статья
+        const existingPost = await prisma.post.findUnique({
+            where: { id: post.id },
         });
 
-        return NextResponse.json({
-            message: "Данные успешно обновлены.",
-            updatedDisease,
+        if (!existingPost) {
+            return NextResponse.json({ error: "Статья с таким ID не найдена." }, { status: 404 });
+        }
+
+        // Обновляем диагноз в рамках транзакции
+        const updatedDisease = await prisma.$transaction(async (tx) => {
+            // Удаляем старые связи
+            await tx.disease.update({
+                where: { id: diseaseId },
+                data: {
+                    doctorId: null,
+                    postId: null,
+                },
+            });
+
+            // Добавляем новые связи
+            return tx.disease.update({
+                where: { id: diseaseId },
+                data: {
+                    doctorId: doctor.id,
+                    postId: post.id,
+                },
+            });
         });
+
+        return NextResponse.json({ message: "Данные успешно обновлены.", updatedDisease });
     } catch (error) {
         console.error("Ошибка при обновлении данных:", error);
-        return NextResponse.json(
-            { error: "Ошибка при обновлении данных." },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: "Ошибка при обновлении данных." }, { status: 500 });
     }
 }
+
+
 
 
 

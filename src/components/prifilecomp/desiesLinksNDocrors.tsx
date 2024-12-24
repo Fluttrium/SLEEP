@@ -6,14 +6,14 @@ import Image from "next/image";
 
 // Интерфейс для пропсов
 interface DesiesLinksNDocrorsProps {
-    doctors: {
+    doctor?: {
         id: string;
         name: string;
         surname: string;
         specialty: string;
         image: string;
     }[];
-    posts: {
+    post?: {
         id: number;
         title: string;
         body: string;
@@ -21,18 +21,24 @@ interface DesiesLinksNDocrorsProps {
     }[];
 }
 
-export function DesiesLinksNDocrors({doctors, posts}: DesiesLinksNDocrorsProps) {
+export function DesiesLinksNDocrors({ doctor = [], post = [] }: DesiesLinksNDocrorsProps) {
     return (
         <div className="space-y-6">
             {/* Врачи */}
             <Card>
-                <CardHeader className="text-lg  text-center font-bold">Врачи, связанные с диагнозом</CardHeader>
+                <CardHeader className="text-lg text-center font-bold">Врачи, связанные с диагнозом</CardHeader>
                 <CardContent>
-                    {doctors.length > 0 ? (
-                        doctors.map((doctor) => (
-                            <div key={doctor.id}
-                                 className="mb-4 border-b pb-2 flex flex-col items-center justify-center">
-                                <img alt='фото доктора' className='flex h-1/2 w-1/2 rounded-3xl' src={doctor.image}/>
+                    {doctor.length > 0 ? (
+                        doctor.map((doctor) => (
+                            <div
+                                key={doctor.id}
+                                className="mb-4 border-b pb-2 flex flex-col items-center justify-center"
+                            >
+                                <img
+                                    alt="фото доктора"
+                                    className="flex h-1/2 w-1/2 rounded-3xl"
+                                    src={doctor.image } // Используйте плейсхолдер для пустых изображений
+                                />
                                 <p className="font-semibold text-2xl pt-3">
                                     {doctor.name} {doctor.surname}
                                 </p>
@@ -43,25 +49,23 @@ export function DesiesLinksNDocrors({doctors, posts}: DesiesLinksNDocrorsProps) 
                         <p className="text-gray-500">Информация о врачах отсутствует.</p>
                     )}
                 </CardContent>
-                <CardFooter className=' flex justify-center '><Button className="text-xl font-semibold">
-                    Записаться на консультацию
-                </Button></CardFooter>
+                <CardFooter className="flex justify-center">
+                    <Button className="text-xl font-semibold">Записаться на консультацию</Button>
+                </CardFooter>
             </Card>
 
             {/* Статьи */}
             <Card>
-                <CardHeader className="text-lg font-bold">
-                    Ознакомьтесь с подходящими материалами
-                </CardHeader>
+                <CardHeader className="text-lg font-bold">Ознакомьтесь с подходящими материалами</CardHeader>
                 <CardContent>
-                    {posts.length > 0 ? (
-                        posts.map((post) => (
+                    {post.length > 0 ? (
+                        post.map((post) => (
                             <div key={post.id} className="mb-6">
                                 <PostsCard
                                     author={post.title}
                                     description={post.body}
                                     title={post.title}
-                                    image={post.image}
+                                    image={post.image } // Используйте плейсхолдер
                                     categories={[]} // Пустые категории, если их нет
                                 />
                             </div>
@@ -71,9 +75,7 @@ export function DesiesLinksNDocrors({doctors, posts}: DesiesLinksNDocrorsProps) 
                     )}
                 </CardContent>
                 <CardFooter className="flex justify-center">
-                    <Button className="text-xl font-semibold">
-                        Записаться на консультацию
-                    </Button>
+                    <Button className="text-xl font-semibold">Записаться на консультацию</Button>
                 </CardFooter>
             </Card>
         </div>

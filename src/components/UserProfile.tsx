@@ -16,12 +16,28 @@ import {TestChart} from "@/components/ui/chart2";
 import {DesiesLinksNDocrors} from "@/components/prifilecomp/desiesLinksNDocrors";
 import {useEffect, useState} from "react";
 
+interface Doctor {
+    id: string;
+    name: string;
+    surname: string;
+    specialty: string;
+    image: string;
+}
+
+interface Post {
+    id: number;
+    title: string;
+    body: string;
+    image: string;
+}
+
+
 export function UserProfile() {
     const {data: session} = useSession();
     const userId = String(session?.user.email);
     const [chartData, setChartData] = useState<{ month: string; desktop: number }[]>([]);
-    const [doctors, setDoctors] = useState([]); // Состояние для врачей
-    const [posts, setPosts] = useState([]); // Состояние для постов
+    const [doctors, setDoctors] = useState<Doctor[]>([]);
+    const [posts, setPosts] = useState<Post[]>([]);
     const [dataFetched, setDataFetched] = useState(false);
 
     // Функция для загрузки данных
@@ -64,7 +80,7 @@ export function UserProfile() {
         try {
             const maxDisease = chartData.reduce(
                 (max, current) => (current.desktop > max.desktop ? current : max),
-                {month: "", desktop: -Infinity}
+                { month: "", desktop: -Infinity }
             );
 
             if (maxDisease.desktop === -Infinity) return;
@@ -73,15 +89,20 @@ export function UserProfile() {
 
             const response = await fetch("/api/test/profiletest", {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({title: maxDisease.month}),
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title: maxDisease.month }),
             });
 
             if (response.ok) {
                 const result = await response.json();
                 console.log("Fetched disease data with doctors and posts:", result);
-                setDoctors(result.disease.doctors); // Сохраняем врачей
-                setPosts(result.disease.posts); // Сохраняем посты
+
+                // Указываем, что это массивы
+                const doctorsArray: Doctor[] = result.disease.doctor ? [result.disease.doctor] : [];
+                const postsArray: Post[] = result.disease.post ? [result.disease.post] : [];
+
+                setDoctors(doctorsArray);
+                setPosts(postsArray);
             } else {
                 console.error("Failed to fetch disease data:", response.statusText);
             }
@@ -89,6 +110,7 @@ export function UserProfile() {
             console.error("Error in fetchPostsNDoctors:", error);
         }
     };
+
 
     useEffect(() => {
         fetchData();
@@ -104,7 +126,7 @@ export function UserProfile() {
         <div className="flex flex-row w-screen h-full justify-between px-10 py-11">
             <div className="flex flex-col mx-3 basis-1/2">
                 {/* Передаём врачей и посты в компонент */}
-                <DesiesLinksNDocrors doctors={doctors} posts={posts}/>
+                <DesiesLinksNDocrors doctor={doctors} post={posts}/>
 
 
             </div>

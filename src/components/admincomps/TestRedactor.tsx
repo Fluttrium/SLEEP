@@ -83,12 +83,11 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
     const handleChange = async (post: Post | null, doctor: User | null) => {
         console.log("handleChange called with:", post, doctor);
         if (!doctor || !post) {
-            return setError("Doctor not found");
-        } else {
-            setDesiesDoctor(doctor);
-            setDesiesPosts(post);
+            return setError("Выберите врача и статью перед продолжением.");
         }
 
+        setDesiesDoctor(doctor);
+        setDesiesPosts(post);
     };
 
     const handleminDiseaseSelect = (e: React.ChangeEvent<HTMLInputElement>, diseaseId: number) => {
@@ -447,17 +446,18 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                                                     }}>
                                                         <DialogTrigger asChild>
                                                             <div
-                                                                className="bg-primary rounded -2xl"
+                                                                className="bg-primary rounded-2xl"
                                                                 onClick={() =>
                                                                     handleChange(
-                                                                        result.posts.length > 0 ? result.posts[0] : null,
-                                                                        result.doctors.length > 0 ? result.doctors[0] : null
+                                                                        result.posts && result.posts.length > 0 ? result.posts[0] : null,
+                                                                        result.doctors && result.doctors.length > 0 ? result.doctors[0] : null
                                                                     )
                                                                 }
                                                             >
                                                                 <Settings color="white" className="m-1"/>
                                                             </div>
                                                         </DialogTrigger>
+
                                                         <DialogContent>
                                                             <DialogHeader className='text-center text-xl'>
                                                                 Добавьте статью и врача для рекомендации пользователям

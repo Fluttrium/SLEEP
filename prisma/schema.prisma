@@ -27,12 +27,11 @@ model User {
   providerId        String?
   verificationToken VerificationToken[] @relation("UserToVerificationToken")
   registrationDate  DateTime            @default(now())
-  diseases          Disease[]           @relation("DoctorDiseases")
   firstTestDate     DateTime?
   specialty         String?
   description       String?
-  Disease           Disease?            @relation(fields: [diseaseId], references: [id])
-  diseaseId         Int?
+  disease           Disease?            @relation("DoctorForDisease") // Указано только имя связи
+  Disease           Disease[]
   DisesesList       String[]
 }
 
@@ -100,7 +99,7 @@ model Post {
   categories Category[] @relation("CategoryToPost")
   image      String?
   diseaseId  Int? // FK для связи с Disease
-  disease    Disease?   @relation(fields: [diseaseId], references: [id]) // Определение связи здесь
+  disease    Disease?   @relation("PostToDisease") // Только имя связи
 }
 
 model Category {
@@ -151,12 +150,14 @@ model Disease {
   title     String   @unique
   testId    Int? // Опциональное поле
   test      Test?    @relation(fields: [testId], references: [id])
-  doctors   User     @relation("DoctorDiseases", fields: [userId], references: [id]) // Правильная связь с User
-  posts     Post[] // Связь с Post через diseaseId
+  doctorId  String?  @unique // Связь с одним врачом
+  doctor    User?    @relation("DoctorForDisease", fields: [doctorId], references: [id]) // Один к одному
+  postId    Int?     @unique // Связь с одной статьей
+  post      Post?    @relation("PostToDisease", fields: [postId], references: [id]) // Один к одному
   OptionMin Option[] @relation("MinDiseases")
   OptionMax Option[] @relation("MaxDiseases")
-  User      User[]
-  userId    String
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
 }
 
 model CPAPMachine {

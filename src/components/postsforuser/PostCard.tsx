@@ -17,7 +17,7 @@ export function PostsCard({ author, title, description, categories, image }: Pos
             <div className="cursor-pointer overflow-hidden relative card h-96 rounded-md shadow-xl max-w-sm mx-auto flex flex-col justify-between p-4">
                 {image && (
                     <img
-                        src={image}
+                        src={encodeURI(image)}
                         alt={title}
                         className="w-full h-full object-cover rounded-md absolute top-0 left-0 z-0"
                     />

@@ -1,25 +1,18 @@
 "use client";
 
-import { motion } from "framer-motion";
+import {motion} from "framer-motion";
 import * as React from "react";
 import {
     ColumnDef,
     flexRender,
     getCoreRowModel,
+    getPaginationRowModel,
     useReactTable,
 } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {Button} from "@/components/ui/button";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription} from "@/components/ui/dialog";
 
 export type Users = {
     id: string;
@@ -39,27 +32,28 @@ export type Users = {
 
 export const columns: (
     setDialogData: React.Dispatch<React.SetStateAction<Users["consul"] | null>>,
-    setDialogUserId: React.Dispatch<React.SetStateAction<string | null>>
-) => ColumnDef<Users>[] = (setDialogData, setDialogUserId) => [
+    setDialogUserId: React.Dispatch<React.SetStateAction<string | null>>,
+    handleDeleteUser: (userId: string) => void
+) => ColumnDef<Users>[] = (setDialogData, setDialogUserId, handleDeleteUser) => [
     {
         accessorKey: "name",
         header: "Имя",
-        cell: ({ row }) => <div>{row.getValue("name")}</div>,
+        cell: ({row}) => <div>{row.getValue("name")}</div>,
     },
     {
         accessorKey: "surname",
         header: "Фамилия",
-        cell: ({ row }) => <div>{row.getValue("surname")}</div>,
+        cell: ({row}) => <div>{row.getValue("surname")}</div>,
     },
     {
         accessorKey: "email",
         header: "Email",
-        cell: ({ row }) => <div>{row.getValue("email")}</div>,
+        cell: ({row}) => <div>{row.getValue("email")}</div>,
     },
     {
         accessorKey: "consul",
         header: "Сообщения",
-        cell: ({ row }) => {
+        cell: ({row}) => {
             const messages: Users["consul"] = row.getValue("consul") || [];
             const unreadMessages = messages.filter((message) => !message.isRead);
 
@@ -67,9 +61,7 @@ export const columns: (
                 <div>
                     <span>Всего сообщений: {messages.length}</span>
                     {unreadMessages.length > 0 && (
-                        <span className="text-red-500 font-semibold">
-                            Есть непрочитанные сообщения
-                        </span>
+                        <span className="text-red-500 font-semibold">Есть непрочитанные сообщения</span>
                     )}
                 </div>
             );
@@ -77,17 +69,25 @@ export const columns: (
     },
     {
         id: "actions",
-        cell: ({ row }) => {
+        cell: ({row}) => {
             const user = row.original;
             return (
-                <Button
-                    onClick={() => {
-                        setDialogData(user.consul);
-                        setDialogUserId(user.id);
-                    }}
-                >
-                    Посмотреть обращения
-                </Button>
+                <div className="flex gap-2">
+                    <Button
+                        onClick={() => {
+                            setDialogData(user.consul);
+                            setDialogUserId(user.id);
+                        }}
+                    >
+                        Посмотреть обращения
+                    </Button>
+                    <Button
+                        variant="destructive"
+                        onClick={() => handleDeleteUser(user.id)}
+                    >
+                        Удалить
+                    </Button>
+                </div>
             );
         },
     },
@@ -116,30 +116,24 @@ export function Users() {
         fetchData();
     }, []);
 
-    const markAllAsRead = async (userId: string) => {
+    const handleDeleteUser = async (userId: string) => {
+        if (!confirm("Вы уверены, что хотите удалить этого пользователя?")) return;
+
         try {
-            const response = await fetch(`/api/admin/messages/${userId}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ isRead: true }),
+            const response = await fetch(`/api/admin/users`, {
+                method: "POST", // Теперь используем POST вместо DELETE
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({id: userId}), // Передаём ID пользователя в теле запроса
             });
 
             if (response.ok) {
-                setUsers((prevUsers) =>
-                    prevUsers.map((user) =>
-                        user.id === userId
-                            ? {
-                                ...user,
-                                consul: user.consul.map((message) => ({
-                                    ...message,
-                                    isRead: true,
-                                })),
-                            }
-                            : user
-                    )
-                );
+                setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+                alert("Пользователь успешно удален.");
             } else {
-                console.error("Ошибка при отметке сообщений как прочитанных");
+                console.error("Ошибка при удалении пользователя");
+                alert("Не удалось удалить пользователя.");
             }
         } catch (error) {
             console.error("Ошибка при выполнении запроса:", error);
@@ -147,19 +141,17 @@ export function Users() {
     };
 
 
-    const handleDialogClose = () => {
-        if (dialogUserId) {
-            markAllAsRead(dialogUserId); // Помечаем все сообщения как прочитанные
-        }
-        setDialogData(null);
-        setDialogUserId(null);
-        setCurrentMessageIndex(0);
-    };
-
     const table = useReactTable({
         data: users,
-        columns: columns(setDialogData, setDialogUserId),
+        columns: columns(setDialogData, setDialogUserId, handleDeleteUser),
         getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        state: {
+            pagination: {
+                pageSize: 10, // Количество записей на странице
+                pageIndex: 0, // Начальный индекс страницы
+            },
+        },
     });
 
     if (loading) {
@@ -168,16 +160,16 @@ export function Users() {
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            initial={{opacity: 0, y: 50}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 0.5, ease: "easeOut"}}
             className="w-full px-5"
         >
             <div className="text-7xl pl-5">Пользователи</div>
             <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
+                initial={{opacity: 0, scale: 0.9}}
+                animate={{opacity: 1, scale: 1}}
+                transition={{duration: 0.5}}
                 className="rounded-md border"
             >
                 <Table>
@@ -220,16 +212,38 @@ export function Users() {
                         )}
                     </TableBody>
                 </Table>
+
+                {/* Пагинация */}
+                <div className="flex items-center justify-between p-2">
+                    <Button
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                    >
+                        Предыдущая
+                    </Button>
+                    <span>
+                        Страница {table.getState().pagination.pageIndex + 1} из{" "}
+                        {table.getPageCount()}
+                    </span>
+                    <Button
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                    >
+                        Следующая
+                    </Button>
+                </div>
             </motion.div>
 
-            <Dialog open={!!dialogData} onOpenChange={handleDialogClose}>
+            <Dialog open={!!dialogData} onOpenChange={() => setDialogData(null)}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Текст обращения</DialogTitle>
                         <DialogDescription>
                             {dialogData && dialogData.length > 0 ? (
                                 <div>
-                                    <p><strong>Дата:</strong> {dialogData[currentMessageIndex].date}</p>
+                                    <p>
+                                        <strong>Дата:</strong> {new Date(dialogData[currentMessageIndex].date).toLocaleDateString()}
+                                    </p>
                                     <p><strong>Имя:</strong> {dialogData[currentMessageIndex].name}</p>
                                     <p><strong>Контакт:</strong> {dialogData[currentMessageIndex].contact}</p>
                                     <div className="flex justify-between mt-4">

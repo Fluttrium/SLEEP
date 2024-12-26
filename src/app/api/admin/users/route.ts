@@ -15,3 +15,35 @@ export async function GET() {
         return NextResponse.json({message: 'Ошибка при получении данных', error}, {status: 500});
     }
 }
+
+export async function POST(req: Request) {
+    try {
+        // Получаем данные из тела запроса
+        const {id} = await req.json();
+
+        // Проверяем, что ID передан
+        if (!id) {
+            return NextResponse.json(
+                {message: "Необходимо указать ID пользователя"},
+                {status: 400}
+            );
+        }
+
+        // Удаляем пользователя и связанные записи (если нужно)
+        await prisma.user.delete({
+            where: {
+                id: id,
+            },
+        });
+
+        return NextResponse.json({
+            message: `Пользователь с ID ${id} успешно удалён`,
+        });
+    } catch (error) {
+        console.error("Ошибка при удалении пользователя:", error);
+        return NextResponse.json(
+            {message: "Ошибка при удалении пользователя", error},
+            {status: 500}
+        );
+    }
+}

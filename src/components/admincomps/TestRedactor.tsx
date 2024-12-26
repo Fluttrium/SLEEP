@@ -201,6 +201,52 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
         }
 
     }
+    const handleDeleteResult = async (resultId: number) => {
+        if (!confirm("Вы уверены, что хотите удалить диагноз?")) return;
+
+        try {
+            const response = await fetch(`/api/admin/tests/result/deleteresult`, {
+                method: "POST", // Теперь используем POST вместо DELETE
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({id:resultId}), // Передаём ID пользователя в теле запроса
+            });
+
+            if (response.ok) {
+                setResult((prevResult) => prevResult.filter((result) => result.id !== resultId));
+                alert("Диагноз успешно удален.");
+            } else {
+                console.error("Ошибка при удалении ");
+                alert("Не удалось удалить диагноз.");
+            }
+        } catch (error) {
+            console.error("Ошибка при выполнении запроса:", error);
+        }
+    };
+    const handleDeleteQuestion  = async (questionId: number) => {
+        if (!confirm("Вы уверены, что хотите удалить вопрос ?")) return;
+
+        try {
+            const response = await fetch(`/api/admin/tests/questions/questionsdelete`, {
+                method: "POST", // Теперь используем POST вместо DELETE
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({id:questionId}), // Передаём ID пользователя в теле запроса
+            });
+
+            if (response.ok) {
+                setQuestions((prevQuestion) => prevQuestion.filter((questions) => questions.id !== questionId));
+                alert("Вопрос успешно удален.");
+            } else {
+                console.error("Ошибка при удалении ");
+                alert("Не удалось удалить вопрос.");
+            }
+        } catch (error) {
+            console.error("Ошибка при выполнении запроса:", error);
+        }
+    };
 
     const handleSubmitResult = async (e: React.FormEvent,) => {
         e.preventDefault();
@@ -528,6 +574,13 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
 
                                                         </DialogContent>
                                                     </Dialog>
+                                                    <Button
+                                                        variant="destructive"
+                                                        className="ml-2"
+                                                        onClick={() => handleDeleteResult(result.id)}
+                                                    >
+                                                        Удалить
+                                                    </Button>
                                                 </TableCell>
                                             </TableRow>
                                         ))
@@ -737,7 +790,16 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                                             </DialogHeader>
                                         </DialogContent>
                                     </Dialog>
+
                                 </TableCell>
+                                <TableCell> <Button
+                                    variant="destructive"
+                                    className="ml-2"
+                                    onClick={() => handleDeleteQuestion(question.id)}
+                                >
+                                    Удалить
+                                </Button></TableCell>
+
                             </TableRow>
                         ))
                     ) : (

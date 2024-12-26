@@ -1,9 +1,9 @@
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import {Dialog, DialogContent, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import {Button} from "@/components/ui/button";
+import React, {useState} from "react";
+import { z} from "zod";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {useForm} from "react-hook-form";
 import {
     Form,
     FormControl,
@@ -13,11 +13,10 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar"
+import {Input} from "@/components/ui/input";
+import {Calendar} from "@/components/ui/calendar"
 import {useSession} from "next-auth/react";
-
-
+import InputMask from "react-input-mask";
 
 
 export default function DoctorForm() {
@@ -27,15 +26,25 @@ export default function DoctorForm() {
 
 
     const formSchema = z.object({
-        date: z.string().nonempty("Выберите дату"),
+        date: z.preprocess(
+            (value) => (value ? new Date(value as string) : undefined), // Преобразование строки или `undefined` в `Date`
+            z.date().min(
+                new Date(new Date().setDate(new Date().getDate() + 1)),
+                "Выберите дату не раньше завтрашнего дня"
+            )
+        ),
         name: z.string().nonempty("Введите имя"),
-        number: z.string().nonempty("Введите номер телефона"),
+        number: z
+            .string()
+            .nonempty("Введите номер телефона")
+            .regex(/^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/, "Введите корректный номер телефона"),
     });
+    2
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            date: "",
+            date: undefined,
             name: "",
             number: "+7",
         },
@@ -63,8 +72,10 @@ export default function DoctorForm() {
                 const result = await response.json();
                 console.log("Успешно отправлено:", result);
                 alert("Запись успешно создана!");
-                form.reset(); // Очистка формы после успешной отправки
-                setSelectedDate(undefined); // Сброс даты
+                setSelectedDate(undefined);
+                form.reset();
+                document.dispatchEvent(new MouseEvent("mousedown", {bubbles: true})); // Закрыть диалог
+
             } else {
                 console.error("Ошибка при отправке:", response.statusText);
                 alert("Произошла ошибка при создании записи.");
@@ -91,8 +102,8 @@ export default function DoctorForm() {
                         <FormField
                             control={form.control}
                             name="date"
-                            render={({ field }) => (
-                                <FormItem>
+                            render={({field}) => (
+                                <FormItem className='flex justify-center  w-min flex-col'>
                                     <FormLabel>Дата</FormLabel>
                                     <FormControl>
                                         <Calendar
@@ -102,11 +113,13 @@ export default function DoctorForm() {
                                                 setSelectedDate(date);
                                                 field.onChange(date?.toISOString() || ""); // Связь с React Hook Form
                                             }}
+                                            disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() + 1))} // Блокировка дат ранее завтрашнего дня
                                             className="rounded-md border flex flex-col w-full justify-center"
                                         />
+
                                     </FormControl>
                                     <FormDescription>Выберите дату консультации.</FormDescription>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
@@ -115,13 +128,13 @@ export default function DoctorForm() {
                         <FormField
                             control={form.control}
                             name="name"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Имя</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Введите имя" {...field} />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
@@ -134,12 +147,19 @@ export default function DoctorForm() {
                                 <FormItem>
                                     <FormLabel>Номер телефона</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="+7 (___) ___-__-__" {...field} />
+                                        <InputMask
+                                            mask="+7 (999) 999-99-99"
+                                            placeholder="+7 (___) ___-__-__"
+                                            {...field}
+                                        >
+                                            {(inputProps) => <Input {...inputProps} />}
+                                        </InputMask>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
+
 
                         <Button type="submit">Отправить</Button>
                     </form>

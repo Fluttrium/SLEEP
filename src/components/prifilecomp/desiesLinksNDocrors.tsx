@@ -22,7 +22,7 @@ interface DesiesLinksNDocrorsProps {
     }[];
 }
 
-export function DesiesLinksNDocrors({ doctor = [], post = [] }: DesiesLinksNDocrorsProps) {
+export function DesiesLinksNDocrors({doctor = [], post = []}: DesiesLinksNDocrorsProps) {
     return (
         <div className="space-y-6">
             {/* Врачи */}
@@ -38,7 +38,7 @@ export function DesiesLinksNDocrors({ doctor = [], post = [] }: DesiesLinksNDocr
                                 <img
                                     alt="фото доктора"
                                     className="flex h-1/2 w-1/2 rounded-3xl"
-                                    src={doctor.image } // Используйте плейсхолдер для пустых изображений
+                                    src={doctor.image} // Используйте плейсхолдер для пустых изображений
                                 />
                                 <p className="font-semibold text-2xl pt-3">
                                     {doctor.name} {doctor.surname}
@@ -51,7 +51,7 @@ export function DesiesLinksNDocrors({ doctor = [], post = [] }: DesiesLinksNDocr
                     )}
                 </CardContent>
                 <CardFooter className="flex justify-center">
-                    <Button className="text-xl font-semibold">Записаться на консультацию</Button>
+                    <Doctorform/>
                 </CardFooter>
             </Card>
 
@@ -66,7 +66,7 @@ export function DesiesLinksNDocrors({ doctor = [], post = [] }: DesiesLinksNDocr
                                     author={post.title}
                                     description={post.body}
                                     title={post.title}
-                                    image={post.image } // Используйте плейсхолдер
+                                    image={post.image} // Используйте плейсхолдер
                                     categories={[]} // Пустые категории, если их нет
                                 />
                             </div>
@@ -77,7 +77,7 @@ export function DesiesLinksNDocrors({ doctor = [], post = [] }: DesiesLinksNDocr
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <Doctorform/>
-                    <Button className="text-xl font-semibold">Записаться на консультацию</Button>
+
                 </CardFooter>
             </Card>
         </div>

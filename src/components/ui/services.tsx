@@ -24,21 +24,21 @@ export function FeaturesSectionDemo() {
                                 <Title text="Лечение" size="md" className="mt-4"/>
                             </Link>
                             <ImageGallery
-                                images={["/lechenie1.1.png", "/lechenie2.png", "/chto-takoe-sipap-terapiya.jpg"]}/>
+                                images={["", "", ""]}/>
                         </li>
                         <li>
                             <Link href="/doctors" className="text-black hover:underline mt-2">
                                 <Title text="Консультации" size="md" className="mt-4"/>
                             </Link>
                             <ImageGallery
-                                images={["/consultation.png", "/consultation2.png", "/consultation3.png"]}/>
+                                images={["", "", ""]}/>
                         </li>
                         <li>
                             <Link href="https://telegra.ph/Polisomnografiya-07-27"
                                   className="text-black hover:underline">
                                 <Title text="Диагностика" size="md"/>
                             </Link>
-                            <ImageGallery images={["/budkovaya_3.png", "/diagnostica.png", "/diagnostica2.png"]}/>
+                            <ImageGallery images={["", "", ""]}/>
                         </li>
                     </ul>
                 </>
@@ -195,7 +195,7 @@ export const SkeletonOne = () => {
             <div className="w-full p-5 mx-auto bg-white dark:bg-neutral-900 shadow-2xl group h-full">
                 <div className="flex flex-1 w-full h-full flex-col space-y-2">
                     <Image
-                        src="/doctor-hospital-medical-health-medicine-teamwork-clinic-healthcare-laptop-computer-care-team-black-diversity-multiracial-unity-african-american-asian-nurse_772720-4760.jpg.avif"
+                        src=""
                         alt="header"
                         width={400}
                         height={400}
@@ -222,7 +222,7 @@ export const SkeletonThree = () => {
                 <div className="flex flex-1 w-full h-full flex-col space-y-2 relative">
                     <IconBrandYoutubeFilled className="h-20 w-20 absolute z-10 inset-0 text-red-500 m-auto"/>
                     <Image
-                        src="/Снимок экрана 2024-12-01 в 15.12.22.png"
+                        src=""
                         alt="header"
                         width={800}
                         height={800}
@@ -239,7 +239,7 @@ export const SkeletonFour = ({className}: { className?: string }) => {
         <div className={cn("relative flex flex-col items-center p-8 gap-6", className)}>
             {/* Картинка для корпоративных программ */}
             <Image
-                src="/thumb_1534_437_437_0_0_crop.png" // Замените на нужный путь к изображению
+                src="" // Замените на нужный путь к изображению
                 alt="Корпоративные программы"
                 width={600}
                 height={400}

@@ -56,8 +56,8 @@ export function TimelineDemo() {
             </Link>
           <div className="grid grid-cols-2 gap-4">
             <Image
-              src="/side-view-professional-male-working-from-home.jpg"
-              alt="startup template"
+              src=""
+              alt=""
               width={500}
               height={500}
               className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] hidden md:block" // Добавлен класс hidden md:block
@@ -82,7 +82,7 @@ export function TimelineDemo() {
           />
           <div className="grid grid-cols-2 gap-4">
             <Image
-              src="/freepik__a-young-woman-with-long-brown-hair-wearing-a-green__99559.jpeg"
+              src=""
               alt="cards template"
               width={500}
               height={500}
@@ -108,7 +108,7 @@ export function TimelineDemo() {
           />
           <div className="grid grid-cols-2 gap-4">
             <Image
-              src="/p687251.jpg"
+              src=""
               alt="cards template"
               width={500}
               height={500}
@@ -146,7 +146,7 @@ export function TimelineDemo() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <Image
-              src="/freepik__a-middleaged-caucasian-man-lying-on-a-hospital-bed__54176.jpeg"
+              src=""
               alt="cards template"
               width={500}
               height={500}

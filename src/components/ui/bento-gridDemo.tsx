@@ -61,48 +61,48 @@ const items = [
     description: "Бессонница и сонливость - основные симптомы всех нарушений сна",
     header: <Skeleton />,
     icon: <IconMoon className="h-8 w-8 text-neutral-500" />, // Луна
-    backgroundImage: "/pensive-senior-man-thinking-something-while-sitting-awake-late-night-bedroom.jpg",
+    backgroundImage: "",
   },
   {
     title: "18,1%",
     description: "Распространенность синдрома апноэ во сне в РФ",
     header: <Skeleton />,
     icon: <IconAlertCircle className="h-8 w-8 text-neutral-500" />, // Восклицательный знак
-    backgroundImage: "/handsome-young-man-morning-yawning-weekend-time.jpg",
+    backgroundImage: "",
   },
   {
     title: "39%",
     description: "Россиян испытывают избыточную дневную сонливость",
     header: <Skeleton />,
     icon: <IconSun className="h-8 w-8 text-neutral-500" />, // Солнце
-    backgroundImage: "/portrait-yawning-student-girl-desk.jpg",
+    backgroundImage: "",
   },
   {
     title: "100%",
     description: "Жизнеугрожающие заболевания, такие как синдром апноэ во сне, не выявляются врачами",
     header: <Skeleton />,
     icon: <IconEye className="h-8 w-8 text-neutral-500" />, // Глаз
-    backgroundImage: "/sick-woman-feeling-temperature-touching-forehead-with-hand.jpg",
+    backgroundImage: "",
   },
   {
     title: "9,7 лет",
     description: "Среднее время постановки диагноза нарколепсии от появления симптомов",
     header: <Skeleton />,
     icon: <IconClock className="h-8 w-8 text-neutral-500" />, // Часы
-    backgroundImage: "/narcolepsya.png",
+    backgroundImage: "",
   },
   {
     title: "Сомнология",
     description: "Специализация по нарушениям сна, отсутствующая в России",
     header: <Skeleton />,
     icon: <IconCheck className="h-8 w-8 text-neutral-500" />, // Галочка
-    backgroundImage: "/somnology.png",
+    backgroundImage: "",
   },
   {
     title: "Развитие апноэ обструктивного типа увеличивается с возрастом.",
     description: "От остановок дыхания во сне страдают примерно 3-7% мужчин и 2-5% женщин",
     header: <Skeleton />,
     icon: <IconUserHeart className="h-8 w-8 text-neutral-500" />, // Сердце пользователя
-    backgroundImage: "/iStock-896820002-1.jpg",
+    backgroundImage: "",
   },
 ];

@@ -320,7 +320,7 @@ export function PostRedacor() {
                     </DialogTrigger>
 
                     <DialogContent aria-describedby="dialog-description">
-                        <p id="dialog-description">Пожалуйста, заполните форму для создания новой категории.</p>
+                        <div id="dialog-description">Пожалуйста, заполните форму для создания новой категории.</div>
                         <Dialog>
                             <DialogTrigger asChild>
                                 <Button size='icon'>

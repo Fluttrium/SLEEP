@@ -75,12 +75,12 @@ export function GlareCardDemo3() {
           </Link>
 
           <GlareCard className="flex flex-col items-start justify-end py-8 px-6">
-            <p className="font-bold text-white text-lg">
+            <div className="font-bold text-white text-lg">
               Валерия Всеволодовна Амелина
-            </p>
-            <p className="font-normal text-base text-neutral-200 mt-4">
+            </div>
+            <div className="font-normal text-base text-neutral-200 mt-4">
               Доцент кафедры клинической психологии и психологической помощи РГПУ им. А.И. Герцена, младший научный сотрудник группы по сомнологии НМИЦ им. В.А. Алмазова
-            </p>
+            </div>
           </GlareCard>
         </div>
       )}

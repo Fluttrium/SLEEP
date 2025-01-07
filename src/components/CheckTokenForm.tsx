@@ -65,8 +65,8 @@ export function CheckTokenForm() {
                 )}
             </div>
 
-            {error && <p className="text-red-500">{error}</p>}
-            {success && <p className="text-green-500">{success}</p>}
+            {error && <div className="text-red-500">{error}</div>}
+            {success && <div className="text-green-500">{success}</div>}
 
             <Button
                 className="btn-primary"

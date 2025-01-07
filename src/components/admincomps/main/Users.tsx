@@ -294,12 +294,12 @@ export function Users() {
                         <DialogDescription>
                             {dialogData && dialogData.length > 0 ? (
                                 <div>
-                                    <p>
+                                    <div>
                                         <strong>Дата:</strong> {new Date(dialogData[currentMessageIndex].date).toLocaleDateString()}
-                                    </p>
-                                    <p><strong>Имя:</strong> {dialogData[currentMessageIndex].name}</p>
-                                    <p><strong>Контакт:</strong> {dialogData[currentMessageIndex].contact}</p>
-                                    <p><strong>Сообщение:</strong> {dialogData[currentMessageIndex].body}</p>
+                                    </div>
+                                    <div><strong>Имя:</strong> {dialogData[currentMessageIndex].name}</div>
+                                    <div><strong>Контакт:</strong> {dialogData[currentMessageIndex].contact}</div>
+                                    <div><strong>Сообщение:</strong> {dialogData[currentMessageIndex].body}</div>
                                     <div className="flex justify-between mt-4">
                                         <Button
                                             onClick={() =>

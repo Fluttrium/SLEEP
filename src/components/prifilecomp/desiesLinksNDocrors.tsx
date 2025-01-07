@@ -40,14 +40,14 @@ export function DesiesLinksNDocrors({doctor = [], post = []}: DesiesLinksNDocror
                                     className="flex h-1/2 w-1/2 rounded-3xl"
                                     src={doctor.image} // Используйте плейсхолдер для пустых изображений
                                 />
-                                <p className="font-semibold text-2xl pt-3">
+                                <div className="font-semibold text-2xl pt-3">
                                     {doctor.name} {doctor.surname}
-                                </p>
-                                <p className="text-sm pt-2 text-gray-500 text-center">{doctor.specialty}</p>
+                                </div>
+                                <div className="text-sm pt-2 text-gray-500 text-center">{doctor.specialty}</div>
                             </div>
                         ))
                     ) : (
-                        <p className="text-gray-500">Информация о врачах отсутствует.</p>
+                        <div className="text-gray-500">Информация о врачах отсутствует.</div>
                     )}
                 </CardContent>
                 <CardFooter className="flex justify-center">
@@ -72,7 +72,7 @@ export function DesiesLinksNDocrors({doctor = [], post = []}: DesiesLinksNDocror
                             </div>
                         ))
                     ) : (
-                        <p className="text-gray-500">Материалы отсутствуют.</p>
+                        <div className="text-gray-500">Материалы отсутствуют.</div>
                     )}
                 </CardContent>
                 <CardFooter className="flex justify-center">

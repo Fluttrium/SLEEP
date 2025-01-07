@@ -9,12 +9,12 @@ interface PostCardProps {
     image?: string; // Опциональный параметр для изображения
 }
 
-export function PostsCard({ author, title, description, categories, image }: PostCardProps) {
+export function PostsResult({ author, title, description, categories, image }: PostCardProps) {
     const descriptionHtml = marked(description);
 
     return (
-        <div className="max-full w-full group/card">
-            <div className="cursor-pointer overflow-hidden relative card h-96 rounded-md shadow-xl max-w-sm mx-auto flex flex-col justify-between p-4">
+        <div className="max-full  aspect-square w-[50%] group/card flex ">
+            <div className="cursor-pointer overflow-hidden relative card  rounded-md shadow-xl  flex flex-col justify-between p-4">
                 {image && (
                     <img
                         src={encodeURI(image)}

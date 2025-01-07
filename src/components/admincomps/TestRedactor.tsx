@@ -20,8 +20,14 @@ import {
 } from "@/components/ui/dialog";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
-import {DropdownMenu, DropdownMenuContent, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import {Post, User} from "@prisma/client";
+import {ScrollArea} from "@/components/ui/scroll-area";
 
 interface TestRedactorProps {
     onClose: () => void;
@@ -210,7 +216,7 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({id:resultId}), // Передаём ID пользователя в теле запроса
+                body: JSON.stringify({id: resultId}), // Передаём ID пользователя в теле запроса
             });
 
             if (response.ok) {
@@ -224,7 +230,7 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
             console.error("Ошибка при выполнении запроса:", error);
         }
     };
-    const handleDeleteQuestion  = async (questionId: number) => {
+    const handleDeleteQuestion = async (questionId: number) => {
         if (!confirm("Вы уверены, что хотите удалить вопрос ?")) return;
 
         try {
@@ -233,7 +239,7 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({id:questionId}), // Передаём ID пользователя в теле запроса
+                body: JSON.stringify({id: questionId}), // Передаём ID пользователя в теле запроса
             });
 
             if (response.ok) {
@@ -478,11 +484,13 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
+                                    <ScrollArea className='max-h-60 overflow-auto'>
                                     {result.length > 0 ? (
                                         result.map((result: Diseas) => (
                                             <TableRow key={result.id}>
                                                 <TableCell
-                                                    className='flex flex-row justify-between mx-3 text-xl'>{result.title}
+                                                    className='flex flex-row justify-between mx-3 text-xl'>
+                                                    <div className='flex w-full items-center justify-items-start'>{result.title}</div>
 
                                                     <Dialog onOpenChange={(isOpen) => {
                                                         if (!isOpen) {
@@ -492,7 +500,7 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                                                     }}>
                                                         <DialogTrigger asChild>
                                                             <div
-                                                                className="bg-primary rounded-2xl"
+                                                                className="bg-primary rounded-2xl flex justify-center items-center h-min "
                                                                 onClick={() =>
                                                                     handleChange(
                                                                         result.posts && result.posts.length > 0 ? result.posts[0] : null,
@@ -523,15 +531,18 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                                                                                 </Button>
                                                                             </DropdownMenuTrigger>
                                                                             <DropdownMenuContent>
-                                                                                {doctorsList.map((doctor) => (
-                                                                                    <div
-                                                                                        key={doctor.id}
-                                                                                        className="cursor-pointer"
-                                                                                        onClick={() => setDesiesDoctor(doctor)}
-                                                                                    >
-                                                                                        {doctor.name}
-                                                                                    </div>
-                                                                                ))}
+                                                                                <DropdownMenuRadioGroup>
+                                                                                    {doctorsList.map((doctor) => (
+                                                                                        <div
+                                                                                            key={doctor.id}
+                                                                                            className="cursor-pointer"
+                                                                                            onClick={() => setDesiesDoctor(doctor)}
+                                                                                        >
+                                                                                            {doctor.name}
+                                                                                        </div>
+                                                                                    ))}
+                                                                                </DropdownMenuRadioGroup>
+
                                                                             </DropdownMenuContent>
                                                                         </DropdownMenu>
                                                                     </div>
@@ -546,6 +557,58 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                                                                                 <Button className='flex '
                                                                                         variant="outline">
                                                                                     {desiesPosts ? desiesPosts.title : "выберите статью"}
+                                                                                </Button>
+                                                                            </DropdownMenuTrigger>
+                                                                            <DropdownMenuContent>
+                                                                                {postsList.map((post) => (
+                                                                                    <div
+                                                                                        key={post.id}
+                                                                                        className="cursor-pointer"
+                                                                                        onClick={() => setDesiesPosts(post)}
+                                                                                    >
+                                                                                        {post.title}
+                                                                                    </div>
+                                                                                ))}
+                                                                            </DropdownMenuContent>
+                                                                        </DropdownMenu>
+                                                                    </div>
+
+                                                                    <div
+                                                                        className="flex flex-row  justify-between items-center mx-8">
+                                                                        <Label htmlFor="post" className="text-right">
+                                                                            Товар из магазина
+                                                                        </Label>
+                                                                        <DropdownMenu>
+                                                                            <DropdownMenuTrigger asChild>
+                                                                                <Button className='flex '
+                                                                                        variant="outline">
+                                                                                    {desiesPosts ? desiesPosts.title : "выберите товар"}
+                                                                                </Button>
+                                                                            </DropdownMenuTrigger>
+                                                                            <DropdownMenuContent>
+                                                                                {postsList.map((post) => (
+                                                                                    <div
+                                                                                        key={post.id}
+                                                                                        className="cursor-pointer"
+                                                                                        onClick={() => setDesiesPosts(post)}
+                                                                                    >
+                                                                                        {post.title}
+                                                                                    </div>
+                                                                                ))}
+                                                                            </DropdownMenuContent>
+                                                                        </DropdownMenu>
+                                                                    </div>
+
+                                                                    <div
+                                                                        className="flex flex-row  justify-between items-center mx-8">
+                                                                        <Label htmlFor="post" className="text-left">
+                                                                            Рекомендация метода обследования
+                                                                        </Label>
+                                                                        <DropdownMenu>
+                                                                            <DropdownMenuTrigger asChild>
+                                                                                <Button className='flex '
+                                                                                        variant="outline">
+                                                                                    {desiesPosts ? desiesPosts.title : "выберите метод"}
                                                                                 </Button>
                                                                             </DropdownMenuTrigger>
                                                                             <DropdownMenuContent>
@@ -591,6 +654,7 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                                             </TableCell>
                                         </TableRow>
                                     )}
+                                    </ScrollArea>
                                     <Dialog>
                                         <DialogTrigger asChild>
                                             <Button>Добавить результат</Button>

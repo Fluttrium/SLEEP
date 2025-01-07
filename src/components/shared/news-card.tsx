@@ -26,9 +26,9 @@ export const NewsCard: React.FC<Props> = ({
           <img className="w-[215px] h-[215px]" src={imageUrl} alt={title} />
         </div>
         <Title text={title} size="sm" className="mb-1 mt-3 font-bold" />
-        <p className="text-sm text-gray-400">
+        <div className="text-sm text-gray-400">
           Нарушение сна, здоровый сон, апноэ во сне, сомнология
-        </p>
+        </div>
         <div className="flex justify-between items-center mt-4">
           <span className="text-[20px]">
             <b>{body}</b>

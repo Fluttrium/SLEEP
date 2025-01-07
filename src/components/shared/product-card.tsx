@@ -40,9 +40,9 @@ export const ProductCard: React.FC<Props> = ({
         <Title text={truncateName(name)} size="sm" className="mb-1 mt-2 font-bold" /> {/* Применяем функцию для обрезки имени */}
 
         {/* Ингредиенты скрыты на мобильных устройствах */}
-        {/* <p className="text-xs text-gray-400 hidden md:block">
+        {/* <div className="text-xs text-gray-400 hidden md:block">
           {ingredients.map((ingredient) => ingredient.name).join(', ')}
-        </p> */}
+        </div> */}
 
         <div className="flex justify-between items-center mt-2">
           <span className="text-xs">

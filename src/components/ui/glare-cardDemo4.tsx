@@ -69,12 +69,12 @@ export function GlareCardDemo4() {
           </GlareCard>
 
           <GlareCard className="flex flex-col items-start justify-end py-8 px-6">
-            <p className="font-bold text-white text-lg">
+            <div className="font-bold text-white text-lg">
             Будковая Марина Александровна
-            </p>
-            <p className="font-normal text-base text-neutral-200 mt-4">
+            </div>
+            <div className="font-normal text-base text-neutral-200 mt-4">
             Врач-оториноларинголог-сомнолог, кандидат медицинский наук. Ведет прием в клинико-диагностическом центре ФГБУ «Санкт Петербургского научно­исследовательский институт уха, горла, носа и речи» Минздрава России
-            </p>
+            </div>
           </GlareCard>
         </div>
       )}

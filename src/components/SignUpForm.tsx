@@ -68,7 +68,7 @@ export function SignUpForm() {
                                     {...register("firstName")}
                                     required
                                 />
-                                {errors.firstName && <p>{errors.firstName.message}</p>}
+                                {errors.firstName && <div>{errors.firstName.message}</div>}
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="last-name">Last name</Label>
@@ -78,7 +78,7 @@ export function SignUpForm() {
                                     {...register("lastName")}
                                     required
                                 />
-                                {errors.lastName && <p>{errors.lastName.message}</p>}
+                                {errors.lastName && <div>{errors.lastName.message}</div>}
                             </div>
                         </div>
                         <div className="grid gap-2">
@@ -90,7 +90,7 @@ export function SignUpForm() {
                                 {...register("email")}
                                 required
                             />
-                            {errors.email && <p>{errors.email.message}</p>}
+                            {errors.email && <div>{errors.email.message}</div>}
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="password">Password</Label>
@@ -100,7 +100,7 @@ export function SignUpForm() {
                                 {...register("password")}
                                 required
                             />
-                            {errors.password && <p>{errors.password.message}</p>}
+                            {errors.password && <div>{errors.password.message}</div>}
                         </div>
                         <Button type="submit" className="w-full">
                             Create an account

@@ -66,13 +66,13 @@ export function GlareCardDemo() {
             />
           </GlareCard>
           <GlareCard className="flex flex-col items-start justify-end py-8 px-6">
-            <p className="font-bold text-white text-lg">
+            <div className="font-bold text-white text-lg">
               Михаил Викторович Бочкарев
-            </p>
-            <p className="font-normal text-base text-neutral-200 mt-4">
+            </div>
+            <div className="font-normal text-base text-neutral-200 mt-4">
               Врач - терапевт, врач функциональной диагностики, кандидат медицинских
               наук, сертифицирован по сомнологии Европейским обществом изучения сна
-            </p>
+            </div>
           </GlareCard>
         </div>
       )}

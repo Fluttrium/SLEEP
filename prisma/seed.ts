@@ -27,7 +27,7 @@ const generateProductItem = ({
 
 async function up() {
   
-  await prisma.category.createMany({
+  await prisma.category2.createMany({
     data: categories,
   });
 

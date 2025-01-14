@@ -1,8 +1,8 @@
-import { Prisma } from '@prisma/client';
 
-import { prisma } from './prisma-client';
 import { hashSync } from 'bcrypt';
 import { _ingredients, categories, products } from './constants';
+import { Prisma } from '@prisma/client';
+import { prisma } from './prisma-client';
 
 const randomDecimalNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min) * 10 + min * 10) / 10;
@@ -221,6 +221,21 @@ async function up() {
     ],
   });
 
+  await prisma.cart.createMany({
+    data: [
+      {
+        
+        totalAmount: 0,
+        token: '11111',
+      },
+      {
+        totalAmount: 0,
+        token: '222222',
+      },
+    ],
+  });
+
+
   await prisma.cartItem.create({
     data: {
       productItemId: 1,
@@ -294,7 +309,7 @@ async function up() {
 
 async function down() {
   await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE`;
-  await prisma.$executeRaw`TRUNCATE TABLE "Category" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Category2" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "Cart" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "CartItem" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "Ingredient" RESTART IDENTITY CASCADE`;

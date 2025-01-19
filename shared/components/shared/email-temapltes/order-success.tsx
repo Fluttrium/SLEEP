@@ -1,4 +1,5 @@
-import { CartItemDTO } from '@/shared/services/dto/cart.dto';
+
+import { CartItemDTO } from '@/services/dto/cart.dto';
 import React from 'react';
 
 interface Props {

@@ -45,7 +45,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
               <Image src="/assets/images/empty-box.png" alt="Empty cart" width={120} height={120} />
               <Title size="sm" text="Корзина пустая" className="text-center font-bold my-2" />
               <p className="text-center text-neutral-500 mb-5">
-                Добавьте хотя бы одну пиццу, чтобы совершить заказ
+                Добавьте хотя бы один товар, чтобы совершить заказ
               </p>
 
               <SheetClose>
@@ -56,7 +56,20 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
               </SheetClose>
             </div>
           )}
-
+          {/* <CartDrawerItem
+  id={1}
+  imageUrl="https://сипап.рф/wordpress/wp-content/uploads/2016/01/PRISMA-20a.jpg"
+  details={getCartItemDetails(
+    [
+      { name: 'Фильтр', price: 100 },
+      { name: 'Шланг', price: 200 },
+    ], 
+    2 // Предположительно, это размер
+  )}
+  name="Cpap"
+  price={10}
+  quantity={1}
+/> */}
           {totalAmount > 0 && (
             <>
               <div className="-mx-6 mt-5 overflow-auto flex-1">

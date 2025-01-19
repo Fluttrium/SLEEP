@@ -6,7 +6,7 @@ import { FormTextarea } from '../form';
 
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { AdressInput } from '../address-input';
+// import { AdressInput } from '../address-input';
 import { ErrorText } from '../error-text';
 
 interface Props {
@@ -24,7 +24,7 @@ export const CheckoutAddressForm: React.FC<Props> = ({ className }) => {
           name="address"
           render={({ field, fieldState }) => (
             <>
-              <AdressInput onChange={field.onChange} />
+              {/* <AdressInput onChange={field.onChange} /> */}
               {fieldState.error?.message && <ErrorText text={fieldState.error.message} />}
             </>
           )}

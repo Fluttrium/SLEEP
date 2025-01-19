@@ -3,10 +3,11 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { ProductWithRelations } from '@/@types/prisma';
+
 import { ProductForm } from '../product-form';
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { ProductWithRelations } from '../../../../@types/prisma';
 
 interface Props {
   product: ProductWithRelations;

@@ -30,7 +30,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
 
-      <SheetContent className="flex flex-col justify-between pb-0 bg-[#F4F1EE]">
+      <SheetContent className="flex flex-col justify-between pb-0 bg-white">
         <div className={cn('flex flex-col h-full', !totalAmount && 'justify-center')}>
           {totalAmount > 0 && (
             <SheetHeader>

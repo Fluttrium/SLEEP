@@ -1,7 +1,8 @@
-import { cn } from '@/lib/utils';
+
 import React from 'react';
 import { Title } from './title';
 import { Button } from '../ui';
+import { cn } from '@/lib/utils';
 
 interface Props {
   imageUrl: string;
@@ -29,7 +30,7 @@ export const ChooseProductForm: React.FC<Props> = ({
         <img
           src={imageUrl}
           alt={name}
-          className="relative left-2 top-2 transition-all z-10 duration-300 w-[350px] h-[350px]"
+          className="relative left-2 top-2 transition-all duration-300 w-[350px] h-[350px]"
         />
       </div>
 

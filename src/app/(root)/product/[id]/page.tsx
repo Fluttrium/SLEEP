@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
-import { Container } from '../../../../../shared/components/shared/container';
-import { ProductForm } from '../../../../../shared/components/shared/product-form';
+import { Container, ProductForm } from '../../../../../shared/components/shared';
 import { prisma } from '../../../../../prisma/prisma-client';
+
 
 export default async function ProductPage({ params: { id } }: { params: { id: string } }) {
   const product = await prisma.product.findFirst({

@@ -15,7 +15,6 @@ import { useSession } from "next-auth/react";
 import { useTestStore } from "@/app/[urltitle]/_store/testStore";
 import { Progress } from "@/components/ui/progress";
 import { useRouter } from "next/navigation";
-import { TestChart } from "@/components/ui/chart2";
 
 
 export default function Page({ params }: { params: { urltitle: string } }) {

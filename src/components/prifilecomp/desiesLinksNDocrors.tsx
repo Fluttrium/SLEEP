@@ -1,8 +1,6 @@
 import {Card, CardFooter, CardHeader, CardContent} from "@/components/ui/card";
-import {Button} from "@/components/ui/button";
 import {PostsCard} from "@/components/postsforuser/PostCard";
 import React from "react";
-import Image from "next/image";
 import Doctorform from "@/components/doctorform";
 
 // Интерфейс для пропсов

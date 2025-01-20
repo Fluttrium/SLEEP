@@ -5,7 +5,7 @@ import {
     CircleUserRound,
     UsersRound,
     LogOut,
-    SquarePen, SquareCheckBig
+    SquarePen, SquareCheckBig, Calendar
 } from "lucide-react"
 import {
     Tooltip,
@@ -93,6 +93,22 @@ export default function Sidebar() {
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={10}>
                         Тесты
+                    </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            onClick={() => setSection('calendar')}
+                            variant="ghost"
+                            size="icon"
+                            className={`rounded-lg ${isActive('calendar')}`}
+                            aria-label="Календарь"
+                        >
+                            <Calendar  className="size-7"/>
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" sideOffset={10}>
+                        Календарь
                     </TooltipContent>
                 </Tooltip>
                 <Tooltip>

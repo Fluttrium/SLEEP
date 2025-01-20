@@ -2,8 +2,8 @@ import {Button} from "@/components/ui/button";
 import {MdEditor, config, ToolbarNames} from "md-editor-rt";
 import React, {useState} from "react";
 import {usePostRedactorStore} from "@/app/admin/_store/adminpageStore";
-import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
-import {Category, Post} from "@prisma/client";
+import {Dialog, DialogContent, DialogFooter, DialogTrigger} from "@/components/ui/dialog";
+import {Category} from "@prisma/client";
 import {Badge} from "@/components/ui/badge";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Plus} from "lucide-react";
@@ -127,8 +127,6 @@ export function PostRedacor() {
     };
 
 
-
-
     React.useEffect(() => {
         fetchCategoriesbyPost();
         setImageUrl(createdPost!.image || "");
@@ -198,7 +196,7 @@ export function PostRedacor() {
             });
 
             if (!response.ok) {
-                throw new Error("Ошибка при создании категории");
+                Error("Ошибка при создании категории");
             }
 
             setCategoryName("");
@@ -226,7 +224,7 @@ export function PostRedacor() {
             if (response.ok) {
                 const updatedPost = await response.json();
                 console.log('Категория удалена из поста:', updatedPost);
-                fetchCategoriesbyPost(); // Обновляем список категорий после удаления
+                await fetchCategoriesbyPost(); // Обновляем список категорий после удаления
             } else {
                 const errorData = await response.json();
                 console.error('Ошибка при удалении категории из поста:', errorData.message);
@@ -298,7 +296,6 @@ export function PostRedacor() {
             alert("Произошла ошибка при загрузке изображения.");
         }
     };
-
 
 
     return (

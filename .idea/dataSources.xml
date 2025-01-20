@@ -8,5 +8,13 @@
       <jdbc-url>jdbc:postgresql://ep-square-cherry-a2yj3vaf-pooler.eu-central-1.aws.neon.tech/verceldb?sslmode=require</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="PostgreSQL" uuid="3fe07446-b8a6-4bf1-91eb-bdf45efbe4a6">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <configured-by-url>true</configured-by-url>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>postgresql://market_b87z_user:F78oaiCLAj5Sw1D1UjIzVDWDX59lQpcg@dpg-ctt61g9u0jms73bfe0ag-a.oregon-postgres.render.com/market_b87z</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

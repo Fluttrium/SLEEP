@@ -1,6 +1,5 @@
 import React from 'react';
 import { TimelineDemo } from '../timelinecomponent';
-import { Title } from "@/components/shared/ui/title";
 
 const Steps = () => {
   return (

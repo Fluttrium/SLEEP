@@ -6,7 +6,6 @@ import {PostsResult} from "@/components/resultComponents/postrsult";
 import {CardDescription} from "@/components/ui/card";
 
 
-
 const posts = [
     {
         id: 1,
@@ -27,7 +26,8 @@ export default function NnewTestResComp() {
                 </div>
                 <div className='flex h-1/2 bg-white rounded-3xl  flex-row shadow justify-between items-center p-3 '>
                     <CardDescription className='flex flex-col gap-3 w-1/3 ml-4'>
-                        Вы отлично постарались! 🎉 Ваш тест завершён, и результаты готовы. На основе ваших ответов мы смогли предположить возможные проблемы и пути их решения.
+                        Вы отлично постарались! 🎉 Ваш тест завершён, и результаты готовы. На основе ваших ответов мы
+                        смогли предположить возможные проблемы и пути их решения.
                         <strong>Ваш предположительный диагноз:</strong>
                         <span className="text-green-600 text-2xl">Лёгкая форма бессонницы</span>
                     </CardDescription>

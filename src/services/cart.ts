@@ -14,5 +14,14 @@ export const removeCartItem = async (id: number): Promise<CartDTO> => {
 };
 
 export const addCartItem = async (values: CreateCartItemValues): Promise<CartDTO> => {
-  return (await axiosInstance.post<CartDTO>('/cart', values)).data;
+  console.log('addCartItem called with values:', values); // Логируем входные данные
+
+  try {
+    const response = await axiosInstance.post<CartDTO>('/cart', values);
+    console.log('addCartItem response:', response.data); // Логируем успешный ответ
+    return response.data;
+  } catch (error) {
+    console.error('addCartItem error:', error); // Логируем ошибки
+    throw error; // Пробрасываем ошибку для обработки в вызывающем коде
+  }
 };

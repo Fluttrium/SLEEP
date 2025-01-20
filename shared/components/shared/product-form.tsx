@@ -9,6 +9,7 @@ import { ChooseProductForm } from './choose-product-form';
 import { ProductWithRelations } from '../../../@types/prisma';
 import { useCartStore } from '@/lib/store';
 import { toast } from 'react-hot-toast';
+import {getCartDetails} from "@/lib";
 
 interface Props {
   product: ProductWithRelations;
@@ -23,8 +24,8 @@ export const ProductForm: React.FC<Props> = ({ product, onSubmit: _onSubmit }) =
 
   const onSubmit = async (productItemId?: number, ingredients?: number[]) => {
     try {
-      const itemId = productItemId ?? firstItem.id;
 
+      const itemId = productItemId ?? firstItem.id;
       await addCartItem({
         productItemId: itemId,
         ingredients,
@@ -34,6 +35,7 @@ export const ProductForm: React.FC<Props> = ({ product, onSubmit: _onSubmit }) =
 
       _onSubmit?.();
     } catch (err) {
+
       toast.error('Не удалось добавить товар в корзину');
       console.error(err);
     }

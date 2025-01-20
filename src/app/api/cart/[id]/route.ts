@@ -2,6 +2,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../../../prisma/prisma-client';
 import { updateCartTotalAmount } from '@/lib/update-cart-total-amount';
+import crypto from "crypto";
+import {findOrCreateCart} from "@/lib/find-or-create-cart";
+import {CreateCartItemValues} from "@/services/dto/cart.dto";
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -74,3 +77,5 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     return NextResponse.json({ message: 'Не удалось удалить корзину' }, { status: 500 });
   }
 }
+
+

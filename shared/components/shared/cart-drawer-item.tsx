@@ -2,10 +2,12 @@
 import React from 'react';
 
 import * as CartItem from './cart-item-details';
-import { CartItemProps } from './cart-item-details/cart-item-details.types';
+
 import { CountButton } from './count-button';
-import { Trash2Icon } from 'lucide-react';
+
+import { CartItemProps } from './cart-item-details/cart-item-details.types';
 import { cn } from '@/lib/utils';
+import { Trash2Icon } from 'lucide-react';
 
 interface Props extends CartItemProps {
   onClickCountButton?: (type: 'plus' | 'minus') => void;
@@ -33,9 +35,12 @@ export const CartDrawerItem: React.FC<Props> = ({
         },
         className,
       )}>
+
+    {/* <CartItem.Image src={imageUrl} /> */}
+      <div className="flex-1">
+
       <CartItem.Image src={imageUrl} />
 
-      <div className="flex-1">
         <CartItem.Info name={name} details={details} />
 
         <hr className="my-3" />

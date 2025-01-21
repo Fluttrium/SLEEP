@@ -12,10 +12,10 @@ import { CartDrawerItem } from './cart-drawer-item';
 import { Title } from './title';
 import { cn } from '@/lib/utils';
 
-import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
 import { PizzaType, PizzaSize } from '@/constants';
 import { getCartItemDetails } from '@/lib';
 import { useCart } from '@/hooks';
+import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { totalAmount, updateItemQuantity, items, removeCartItem } = useCart();
@@ -56,20 +56,6 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
               </SheetClose>
             </div>
           )}
-          {/* <CartDrawerItem
-  id={1}
-  imageUrl="https://сипап.рф/wordpress/wp-content/uploads/2016/01/PRISMA-20a.jpg"
-  details={getCartItemDetails(
-    [
-      { name: 'Фильтр', price: 100 },
-      { name: 'Шланг', price: 200 },
-    ], 
-    2 // Предположительно, это размер
-  )}
-  name="Cpap"
-  price={10}
-  quantity={1}
-/> */}
           {totalAmount > 0 && (
             <>
               <div className="-mx-6 mt-5 overflow-auto flex-1">

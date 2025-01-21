@@ -31,20 +31,28 @@ export default function CheckoutPage() {
     },
   });
 
-  // React.useEffect(() => {
-  //   async function fetchUserInfo() {
-  //     const data = await Api.auth.getMe();
-  //     const [firstName, lastName] = data.fullName.split(' ');
+   React.useEffect(() => {
+     async function fetchUserInfo() {
+       try {
+         const data = await Api.auth.getMe();
 
-  //     form.setValue('firstName', firstName);
-  //     form.setValue('lastName', lastName);
-  //     form.setValue('email', data.email);
-  //   }
+         if (data?.name && data?.surname && data?.email) {
+           form.setValue('firstName', data.name);
+           form.setValue('lastName', data.surname);
+           form.setValue('email', data.email);
+         } else {
+           throw new Error('Ошибка: Неполные данные пользователя');
+         }
+       } catch (error: any) {
+         console.error('Ошибка при получении данных пользователя:', error.message);
+         return null; // или выбросить ошибку, если нужно
+       }
+     }
 
-  //   if (session) {
-  //     fetchUserInfo();
-  //   }
-  // }, [session]);
+     if (session) {
+      fetchUserInfo();
+     }
+   }, [session]);
 
   const onSubmit = async (data: CheckoutFormValues) => {
     try {

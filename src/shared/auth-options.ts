@@ -6,7 +6,7 @@ import {prisma} from "../../prisma/prisma-client";
 import {User as PrismaUS} from "@prisma/client";
 import YandexProvider from "next-auth/providers/yandex";
 
-// Расширение типов next-auth
+//асширение типов next-auth
 declare module "next-auth" {
     interface User extends PrismaUS {
         id: string;

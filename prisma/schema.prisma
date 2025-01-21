@@ -9,33 +9,34 @@ datasource db {
 }
 
 model User {
-  id                String             @id @default(cuid())
-  email             String?            @unique
-  name              String?
-  surname           String?
-  phone             String?
-  emailVerified     DateTime?
-  image             String?
-  role              Role               @default(USER)
-  password          String?
-  verified          Boolean?           @default(false)
-  provider          String?
-  providerId        String?
-  registrationDate  DateTime           @default(now())
-  firstTestDate     DateTime?
-  specialty         String?
-  description       String?
-  DisesesList       String[]
-  accounts          Account[]
-  cart              Cart?
-  consul            Consul[]
-  disease           Disease?           @relation("DoctorForDisease")
-  Disease           Disease[]
-  messages          Message[]
-  orders            Order[]
-  profile           Profile?
-  sessions          Session[]
-  verificationToken VerificationToken? @relation("UserToVerificationToken")
+  id                     String             @id @default(cuid())
+  email                  String?            @unique
+  name                   String?
+  surname                String?
+  phone                  String?
+  emailVerified          DateTime?
+  image                  String?
+  role                   Role               @default(USER)
+  password               String?
+  verified               Boolean?           @default(false)
+  provider               String?
+  providerId             String?
+  registrationDate       DateTime           @default(now())
+  firstTestDate          DateTime?
+  specialty              String?
+  description            String?
+  DisesesList            String[]
+  diseaseId              Int?
+  accounts               Account[]
+  cart                   Cart?
+  consul                 Consul[]
+  Disease                Disease[]
+  messages               Message[]
+  orders                 Order[]
+  profile                Profile?
+  sessions               Session[]
+  verificationToken      VerificationToken? @relation("UserToVerificationToken")
+  Disease_DoctorDiseases Disease[]          @relation("DoctorDiseases")
 }
 
 model VerificationToken {
@@ -152,18 +153,17 @@ model Option {
 }
 
 model Disease {
-  id        Int      @id @default(autoincrement())
-  title     String   @unique
-  testId    Int?
-  doctorId  String?  @unique
-  postId    Int?     @unique
-  userId    String?
-  doctor    User?    @relation("DoctorForDisease", fields: [doctorId], references: [id])
-  post      Post?    @relation("PostToDisease", fields: [postId], references: [id])
-  test      Test?    @relation(fields: [testId], references: [id])
-  User      User?    @relation(fields: [userId], references: [id])
-  OptionMax Option[] @relation("MaxDiseases")
-  OptionMin Option[] @relation("MinDiseases")
+  id                  Int      @id @default(autoincrement())
+  title               String   @unique
+  testId              Int?
+  postId              Int?     @unique
+  userId              String?
+  post                Post?    @relation("PostToDisease", fields: [postId], references: [id])
+  test                Test?    @relation(fields: [testId], references: [id])
+  User                User?    @relation(fields: [userId], references: [id])
+  User_DoctorDiseases User[]   @relation("DoctorDiseases")
+  OptionMax           Option[] @relation("MaxDiseases")
+  OptionMin           Option[] @relation("MinDiseases")
 }
 
 model CPAPMachine {
@@ -284,6 +284,22 @@ model consulOrder {
   Time     Int
   Date     Int
   clientId String
+}
+
+model ConsulProduct {
+  id                Int                 @id @default(autoincrement())
+  description       String
+  doctorID          String
+  image             String?
+  ConsulProductItem ConsulProductItem[]
+}
+
+model ConsulProductItem {
+  id              Int           @id @default(autoincrement())
+  price           Int
+  date            DateTime
+  consulProductId Int
+  ConsulProduct   ConsulProduct @relation(fields: [consulProductId], references: [id])
 }
 
 enum Role {

@@ -9,6 +9,7 @@ import { Title } from '@/components/shared/ui/title';
 import { TopBar } from '../../../shared/components/shared/top-bar';
 import { CartButton, Filters, ProductsGroupList, Stories } from '../../../shared/components/shared';
 import { findPizzas, GetSearchParams } from '@/lib/find-pizzas';
+import { SearchInput2 } from '@/components/shared/ui/search-input2';
 
 export default async function Home({ searchParams }: { searchParams: GetSearchParams }) {
   const categories = await findPizzas(searchParams);
@@ -27,7 +28,7 @@ export default async function Home({ searchParams }: { searchParams: GetSearchPa
     {/* Средняя часть: Поиск */}
     {hasSearch && (
       <div className="flex-1 md:ml-10">
-        <SearchInput />
+        <SearchInput2 />
       </div>
     )}
 

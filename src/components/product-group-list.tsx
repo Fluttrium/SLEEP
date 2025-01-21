@@ -5,15 +5,14 @@ import { useIntersection } from 'react-use';
 
 import { Title } from './title';
 
-
-// import { useCategoryStore } from '@/shared/store';
-// import { ProductWithRelations } from '@/@types/prisma';
 import { ProductCard } from './shared/product-card';
 import { cn } from '@/lib/utils';
+import { useCategoryStore } from '@/lib/store/category';
+import { ProductWithRelations } from '../../@types/prisma';
 
 interface Props {
   title: string;
-//   items: ProductWithRelations[];
+items: ProductWithRelations[];
   categoryId: number;
   className?: string;
   listClassName?: string;
@@ -21,12 +20,12 @@ interface Props {
 
 export const ProductsGroupList: React.FC<Props> = ({
   title,
-//   items,
+items,
   listClassName,
   categoryId,
   className,
 }) => {
-//   const setActiveCategoryId = useCategoryStore((state) => state.setActiveId);
+const setActiveCategoryId = useCategoryStore((state) => state.setActiveId);
   const intersectionRef = React.useRef(null);
   const intersection = useIntersection(intersectionRef, {
     threshold: 0.4,
@@ -34,7 +33,7 @@ export const ProductsGroupList: React.FC<Props> = ({
 
   React.useEffect(() => {
     if (intersection?.isIntersecting) {
-    //   setActiveCategoryId(categoryId);
+    setActiveCategoryId(categoryId);
     }
   }, [categoryId, intersection?.isIntersecting, title]);
 
@@ -52,7 +51,7 @@ export const ProductsGroupList: React.FC<Props> = ({
         )}
         style={{ scrollSnapType: 'x mandatory' }} // Для плавного скроллинга на мобильных
       >
-        {/* {items.map((product) => (
+        {items.map((product) => (
           <div key={product.id} style={{ scrollSnapAlign: 'start' }}>
             <ProductCard
               id={product.id}
@@ -62,7 +61,7 @@ export const ProductsGroupList: React.FC<Props> = ({
             //   ingredients={product.ingredients}
             />
           </div>
-        ))} */}
+        ))}
       </div>
     </div>
   );

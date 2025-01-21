@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
 
-import { SearchInput } from '@/components/shared/ui/search-input';
+
 
 import { Container } from '@/components/shared/ui/container';
 import { Title } from '@/components/shared/ui/title';
@@ -9,6 +9,7 @@ import { Title } from '@/components/shared/ui/title';
 import { TopBar } from '../../../shared/components/shared/top-bar';
 import { CartButton, Filters, ProductsGroupList, Stories } from '../../../shared/components/shared';
 import { findPizzas, GetSearchParams } from '@/lib/find-pizzas';
+import { SearchInput2 } from '@/components/shared/ui/search-input2';
 
 export default async function Home({ searchParams }: { searchParams: GetSearchParams }) {
   const categories = await findPizzas(searchParams);
@@ -25,20 +26,20 @@ export default async function Home({ searchParams }: { searchParams: GetSearchPa
     <Title text="Каталог" size="lg" className="font-extrabold" />
 
     {/* Средняя часть: Поиск */}
-    {hasSearch && (
+    {/* {hasSearch && (
       <div className="flex-1 md:ml-10">
-        <SearchInput />
+        <SearchInput2 />
       </div>
-    )}
+    )} */}
 
     {/* Правая часть: Кнопка корзины */}
-    <div className="flex items-center gap-3">
+    {/* <div className="flex items-center gap-3">
       {hasCart && <CartButton />}
-    </div>
+    </div> */}
   </div>
 </Container>    
 
-      <TopBar categories={categories.filter((category) => category.products.length > 0)} />
+      {/* <TopBar categories={categories.filter((category) => category.products.length > 0)} /> */}
 
       <Stories />
 

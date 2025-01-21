@@ -15,32 +15,16 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {TestChart} from "@/components/ui/chart2";
 import {DesiesLinksNDocrors} from "@/components/prifilecomp/desiesLinksNDocrors";
 import {useEffect, useState} from "react";
-
-interface Doctor {
-    id: string;
-    name: string;
-    surname: string;
-    specialty: string;
-    image: string;
-}
-
-interface Post {
-    id: number;
-    title: string;
-    body: string;
-    image: string;
-}
+import NnewTestResComp from "@/components/newTestResComp";
 
 
 export function UserProfile() {
-    const {data: session} = useSession();
+    const { data: session } = useSession();
     const userId = String(session?.user.email);
     const [chartData, setChartData] = useState<{ month: string; desktop: number }[]>([]);
-    const [doctors, setDoctors] = useState<Doctor[]>([]);
-    const [posts, setPosts] = useState<Post[]>([]);
     const [dataFetched, setDataFetched] = useState(false);
+    const [isWidgetOpen, setIsWidgetOpen] = useState(true); // Состояние для управления видимостью виджета
 
-    // Функция для загрузки данных
     // Функция для загрузки данных
     const fetchData = async () => {
         if (!userId) return;
@@ -54,127 +38,45 @@ export function UserProfile() {
 
             if (response.ok) {
                 const result = await response.json();
-
                 if (result?.diseasesList?.length > 0) {
-                    // Если сервер вернул данные, форматируем и сохраняем их
                     const formattedData = result.diseasesList.map((item: string) => {
                         const parsedItem = JSON.parse(item);
                         return { month: parsedItem.title, desktop: parsedItem.score };
                     });
                     setChartData(formattedData);
-                    localStorage.setItem("testResults", JSON.stringify(formattedData));
                     setDataFetched(true);
-                } else {
-                    // Если сервер вернул пустой список, пробуем данные из localStorage
-                    const storedData = localStorage.getItem("testResults");
-                    if (storedData) {
-                        const parsedData = JSON.parse(storedData);
-                        const formattedData = parsedData.map((item: { title: string; score: number }) => ({
-                            month: item.title,
-                            desktop: item.score,
-                        }));
-                        setChartData(formattedData);
-                        setDataFetched(true);
-                    } else {
-                        console.warn("No test results found locally or on the server.");
-                    }
-                }
-            } else {
-                console.error("Failed to fetch data from server:", response.statusText);
-
-                // Если запрос не удался, пробуем загрузить данные из localStorage
-                const storedData = localStorage.getItem("testResults");
-                if (storedData) {
-                    const parsedData = JSON.parse(storedData);
-                    const formattedData = parsedData.map((item: { title: string; score: number }) => ({
-                        month: item.title,
-                        desktop: item.score,
-                    }));
-                    setChartData(formattedData);
-                    setDataFetched(true);
-                } else {
-                    console.warn("No test results found locally or on the server.");
                 }
             }
         } catch (error) {
             console.error("Error loading chart data:", error);
-
-            // Если произошла ошибка, пробуем загрузить данные из localStorage
-            const storedData = localStorage.getItem("testResults");
-            if (storedData) {
-                const parsedData = JSON.parse(storedData);
-                const formattedData = parsedData.map((item: { title: string; score: number }) => ({
-                    month: item.title,
-                    desktop: item.score,
-                }));
-                setChartData(formattedData);
-                setDataFetched(true);
-            } else {
-                console.warn("No test results found locally or on the server.");
-            }
         }
     };
-
-
-
-
-    // Функция для отправки данных о максимальном диагнозе
-    const fetchPostsNDoctors = async () => {
-        try {
-            const maxDisease = chartData.reduce(
-                (max, current) => (current.desktop > max.desktop ? current : max),
-                {month: "", desktop: -Infinity}
-            );
-
-            if (maxDisease.desktop === -Infinity) return;
-
-            console.log("Sending the best disease:", maxDisease);
-
-            const response = await fetch("/api/test/profiletest", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({title: maxDisease.month}),
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                console.log("Fetched disease data with doctors and posts:", result);
-
-                // Указываем, что это массивы
-                const doctorsArray: Doctor[] = result.disease.doctor ? [result.disease.doctor] : [];
-                const postsArray: Post[] = result.disease.post ? [result.disease.post] : [];
-
-                setDoctors(doctorsArray);
-                setPosts(postsArray);
-            } else {
-                console.error("Failed to fetch disease data:", response.statusText);
-            }
-        } catch (error) {
-            console.error("Error in fetchPostsNDoctors:", error);
-        }
-    };
-
 
     useEffect(() => {
         fetchData();
-    }, [userId]);
-
-    useEffect(() => {
-        if (dataFetched && chartData.length > 0) {
-            fetchPostsNDoctors();
-        }
-    }, [dataFetched]);
+    }, []);
 
     return (
         <div className="flex flex-row w-screen h-full justify-between px-10 py-11">
-            <div className="flex flex-col mx-3 basis-1/2">
-                {/* Передаём врачей и посты в компонент */}
-                <DesiesLinksNDocrors doctor={doctors} post={posts}/>
+            {/* Виджет, который будет отображаться поверх всех элементов */}
+            {isWidgetOpen && (
+                <div
+                    className="fixed top-0 left-0 z-50 w-full h-full bg-opacity-60 bg-black flex justify-center items-center"
+                    onClick={() => setIsWidgetOpen(false)} // Закрытие при клике на фон
+                >
+                    <div
+                        className="relative w-full max-w-[90%] max-h-[90%] h-auto p-4"
+                        onClick={(e) => e.stopPropagation()} // Предотвращает закрытие при клике внутри виджета
+                    >
+                        <NnewTestResComp/>
+                    </div>
+                </div>
 
 
-            </div>
+            )}
+
+            {/* Основной контент страницы */}
             <div className="flex flex-col mx-3 basis-1/2">
-                {session?.user?.id && <TestChart chartData={chartData}/>}
                 <Tabs defaultValue="account" className="w-full">
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="account">Аккаунт</TabsTrigger>
@@ -229,15 +131,16 @@ export function UserProfile() {
                         </Card>
                     </TabsContent>
                 </Tabs>
+            </div>
+
+            <div className="flex flex-col mx-3 basis-1/2">
                 <div
                     className="mt-8 w-full h-8 bg-red-600 rounded-3xl flex items-center justify-center text-stone-50 font-semibold"
-                    onClick={() => signOut({callbackUrl: "/"})}
+                    onClick={() => signOut({ callbackUrl: "/" })}
                 >
                     Выйти из аккаунта
                 </div>
             </div>
-
-
         </div>
     );
 }

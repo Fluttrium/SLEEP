@@ -54,13 +54,7 @@ export function CheckTokenForm() {
                 </InputOTPGroup>
             </InputOTP>
 
-            <div className="text-center text-sm">
-                {value === "" ? (
-                    <>Enter your one-time password.</>
-                ) : (
-                    <>You entered: {value}</>
-                )}
-            </div>
+
 
             {error && <div className="text-red-500">{error}</div>}
             {success && <div className="text-green-500">{success}</div>}

@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import * as React from "react";
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -10,15 +10,15 @@ import {
     CardHeader,
     CardFooter,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { useSession } from "next-auth/react";
-import { useTestStore } from "@/app/[urltitle]/_store/testStore";
-import { Progress } from "@/components/ui/progress";
-import { useRouter } from "next/navigation";
+import {Label} from "@/components/ui/label";
+import {useSession} from "next-auth/react";
+import {useTestStore} from "@/app/[urltitle]/_store/testStore";
+import {Progress} from "@/components/ui/progress";
+import {useRouter} from "next/navigation";
 
 
-export default function Page({ params }: { params: { urltitle: string } }) {
-    const { data: session } = useSession();
+export default function Page({params}: { params: { urltitle: string } }) {
+    const {data: session} = useSession();
     const router = useRouter();
 
     const {
@@ -39,17 +39,20 @@ export default function Page({ params }: { params: { urltitle: string } }) {
     const [resultTitle, setResultTitle] = useState<string | null>(null);
     const [progress, setProgress] = useState(0);
 
+    //анимация загрузки
     useEffect(() => {
         const timer = setTimeout(() => setProgress(80), 300);
         return () => clearTimeout(timer);
     }, []);
 
+    // Очистка кеша с названием "testResults" при рендере
     useEffect(() => {
-        // Очистка кеша с названием "testResults" при рендере
+
         localStorage.removeItem("testResults");
         resetStore();
     }, []);
 
+    //загрузка теста по titlte
     useEffect(() => {
         const fetchTest = async () => {
             try {
@@ -93,32 +96,12 @@ export default function Page({ params }: { params: { urltitle: string } }) {
                     score,
                 }));
 
-                // Проверяем сессию и отправляем результаты
-                if (session?.user?.id) {
-                    try {
-                        console.log(session.user.email)
-                        await fetch("/api/user/test", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({
-                                userId: session.user.email,
-                                results: resultsArray,
-                            }),
-                        });
-                        router.push("/profile ");
-                    } catch (error) {
-                        console.error("Ошибка сохранения результатов:", error);
-                    }
-                } else {
-                    setResultTitle(resultsArray[0].title);
-                    localStorage.setItem("testResults", JSON.stringify(resultsArray));
 
-                }
-            } else {
-                setError("Результаты теста отсутствуют.");
+                setResultTitle(resultsArray[0].title);
+                localStorage.setItem("testResults", JSON.stringify(resultsArray));
+
             }
+
         }
     };
 
@@ -126,7 +109,7 @@ export default function Page({ params }: { params: { urltitle: string } }) {
     if (loading) {
         return (
             <div className="flex h-screen w-screen justify-center items-center">
-                <Progress value={progress} className="w-[60%]" />
+                <Progress value={progress} className="w-[60%]"/>
             </div>
         );
     }
@@ -151,7 +134,7 @@ export default function Page({ params }: { params: { urltitle: string } }) {
                     </CardHeader>
                     <CardContent className="flex justify-center">
                         <Button
-                            onClick={() => router.push("/signin")}
+                            onClick={() => router.push("/signup")}
                             className="text-xl font-semibold"
                         >
                             Зарегистрироваться

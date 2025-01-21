@@ -29,13 +29,14 @@ model User {
   accounts          Account[]
   Cart              Cart?
   consul            Consul[]
-  disease           Disease?           @relation("DoctorForDisease")
   Disease           Disease[]
   messages          Message[]
   Order             Order[]
   profile           Profile?
   sessions          Session[]
   verificationToken VerificationToken? @relation("UserToVerificationToken")
+  diseaseId         Int?
+  diseases          Disease[]          @relation("DoctorDiseases")
 }
 
 model VerificationToken {
@@ -152,18 +153,17 @@ model Option {
 }
 
 model Disease {
-  id        Int      @id @default(autoincrement())
-  title     String   @unique
-  testId    Int?
-  doctorId  String?  @unique
-  postId    Int?     @unique
-  userId    String?
-  doctor    User?    @relation("DoctorForDisease", fields: [doctorId], references: [id])
-  post      Post?    @relation("PostToDisease", fields: [postId], references: [id])
-  test      Test?    @relation(fields: [testId], references: [id])
-  User      User?    @relation(fields: [userId], references: [id])
-  OptionMax Option[] @relation("MaxDiseases")
-  OptionMin Option[] @relation("MinDiseases")
+  id              Int      @id @default(autoincrement())
+  title           String   @unique
+  testId          Int?
+  postId          Int?     @unique
+  userId          String?
+  assignedDoctors User[]   @relation("DoctorDiseases") // Переименовано для ясности
+  post            Post?    @relation("PostToDisease", fields: [postId], references: [id])
+  test            Test?    @relation(fields: [testId], references: [id])
+  User            User?    @relation(fields: [userId], references: [id])
+  OptionMax       Option[] @relation("MaxDiseases")
+  OptionMin       Option[] @relation("MinDiseases")
 }
 
 model CPAPMachine {

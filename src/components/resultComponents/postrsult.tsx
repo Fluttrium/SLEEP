@@ -1,5 +1,6 @@
-import { marked } from "marked";
-import { Badge } from "@/components/ui/badge";
+
+import {marked} from "marked";
+import {Badge} from "@/components/ui/badge";
 
 interface PostCardProps {
     author: string;
@@ -13,11 +14,11 @@ export function PostsResult({ author, title, description, categories, image }: P
     const descriptionHtml = marked(description);
 
     return (
-        <div className="max-full  aspect-square w-[50%] group/card flex ">
-            <div className="cursor-pointer overflow-hidden relative card  rounded-md shadow-xl  flex flex-col justify-between p-4">
+        <div className="max-full aspect-square w-[50%] group/card flex">
+            <div className="cursor-pointer overflow-hidden relative card rounded-md shadow-xl flex flex-col justify-between p-4">
                 {image && (
                     <img
-                        src={encodeURI(image)}
+                        src={encodeURI(image)}  // Кодируем изображение
                         alt={title}
                         className="w-full h-full object-cover rounded-md absolute top-0 left-0 z-0"
                     />
@@ -41,7 +42,7 @@ export function PostsResult({ author, title, description, categories, image }: P
                 <div className="text content z-20 relative">
                     <h1 className="font-bold text-xl md:text-2xl text-gray-50">{title}</h1>
                     <div className="text-balance font-normal text-sm text-gray-50 my-4 line-clamp-3">
-                        <div dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
+                        <div dangerouslySetInnerHTML={{ __html: descriptionHtml }} /> {/* Используем dangerouslySetInnerHTML для HTML */}
                     </div>
                 </div>
             </div>

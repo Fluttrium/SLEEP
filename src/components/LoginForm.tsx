@@ -33,8 +33,44 @@ export function LoginForm() {
     const router = useRouter();
 
 
+    const setResultToBD = async () => {
+        console.log("Email in setResultToBD:", email); // Проверка значения
+        if (!email) {
+            console.error("Email is missing in setResultToBD");
+            return;
+        }
+        const results = localStorage.getItem('testResults');
+        const parsedResults = results ? JSON.parse(results) : []; // Преобразуем строку в объект
+
+
+        try {
+            const response = await fetch("/api/user/test", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    results: parsedResults, // Теперь results - это объект
+                }),
+            });
+            console.log("Response from API:", await response.json()); // Лог результата
+            return response;
+        } catch (error) {
+            console.error("Error in setResultToBD:", error);
+        }
+    };
+
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        console.log("Попытка входа с email:", email);
+
+        if (!email || !password) {
+            setError("Заполните все поля");
+            return;
+        }
 
         const res = await signIn('credentials', {
             redirect: false,
@@ -46,9 +82,12 @@ export function LoginForm() {
             setError(res.error); // Отображение ошибки
         } else {
             setError(''); // Сброс ошибки при успешном входе
-            router.push('/');
+            console.log("Авторизация успешна. Email:", email);
+            await setResultToBD(); // Вызываем setResultToBD
+            router.push('/profile');
         }
     };
+
 
     return (
         <Card className="mx-auto max-w-sm">
@@ -67,6 +106,7 @@ export function LoginForm() {
                                 id="email"
                                 type="email"
                                 placeholder="example@example.com"
+                                value={email} // добавьте value для контроля состояния
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />

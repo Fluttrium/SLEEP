@@ -51,9 +51,9 @@ export function SignUpForm() {
     return (
         <Card className="mx-auto max-w-sm">
             <CardHeader>
-                <CardTitle className="text-xl">Sign Up</CardTitle>
+                <CardTitle className="text-xl">Регистрация</CardTitle>
                 <CardDescription>
-                    Enter your information to create an account
+                    Введите информация о себе для регистрации
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -61,20 +61,20 @@ export function SignUpForm() {
                     <div className="grid gap-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div className="grid gap-2">
-                                <Label htmlFor="first-name">First name</Label>
+                                <Label htmlFor="first-name">Имя</Label>
                                 <Input
                                     id="first-name"
-                                    placeholder="Max"
+                                    placeholder="Иван"
                                     {...register("firstName")}
                                     required
                                 />
                                 {errors.firstName && <div>{errors.firstName.message}</div>}
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="last-name">Last name</Label>
+                                <Label htmlFor="last-name">Фамилия</Label>
                                 <Input
                                     id="last-name"
-                                    placeholder="Robinson"
+                                    placeholder="Иванов"
                                     {...register("lastName")}
                                     required
                                 />
@@ -93,7 +93,7 @@ export function SignUpForm() {
                             {errors.email && <div>{errors.email.message}</div>}
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="password">Пароль</Label>
                             <Input
                                 id="password"
                                 type="password"
@@ -103,16 +103,16 @@ export function SignUpForm() {
                             {errors.password && <div>{errors.password.message}</div>}
                         </div>
                         <Button type="submit" className="w-full">
-                            Create an account
+                            Создать аккаунт
                         </Button>
                         <Button variant="outline" className="w-full" onClick={() => signIn("yandex")}>
                             Войти с помощью яндекс
                         </Button>
                     </div>
                     <div className="mt-4 text-center text-sm">
-                        Already have an account?{" "}
+                        Уже есть аккаунт?{" "}
                         <Link href="/signin" className="underline">
-                            Sign in
+                            Войти
                         </Link>
                     </div>
                 </form>

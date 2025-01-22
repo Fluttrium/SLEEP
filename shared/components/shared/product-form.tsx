@@ -5,8 +5,9 @@ import React from 'react';
 import { ChoosePizzaForm } from './choose-pizza-form';
 import { ChooseProductForm } from './choose-product-form';
 import { ProductWithRelations } from '../../../@types/prisma';
-import { useCartStore } from '@/lib/store';
+
 import { toast } from 'react-hot-toast';
+import {useCartStore} from "@/lib/store";
 
 interface Props {
   product: ProductWithRelations;
@@ -27,7 +28,7 @@ export const ProductForm: React.FC<Props> = ({ product, onSubmit: _onSubmit }) =
         productItemId: itemId,
         ingredients,
       });
-
+      console.log('должен быть тоаст')
       toast.success(product.name + ' добавлена в корзину');
 
       _onSubmit?.();

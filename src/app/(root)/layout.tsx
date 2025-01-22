@@ -4,6 +4,7 @@ import {Montserrat_Alternates} from "next/font/google";
 import {Header} from "@/components/shared/ui/header";
 
 import "./globals.css";
+import {Toaster} from "react-hot-toast";
 
 
 const sans = Montserrat_Alternates({subsets: ["cyrillic"], weight: ["900", "800", "600", "200"]});
@@ -23,6 +24,7 @@ export default function RootLayout({
     return (
         <body className={sans.className}>
         <Header hasSearch={false}/>
+
         {children}
         {modal}
         </body>

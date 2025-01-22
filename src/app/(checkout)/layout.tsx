@@ -14,16 +14,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
                                        children,
-                                       modal,
                                    }: Readonly<{
     children: React.ReactNode;
-    modal: React.ReactNode;
 }>) {
     return (
         <body className={sans.className}>
-        <Header hasSearch={false}/>
+            <Suspense>
+            <Header hasSearch={false}/>
+            </Suspense>
         {children}
-        {modal}
         </body>
     );
 }

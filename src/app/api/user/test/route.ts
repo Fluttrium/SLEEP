@@ -4,47 +4,37 @@ import { prisma } from "../../../../../prisma/prisma-client";
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { userId, results } = body;
+        console.log("Received request body:", body); // Логируем тело запроса
+        const { email, results } = body;
 
-        if (!userId) {
-            return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+        if (!email) {
+            console.error("Email is required in the request body");
+            return NextResponse.json({ error: "Email is required" }, { status: 400 });
         }
 
+        // Проверим, что results содержит ожидаемые данные
+        console.log("Results:", results);
+
         if (results) {
-            if (!Array.isArray(results)) {
-                return NextResponse.json(
-                    { error: "Results should be an array" },
-                    { status: 400 }
-                );
-            }
-
-            // Преобразуем массив данных в JSON для сохранения
-            const serializedResults = results.map((item: any) => JSON.stringify(item));
-
             // Обновляем данные пользователя
             await prisma.user.update({
-                where: { email: userId },
+                where: { email },
                 data: {
-                    DisesesList: serializedResults,
+                    DisesesList: results.map((result: any) => JSON.stringify(result)), // Преобразуем объекты в строки
                 },
             });
 
-            return NextResponse.json(
-                { message: "Results successfully saved." },
-                { status: 200 }
-            );
+            return NextResponse.json({ message: "Results successfully saved." }, { status: 200 });
         } else {
-            // Если `results` нет, просто возвращаем данные пользователя
+            // Если `results` нет, возвращаем данные пользователя
             const userData = await prisma.user.findUnique({
-                where: { email: userId },
+                where: { email },
                 select: { DisesesList: true },
             });
 
             if (!userData) {
-                return NextResponse.json(
-                    { error: "User not found" },
-                    { status: 404 }
-                );
+                console.error("User not found");
+                return NextResponse.json({ error: "User not found" }, { status: 404 });
             }
 
             return NextResponse.json(
@@ -53,10 +43,7 @@ export async function POST(req: Request) {
             );
         }
     } catch (error) {
-        console.error("Error processing user data:", error);
-        return NextResponse.json(
-            { error: "Internal Server Error" },
-            { status: 500 }
-        );
+        console.error("Error processing request:", error);
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

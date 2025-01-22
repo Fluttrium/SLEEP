@@ -41,7 +41,7 @@ export default function CPAPMachineList() {
   if (loading) {
     return (
       <div className="text-center py-8">
-        <p>Загрузка...</p>
+        <div>Загрузка...</div>
       </div>
     );
   }
@@ -49,7 +49,7 @@ export default function CPAPMachineList() {
   if (error) {
     return (
       <div className="text-center py-8 text-red-500">
-        <p>{error}</p>
+        <div>{error}</div>
       </div>
     );
   }
@@ -58,7 +58,7 @@ export default function CPAPMachineList() {
     <div className="max-w-6xl mx-auto px-4">
       <h2 className="text-2xl font-bold text-center my-6 text-gray-800 dark:text-white">Список CPAP аппаратов</h2>
       {machines.length === 0 ? (
-        <p className="text-center text-gray-600 dark:text-gray-300">Нет аппаратов для отображения</p>
+        <div className="text-center text-gray-600 dark:text-gray-300">Нет аппаратов для отображения</div>
       ) : (
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {machines.map((machine) => (
@@ -77,8 +77,8 @@ export default function CPAPMachineList() {
               {/* Информация о аппарате */}
               <div className="p-4 flex-grow">
                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">{machine.name}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{machine.description}</p>
-                <p className="text-lg font-semibold text-gray-800 dark:text-white">{machine.price} ₽</p>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">{machine.description}</div>
+                <div className="text-lg font-semibold text-gray-800 dark:text-white">{machine.price} ₽</div>
               </div>
               {/* Кнопка действия */}
               <div className="p-4 w-full">

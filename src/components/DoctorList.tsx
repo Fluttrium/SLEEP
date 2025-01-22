@@ -69,7 +69,7 @@ export default function DoctorsList() {
     };
 
     if (loading) {
-        return <p>Загрузка...</p>;
+        return <div>Загрузка...</div>;
     }
 
     return (
@@ -78,9 +78,9 @@ export default function DoctorsList() {
                 Список врачей
             </h2>
             {doctors.length === 0 ? (
-                <p className="text-center text-gray-600 dark:text-gray-300">
+                <div className="text-center text-gray-600 dark:text-gray-300">
                     Нет врачей для отображения
-                </p>
+                </div>
             ) : (
                 <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                     {doctors.map((doctor) => (
@@ -102,7 +102,7 @@ export default function DoctorsList() {
                                     {`${doctor.name} ${doctor.surname}`}
                                 </h3>
                                 {/* Специальность с улучшенным сокращением */}
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                                <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                                     <strong>Специальность:</strong>{" "}
                                     {truncateSpecialty(doctor.specialty || "")}
                                     {doctor.specialty && doctor.specialty.length > 50 && (
@@ -113,19 +113,19 @@ export default function DoctorsList() {
                                             {expandedDoctor === doctor.id ? 'Скрыть' : 'Показать'}
                                         </button>
                                     )}
-                                </p>
+                                </div>
                                 {/* Полное описание специальности */}
                                 {expandedDoctor === doctor.id && doctor.specialty && (
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="text-sm text-gray-600 dark:text-gray-400">
                                         {doctor.specialty}
-                                    </p>
+                                    </div>
                                 )}
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                                <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                                     <strong>Телефон:</strong> {doctor.phone}
-                                </p>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                </div>
+                                <div className="text-sm text-gray-600 dark:text-gray-400">
                                     <strong>Email:</strong> {doctor.email}
-                                </p>
+                                </div>
                             </div>
                             {/* Кнопка записи на прием */}
                             <div className="p-4 w-full">

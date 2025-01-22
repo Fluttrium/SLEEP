@@ -1,7 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['img.medicalexpo.ru'],
+
+        domains: ['assets.aceternity.com'],['img.medicalexpo.ru'],
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "storage.yandexcloud.net",
+                pathname: "/**",
+            },
+        ],// Добавьте сюда ваш домен для загрузки изображений
+
     },
 };
 

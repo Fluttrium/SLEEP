@@ -18,7 +18,7 @@ const InfoCard: React.FC<CardProps> = ({ title, content, backgroundImage }) => {
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
       <Title text={title} size="sm" className="mb-2" /> {/* Используем заголовок из shared */}
-      <p className="text-gray-600">{content}</p>
+      <div className="text-gray-600">{content}</div>
       {/* Галочка в правом нижнем углу */}
       <CheckCircle className="absolute bottom-4 right-4 text-green-500 w-6 h-6" />
     </div>

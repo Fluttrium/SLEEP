@@ -1,7 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['assets.aceternity.com'], // Добавьте сюда ваш домен для загрузки изображений
+        domains: ['assets.aceternity.com'],
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "storage.yandexcloud.net",
+                pathname: "/**",
+            },
+        ],// Добавьте сюда ваш домен для загрузки изображений
     },
     async headers() {
         return [

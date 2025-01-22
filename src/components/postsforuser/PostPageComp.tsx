@@ -69,7 +69,7 @@ export function PostPageComp({ showLimited = false }: PostPageCompProps) {
     if (error) {
         return (
             <div className="w-screen h-screen flex items-center justify-center">
-                <p className="text-red-500">{error}</p>
+                <div className="text-red-500">{error}</div>
             </div>
         );
     }

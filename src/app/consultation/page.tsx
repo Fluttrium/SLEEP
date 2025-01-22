@@ -12,12 +12,12 @@ const AboutUsPage = () => {
             <h1 className="text-4xl lg:text-6xl text-center font-bold mb-12">О нас</h1>
 
             <div className="text-lg text-center mb-12">
-                <p>CEO: Михаил Бочкарев</p>
-                <p>Врач-терапевт, кандидат медицинских наук</p>
-                <p>Сертифицирован по сомнологии Европейским обществом изучения сна</p>
-                <p className="mt-4">
+                <div>CEO: Михаил Бочкарев</div>
+                <div>Врач-терапевт, кандидат медицинских наук</div>
+                <div>Сертифицирован по сомнологии Европейским обществом изучения сна</div>
+                <div className="mt-4">
                     По любым вопросам и для сотрудничества свяжитесь с нами в социальных сетях:
-                </p>
+                </div>
                 <Link href="https://web.telegram.org/k/#@Mikhail_V_Bochkarev" target="_blank"
                       className="text-blue-600 hover:underline">
                     Telegram

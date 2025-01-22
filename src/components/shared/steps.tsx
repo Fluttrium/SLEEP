@@ -1,6 +1,5 @@
 import React from 'react';
 import { TimelineDemo } from '../timelinecomponent';
-import { Title } from "@/components/shared/ui/title";
 
 const Steps = () => {
   return (
@@ -11,9 +10,9 @@ const Steps = () => {
       <h4 className="text-xl lg:text-3xl font-semibold my-4 text-center text-black dark:text-white max-w-3xl mx-auto">
         Проблемы со сном не являются неизбежными. Позвольте нашей команде помочь вам!
       </h4>
-      <p className="text-black dark:text-white text-xl italic mb-6 text-center max-w-2xl mx-auto">
+      <div className="text-black dark:text-white text-xl italic mb-6 text-center max-w-2xl mx-auto">
         Качественный сон — это основа вашего здоровья и хорошего самочувствия
-      </p>
+      </div>
       <TimelineDemo />
     </div>
   );

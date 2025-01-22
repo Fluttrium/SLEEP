@@ -25,7 +25,7 @@ export function PostsCard({ author, title, description, categories, image }: Pos
                 <div className="absolute w-full h-full top-0 left-0 transition duration-300 group-hover/card:bg-black opacity-60 z-10"></div>
                 <div className="flex flex-row items-center space-x-4 z-20">
                     <div className="flex flex-col">
-                        <p className="font-normal text-base text-gray-50 relative z-10">
+                        <div className="font-normal text-base text-gray-50 relative z-10">
                             {categories.length > 0 ? (
                                 categories.map((category, index) => (
                                     <Badge key={index} className="text-gray-200 mr-2">
@@ -35,7 +35,7 @@ export function PostsCard({ author, title, description, categories, image }: Pos
                             ) : (
                                 <span className="text-gray-400">Нет категорий</span>
                             )}
-                        </p>
+                        </div>
                     </div>
                 </div>
                 <div className="text content z-20 relative">

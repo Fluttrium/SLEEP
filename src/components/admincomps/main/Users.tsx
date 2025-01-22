@@ -12,7 +12,8 @@ import {
 
 import {Button} from "@/components/ui/button";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
-import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription} from "@/components/ui/dialog";
+import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose} from "@/components/ui/dialog";
+import {CircleAlert} from "lucide-react";
 
 export type Users = {
     id: string;
@@ -58,10 +59,10 @@ export const columns: (
             const unreadMessages = messages.filter((message) => !message.isRead);
 
             return (
-                <div>
+                <div className='flex flex-row items-center justify-start'>
                     <span>Всего сообщений: {messages.length}</span>
                     {unreadMessages.length > 0 && (
-                        <span className="text-red-500 font-semibold">Есть непрочитанные сообщения</span>
+                        <CircleAlert color='red'/>
                     )}
                 </div>
             );
@@ -134,6 +135,39 @@ export function Users() {
             } else {
                 console.error("Ошибка при удалении пользователя");
                 alert("Не удалось удалить пользователя.");
+            }
+        } catch (error) {
+            console.error("Ошибка при выполнении запроса:", error);
+        }
+    };
+
+
+    const handleReadConsul = async (userId: string) => {
+        try {
+            const response = await fetch(`/api/admin/users/readConsul`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({id: userId}),
+            });
+
+            if (response.ok) {
+                setUsers((prevUsers) =>
+                    prevUsers.map((user) =>
+                        user.id === userId
+                            ? {
+                                ...user,
+                                consul: user.consul.map((message) => ({
+                                    ...message,
+                                    isRead: true,
+                                })),
+                            }
+                            : user
+                    )
+                );
+            } else {
+                console.error("Ошибка при обновлении сообщений");
             }
         } catch (error) {
             console.error("Ошибка при выполнении запроса:", error);
@@ -234,24 +268,42 @@ export function Users() {
                 </div>
             </motion.div>
 
-            <Dialog open={!!dialogData} onOpenChange={() => setDialogData(null)}>
+            <Dialog
+                open={!!dialogData}
+                onOpenChange={async (open) => {
+                    console.log("onOpenChange вызван с состоянием:", open);
+
+                    if (!open) {
+                        // Выполняем хендлер только при закрытии
+                        if (dialogUserId) {
+                            console.log("Выполняем handleReadConsul при закрытии для ID:", dialogUserId);
+                            await handleReadConsul(dialogUserId);
+                        } else {
+                            console.error("dialogUserId отсутствует!");
+                        }
+
+                        // Сбрасываем данные после выполнения хендлера
+                        setDialogData(null);
+                    }
+                }}
+            >
                 <DialogContent>
+
                     <DialogHeader>
                         <DialogTitle>Текст обращения</DialogTitle>
                         <DialogDescription>
                             {dialogData && dialogData.length > 0 ? (
                                 <div>
-                                    <p>
+                                    <div>
                                         <strong>Дата:</strong> {new Date(dialogData[currentMessageIndex].date).toLocaleDateString()}
-                                    </p>
-                                    <p><strong>Имя:</strong> {dialogData[currentMessageIndex].name}</p>
-                                    <p><strong>Контакт:</strong> {dialogData[currentMessageIndex].contact}</p>
+                                    </div>
+                                    <div><strong>Имя:</strong> {dialogData[currentMessageIndex].name}</div>
+                                    <div><strong>Контакт:</strong> {dialogData[currentMessageIndex].contact}</div>
+                                    <div><strong>Сообщение:</strong> {dialogData[currentMessageIndex].body}</div>
                                     <div className="flex justify-between mt-4">
                                         <Button
                                             onClick={() =>
-                                                setCurrentMessageIndex((prev) =>
-                                                    Math.max(prev - 1, 0)
-                                                )
+                                                setCurrentMessageIndex((prev) => Math.max(prev - 1, 0))
                                             }
                                             disabled={currentMessageIndex === 0}
                                         >
@@ -276,6 +328,7 @@ export function Users() {
                     </DialogHeader>
                 </DialogContent>
             </Dialog>
+
         </motion.div>
     );
 }

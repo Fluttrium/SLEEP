@@ -69,7 +69,7 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                     <Image src="/sleeplogo.png" alt="Logo" width={50} height={50}/>
                     <div className="hidden md:block">
                         <h1 className="text-xl md:text-2xl uppercase font-black">Asleep</h1>
-                        <p className="text-xs md:text-sm text-gray-400 leading-3">Здоровый сон возможен</p>
+                        <div className="text-xs md:text-sm text-gray-400 leading-3">Здоровый сон возможен</div>
                     </div>
                 </Link>
 

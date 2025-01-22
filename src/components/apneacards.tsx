@@ -20,9 +20,9 @@ const SleepApneaInfo = () => {
       </h1>
 
       {/* Описание */}
-      <p className="text-center text-gray-700 text-lg md:text-xl mb-8">
+      <div className="text-center text-gray-700 text-lg md:text-xl mb-8">
         Если не лечить апноэ во сне, это может привести к серьезным осложнениям.
-      </p>
+      </div>
 
       {/* Карточки */}
       <div className="flex flex-wrap justify-center gap-6">
@@ -45,9 +45,9 @@ const SleepApneaInfo = () => {
           <h2 className="text-lg font-bold text-gray-900 text-center mb-2">
             Более 60 нарушений сна
           </h2>
-          <p className="text-sm text-gray-700 text-center">
+          <div className="text-sm text-gray-700 text-center">
             Бессонница и сонливость - основные симптомы всех нарушений сна
-          </p>
+          </div>
         </div>
 
         {/* Карточка 2 */}
@@ -77,9 +77,9 @@ const SleepApneaInfo = () => {
           <h2 className="text-lg font-bold text-gray-900 text-center mb-2">
             18,1%
           </h2>
-          <p className="text-sm text-gray-700 text-center">
+          <div className="text-sm text-gray-700 text-center">
             Распространенность синдрома апноэ во сне в РФ
-          </p>
+          </div>
         </div>
 
         {/* Карточка 3 */}
@@ -109,9 +109,9 @@ const SleepApneaInfo = () => {
           <h2 className="text-lg font-bold text-gray-900 text-center mb-2">
             39%
           </h2>
-          <p className="text-sm text-gray-700 text-center">
+          <div className="text-sm text-gray-700 text-center">
             Россиян испытывают избыточную дневную сонливость
-          </p>
+          </div>
         </div>
       </div>
     </div>

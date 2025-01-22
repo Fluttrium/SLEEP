@@ -39,7 +39,7 @@ export default function DoctorForm() {
             .nonempty("Введите номер телефона")
             .regex(/^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/, "Введите корректный номер телефона"),
     });
-    2
+
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),

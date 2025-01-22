@@ -21,20 +21,20 @@ export default function CardDemo() {
             className="h-10 w-10 rounded-full border-2 object-cover"
           />
           <div className="flex flex-col">
-            <p className="font-normal text-base text-gray-50 relative z-10">
+            <div className="font-normal text-base text-gray-50 relative z-10">
               Manu Arora
-            </p>
-            <p className="text-sm text-gray-400">2 min read</p>
+            </div>
+            <div className="text-sm text-gray-400">2 min read</div>
           </div>
         </div>
         <div className="text content">
           <h1 className="font-bold text-xl md:text-2xl text-gray-50 relative z-10">
             Author Card
           </h1>
-          <p className="font-normal text-sm text-gray-50 relative z-10 my-4">
+          <div className="font-normal text-sm text-gray-50 relative z-10 my-4">
             Card with Author avatar, complete name and time to read - most
             suitable for blogs.
-          </p>
+          </div>
         </div>
       </div>
     </div>

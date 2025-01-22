@@ -6,7 +6,6 @@ import {Container} from './container';
 import Image from 'next/image';
 import {Button} from "../../ui/button";
 import {ArrowRight, User, Search, Menu, X} from "lucide-react";
-import {SearchInput} from "./search-input";
 import {useSession} from "next-auth/react";
 import {useRouter, usePathname} from "next/navigation";
 import {useEffect, useState} from "react";
@@ -18,6 +17,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SearchInput } from "./search-input";
 
 interface Props {
     className?: string;

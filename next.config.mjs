@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['assets.aceternity.com'],
+
+        domains: ['assets.aceternity.com'],['img.medicalexpo.ru'],
         remotePatterns: [
             {
                 protocol: "https",
@@ -9,6 +10,7 @@ const nextConfig = {
                 pathname: "/**",
             },
         ],// Добавьте сюда ваш домен для загрузки изображений
+
     },
 };
 

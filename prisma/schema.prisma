@@ -9,34 +9,34 @@ datasource db {
 }
 
 model User {
-  id                String             @id @default(cuid())
-  email             String?            @unique
-  name              String?
-  surname           String?
-  phone             String?
-  emailVerified     DateTime?
-  image             String?
-  role              Role               @default(USER)
-  password          String?
-  verified          Boolean?           @default(false)
-  provider          String?
-  providerId        String?
-  registrationDate  DateTime           @default(now())
-  firstTestDate     DateTime?
-  specialty         String?
-  description       String?
-  DisesesList       String[]
-  accounts          Account[]
-  Cart              Cart?
-  consul            Consul[]
-  Disease           Disease[]
-  messages          Message[]
-  Order             Order[]
-  profile           Profile?
-  sessions          Session[]
-  verificationToken VerificationToken? @relation("UserToVerificationToken")
-  diseaseId         Int?
-  diseases          Disease[]          @relation("DoctorDiseases")
+  id                     String             @id @default(cuid())
+  email                  String?            @unique
+  name                   String?
+  surname                String?
+  phone                  String?
+  emailVerified          DateTime?
+  image                  String?
+  role                   Role               @default(USER)
+  password               String?
+  verified               Boolean?           @default(false)
+  provider               String?
+  providerId             String?
+  registrationDate       DateTime           @default(now())
+  firstTestDate          DateTime?
+  specialty              String?
+  description            String?
+  DisesesList            String[]
+  diseaseId              Int?
+  accounts               Account[]
+  cart                   Cart?
+  consul                 Consul[]
+  Disease                Disease[]
+  messages               Message[]
+  orders                 Order[]
+  profile                Profile?
+  sessions               Session[]
+  verificationToken      VerificationToken? @relation("UserToVerificationToken")
+  Disease_DoctorDiseases Disease[]          @relation("DoctorDiseases")
 }
 
 model VerificationToken {
@@ -153,17 +153,18 @@ model Option {
 }
 
 model Disease {
-  id              Int      @id @default(autoincrement())
-  title           String   @unique
-  testId          Int?
-  postId          Int?     @unique
-  userId          String?
-  assignedDoctors User[]   @relation("DoctorDiseases") // Переименовано для ясности
-  post            Post?    @relation("PostToDisease", fields: [postId], references: [id])
-  test            Test?    @relation(fields: [testId], references: [id])
-  User            User?    @relation(fields: [userId], references: [id])
-  OptionMax       Option[] @relation("MaxDiseases")
-  OptionMin       Option[] @relation("MinDiseases")
+  id                  Int       @id @default(autoincrement())
+  title               String    @unique
+  testId              Int?
+  postId              Int?      @unique
+  userId              String?
+  post                Post?     @relation("PostToDisease", fields: [postId], references: [id])
+  test                Test?     @relation(fields: [testId], references: [id])
+  User                User?     @relation(fields: [userId], references: [id])
+  User_DoctorDiseases User[]    @relation("DoctorDiseases")
+  OptionMax           Option[]  @relation("MaxDiseases")
+  OptionMin           Option[]  @relation("MinDiseases")
+  Product             Product[] @relation("ProductDiseases")
 }
 
 model CPAPMachine {
@@ -182,35 +183,35 @@ model DefaultTest {
   test      Test   @relation("DefaultTestRelation", fields: [testTitle], references: [title])
 }
 
-model Cart {
-  id          Int        @id @default(autoincrement())
-  userId      String?    @unique
-  token       String
-  totalAmount Int        @default(0)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime
-  User        User?      @relation(fields: [userId], references: [id])
-  CartItem    CartItem[]
-}
-
-model CartItem {
-  id            Int          @id @default(autoincrement())
-  cartId        Int
-  productItemId Int
-  quantity      Int          @default(1)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime
-  Cart          Cart         @relation(fields: [cartId], references: [id])
-  ProductItem   ProductItem  @relation(fields: [productItemId], references: [id])
-  Ingredient    Ingredient[] @relation("CartItemToIngredient")
-}
-
 model Category2 {
   id        Int       @id @default(autoincrement())
   name      String    @unique
   createdAt DateTime  @default(now())
-  updatedAt DateTime
-  Product   Product[]
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+}
+
+model Product {
+  id          Int           @id @default(autoincrement())
+  name        String
+  imageUrl    String
+  categoryId  Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  category    Category2     @relation(fields: [categoryId], references: [id])
+  items       ProductItem[]
+  ingredients Ingredient[]  @relation("IngredientToProduct")
+  Disease     Disease[]     @relation("ProductDiseases")
+}
+
+model ProductItem {
+  id        Int        @id @default(autoincrement())
+  price     Int
+  size      Int?
+  pizzaType Int?
+  productId Int
+  cartItems CartItem[]
+  product   Product    @relation(fields: [productId], references: [id])
 }
 
 model Ingredient {
@@ -219,9 +220,32 @@ model Ingredient {
   price     Int
   imageUrl  String
   createdAt DateTime   @default(now())
-  updatedAt DateTime
-  CartItem  CartItem[] @relation("CartItemToIngredient")
-  Product   Product[]  @relation("IngredientToProduct")
+  updatedAt DateTime   @updatedAt
+  cartItems CartItem[] @relation("CartItemToIngredient")
+  products  Product[]  @relation("IngredientToProduct")
+}
+
+model Cart {
+  id          Int        @id @default(autoincrement())
+  userId      String?    @unique
+  token       String
+  totalAmount Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        User?      @relation(fields: [userId], references: [id])
+  items       CartItem[]
+}
+
+model CartItem {
+  id            Int          @id @default(autoincrement())
+  cartId        Int
+  productItemId Int
+  quantity      Int          @default(1)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  cart          Cart         @relation(fields: [cartId], references: [id])
+  productItem   ProductItem  @relation(fields: [productItemId], references: [id])
+  ingredients   Ingredient[] @relation("CartItemToIngredient")
 }
 
 model Order {
@@ -238,37 +262,15 @@ model Order {
   address     String
   comment     String?
   createdAt   DateTime    @default(now())
-  updatedAt   DateTime
-  User        User?       @relation(fields: [userId], references: [id])
-}
-
-model Product {
-  id          Int           @id @default(autoincrement())
-  name        String
-  imageUrl    String
-  categoryId  Int
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime
-  Category2   Category2     @relation(fields: [categoryId], references: [id])
-  ProductItem ProductItem[]
-  Ingredient  Ingredient[]  @relation("IngredientToProduct")
-}
-
-model ProductItem {
-  id        Int        @id @default(autoincrement())
-  price     Int
-  size      Int?
-  pizzaType Int?
-  productId Int
-  CartItem  CartItem[]
-  Product   Product    @relation(fields: [productId], references: [id])
+  updatedAt   DateTime    @updatedAt
+  user        User?       @relation(fields: [userId], references: [id])
 }
 
 model Story {
   id              Int         @id @default(autoincrement())
   previewImageUrl String
   createdAt       DateTime    @default(now())
-  StoryItem       StoryItem[]
+  items           StoryItem[]
 }
 
 model StoryItem {
@@ -276,7 +278,30 @@ model StoryItem {
   storyId   Int
   sourceUrl String
   createdAt DateTime @default(now())
-  Story     Story    @relation(fields: [storyId], references: [id])
+  story     Story    @relation(fields: [storyId], references: [id])
+}
+
+model consulOrder {
+  id       Int    @id @default(autoincrement())
+  Time     Int
+  Date     Int
+  clientId String
+}
+
+model ConsulProduct {
+  id                Int                 @id @default(autoincrement())
+  description       String
+  doctorID          String
+  image             String?
+  ConsulProductItem ConsulProductItem[]
+}
+
+model ConsulProductItem {
+  id              Int           @id @default(autoincrement())
+  price           Int
+  date            DateTime
+  consulProductId Int
+  ConsulProduct   ConsulProduct @relation(fields: [consulProductId], references: [id])
 }
 
 enum Role {
@@ -294,27 +319,4 @@ enum OrderStatus {
 enum UserRole {
   USER
   ADMIN
-}
-
-model consulOrder {
-  id       Int    @id @default(autoincrement())
-  Time     Int
-  Date     Int
-  clientId String
-}
-
-model ConsulProduct {
-  id          Int                 @id @default(autoincrement())
-  description String
-  doctorID    String
-  image       String?
-  items       ConsulProductItem[]
-}
-
-model ConsulProductItem {
-  id              Int           @id @default(autoincrement())
-  price           Int
-  date            DateTime
-  product         ConsulProduct @relation(fields: [consulProductId], references: [id])
-  consulProductId Int
 }

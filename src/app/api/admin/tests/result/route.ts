@@ -17,7 +17,7 @@ export async function POST(request: Request) {
             },
             include: {
                 post: true,
-                doctor: true// Включает связанные посты
+                assignedDoctors: true// Включает связанные посты
             },
         });
 

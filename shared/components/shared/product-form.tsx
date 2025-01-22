@@ -9,7 +9,6 @@ import { ChooseProductForm } from './choose-product-form';
 import { ProductWithRelations } from '../../../@types/prisma';
 import { useCartStore } from '@/lib/store';
 import { toast } from 'react-hot-toast';
-import {getCartDetails} from "@/lib";
 
 interface Props {
   product: ProductWithRelations;

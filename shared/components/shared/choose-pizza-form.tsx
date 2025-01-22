@@ -30,9 +30,9 @@ interface Props {
  * Форма выбора ПИЦЦЫ
  */
 export const ChoosePizzaForm: React.FC<Props> = ({
-  imageUrl,
   name,
   items,
+  imageUrl,
   ingredients,
   loading,
   onSubmit,
@@ -65,12 +65,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
 
   return (
     <div className={cn(className, 'flex flex-1')}>
-      <img
-  src={imageUrl}
-  alt={name}
-  className="relative left-2 top-2 transition-all duration-300 w-[350px] h-[350px]"
-/>
-      {/* <PizzaImage imageUrl={imageUrl} size={30} /> */}
+      <PizzaImage imageUrl={imageUrl} size={size} />
 
       <div className="w-[490px] bg-[#f7f6f5] p-7">
         <Title text={name} size="md" className="font-extrabold mb-1" />

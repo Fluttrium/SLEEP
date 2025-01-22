@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     if (isSucceeded) {
       await sendEmail(
         order.email,
-        'Ножи СПБ / Ваш заказ успешно оформлен 🎉',
+        'Asleep / Ваш заказ успешно оформлен 🎉',
         OrderSuccessTemplate({ orderId: order.id, items }),
       );
     } else {

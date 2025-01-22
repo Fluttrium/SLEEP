@@ -1,7 +1,5 @@
 'use client';
 
-
-
 import React from 'react';
 
 import { ChoosePizzaForm } from './choose-pizza-form';
@@ -23,8 +21,8 @@ export const ProductForm: React.FC<Props> = ({ product, onSubmit: _onSubmit }) =
 
   const onSubmit = async (productItemId?: number, ingredients?: number[]) => {
     try {
-
       const itemId = productItemId ?? firstItem.id;
+
       await addCartItem({
         productItemId: itemId,
         ingredients,
@@ -34,7 +32,6 @@ export const ProductForm: React.FC<Props> = ({ product, onSubmit: _onSubmit }) =
 
       _onSubmit?.();
     } catch (err) {
-
       toast.error('Не удалось добавить товар в корзину');
       console.error(err);
     }

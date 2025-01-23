@@ -2,7 +2,7 @@
 const nextConfig = {
     images: {
 
-        domains: ['assets.aceternity.com'],['img.medicalexpo.ru'],
+        domains: ['assets.aceternity.com', 'img.medicalexpo.ru'],
         remotePatterns: [
             {
                 protocol: "https",

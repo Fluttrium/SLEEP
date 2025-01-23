@@ -1,3 +1,4 @@
+
 import { Suspense } from 'react';
 
 
@@ -6,10 +7,14 @@ import { SearchInput } from '@/components/shared/ui/search-input';
 import { Container } from '@/components/shared/ui/container';
 import { Title } from '@/components/shared/ui/title';
 
-import { TopBar } from '../../../shared/components/shared/top-bar';
-import { CartButton, Filters, ProductsGroupList, Stories } from '../../../shared/components/shared';
+
+
 import { findPizzas, GetSearchParams } from '@/lib/find-pizzas';
 import { SearchInput2 } from '@/components/shared/ui/search-input2';
+import {CartButton, Filters, TopBar} from "../../../shared/components/shared";
+
+import {Stories} from "@storybook/blocks";
+import {ProductsGroupList} from "@/components/product-group-list";
 
 export default async function Home({ searchParams }: { searchParams: GetSearchParams }) {
   const categories = await findPizzas(searchParams);
@@ -41,7 +46,7 @@ export default async function Home({ searchParams }: { searchParams: GetSearchPa
 
       <TopBar categories={categories.filter((category) => category.products.length > 0)} />
 
-      <Stories />
+      {/*<Stories />*/}
 
       <Container className="mt-10 pb-14">
         <div className="flex gap-[80px]">

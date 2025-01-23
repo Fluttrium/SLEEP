@@ -153,18 +153,18 @@ model Option {
 }
 
 model Disease {
-  id                  Int       @id @default(autoincrement())
-  title               String    @unique
-  testId              Int?
-  postId              Int?      @unique
-  userId              String?
-  post                Post?     @relation("PostToDisease", fields: [postId], references: [id])
-  test                Test?     @relation(fields: [testId], references: [id])
-  User                User?     @relation(fields: [userId], references: [id])
-  User_DoctorDiseases User[]    @relation("DoctorDiseases")
-  OptionMax           Option[]  @relation("MaxDiseases")
-  OptionMin           Option[]  @relation("MinDiseases")
-  Product             Product[] @relation("ProductDiseases")
+  id             Int       @id @default(autoincrement())
+  title          String    @unique
+  testId         Int?
+  postId         Int?      @unique
+  userId         String?
+  post           Post?     @relation("PostToDisease", fields: [postId], references: [id])
+  test           Test?     @relation(fields: [testId], references: [id])
+  User           User?     @relation(fields: [userId], references: [id])
+  assignedDoctor User[]    @relation("DoctorDiseases")
+  OptionMax      Option[]  @relation("MaxDiseases")
+  OptionMin      Option[]  @relation("MinDiseases")
+  Product        Product[] @relation("ProductDiseases")
 }
 
 model CPAPMachine {

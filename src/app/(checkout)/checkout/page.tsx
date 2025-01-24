@@ -30,7 +30,7 @@ export default function CheckoutPage() {
       comment: '',
     },
   });
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
    React.useEffect(() => {
      async function fetchUserInfo() {
        try {

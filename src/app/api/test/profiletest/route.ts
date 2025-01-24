@@ -18,7 +18,7 @@ export async function POST(req: Request) {
         const disease = await prisma.disease.findUnique({
             where: { title },
             include: {
-                doctor: {
+                assignedDoctor: {
                     select: {
                         id: true,
                         name: true,
@@ -54,8 +54,8 @@ export async function POST(req: Request) {
                 message: "Disease data fetched successfully",
                 disease: {
                     title: disease.title,
-                    doctor: disease.doctor,
-                    post: disease.post,
+                    doctor: disease.userId,
+                    post: disease.postId,
                 },
             }),
             { status: 200, headers: { "Content-Type": "application/json" } }

@@ -1,9 +1,9 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import * as React from "react";
-import { ConsulOrder } from "@prisma/client";
+import { consulOrder } from "@prisma/client";
 
 interface DatailOfConsulProps {
-    consulsbyhour: ConsulOrder[]; // Массив записей
+    consulsbyhour: consulOrder[]; // Массив записей
 }
 
 export default function DatailOfConsul({ consulsbyhour }: DatailOfConsulProps) {
@@ -19,12 +19,12 @@ export default function DatailOfConsul({ consulsbyhour }: DatailOfConsulProps) {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {consulsbyhour.map((consul: ConsulOrder) => (
+                {consulsbyhour.map((consul: consulOrder) => (
                     <TableRow key={consul.id}>
                         <TableCell className="font-medium">{consul.id}</TableCell>
-                        <TableCell>{consul.Paid ? "Оплачено" : "Не оплачено"}</TableCell>
+
                         <TableCell>{consul.clientId}</TableCell>
-                        <TableCell className="text-right">{consul.message}</TableCell>
+
                     </TableRow>
                 ))}
             </TableBody>

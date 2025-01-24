@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ConsulOrder } from "@prisma/client";
+import { consulOrder } from "@prisma/client";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -15,7 +15,7 @@ import {
 
 interface HoursTableProps {
     date: Date | undefined;
-    consuls: ConsulOrder[]; // Массив записей
+    consuls: consulOrder[]; // Массив записей
 }
 
 export default function HoursTable({ date, consuls }: HoursTableProps) {

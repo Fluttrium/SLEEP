@@ -130,7 +130,7 @@ export function PostRedacor() {
     React.useEffect(() => {
         fetchCategoriesbyPost();
         setImageUrl(createdPost!.image || "");
-    }, [createdPost]); // Зависимость от createdPost
+    }, [createdPost, fetchCategoriesbyPost]);
 
     const onUploadImg = async (files: File[], callback: (urls: string[]) => void) => {
         try {

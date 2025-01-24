@@ -53,7 +53,7 @@ export function UserProfile() {
             console.error("Error loading chart data:", error);
         }
     };
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         fetchData();
     }, []);

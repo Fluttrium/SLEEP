@@ -38,7 +38,7 @@ export default function Page({params}: { params: { urltitle: string } }) {
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
     const [resultTitle, setResultTitle] = useState<string | null>(null);
     const [progress, setProgress] = useState(0);
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
     //анимация загрузки
     useEffect(() => {
         const timer = setTimeout(() => setProgress(80), 300);

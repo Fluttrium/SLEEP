@@ -11,10 +11,11 @@ import { Title } from '@/components/shared/ui/title';
 
 import { findPizzas, GetSearchParams } from '@/lib/find-pizzas';
 import { SearchInput2 } from '@/components/shared/ui/search-input2';
-import {CartButton, Filters, TopBar} from "../../../shared/components/shared";
+import {CartButton, Filters, TopBar} from "../../../../shared/components/shared";
 
 import {Stories} from "@storybook/blocks";
 import {ProductsGroupList} from "@/components/product-group-list";
+
 
 export default async function Home({ searchParams }: { searchParams: GetSearchParams }) {
   const categories = await findPizzas(searchParams);
@@ -60,16 +61,15 @@ export default async function Home({ searchParams }: { searchParams: GetSearchPa
           {/* Список товаров */}
           <div className="flex-1">
             <div className="flex flex-col gap-16">
-              {categories.map(
-                (category) =>
-                  category.products.length > 0 && (
-                    <ProductsGroupList
-                      key={category.id}
-                      title={category.name}
-                      categoryId={category.id}
-                      items={category.products}
-                    />
-                  ),
+              {categories.map((category) =>
+                  category.products.length > 0 ? (
+                      <ProductsGroupList
+                          key={category.id}
+                          title={category.name}
+                          categoryId={category.id}
+                          items={category.products}
+                      />
+                  ) : null
               )}
             </div>
           </div>

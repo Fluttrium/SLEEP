@@ -32,7 +32,8 @@ export async function POST(req: Request) {
                         },
                     },
                 },
-                assignedDoctors: true,
+                assignedDoctor: true,
+                Product: true,
             },
         });
 

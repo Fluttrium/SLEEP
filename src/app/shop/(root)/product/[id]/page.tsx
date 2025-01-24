@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
-import {prisma} from "../../../../../prisma/prisma-client";
-import {Container, ProductForm} from "../../../../../shared/components/shared";
+import {prisma} from "../../../../../../prisma/prisma-client";
+import {Container, ProductForm} from "../../../../../../shared/components/shared";
 
 
 

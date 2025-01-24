@@ -1,27 +1,10 @@
-import {AuthOptions} from 'next-auth';
+import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
-import {compare, hashSync} from 'bcrypt';
-import {prisma} from "../../prisma/prisma-client";
-import {User as PrismaUS} from "@prisma/client";
-import YandexProvider from "next-auth/providers/yandex";
-
-//асширение типов next-auth
-declare module "next-auth" {
-    interface User extends PrismaUS {
-        id: string;
-        role: string;
-    }
-
-    interface Session {
-        user: User;
-    }
-
-    interface JWT {
-        id: string;
-        role: string;
-    }
-}
+import { compare, hashSync } from 'bcrypt';
+import { prisma } from '../../prisma/prisma-client';
+import YandexProvider from 'next-auth/providers/yandex';
+import { Role } from '@prisma/client';
 
 // Опции аутентификации для NextAuth
 export const authOptions: AuthOptions = {
@@ -32,42 +15,43 @@ export const authOptions: AuthOptions = {
         }),
 
         YandexProvider({
-            clientId: process.env.YANDEX_CLIENT_ID || "",
-            clientSecret: process.env.YANDEX_CLIENT_SECRET || "",
+            clientId: process.env.YANDEX_CLIENT_ID || '',
+            clientSecret: process.env.YANDEX_CLIENT_SECRET || '',
             authorization: {
-                params: {
-                    redirect_uri: "https://asleep.online"
-                }
-            }
+                params: { redirect_uri: 'https://asleep.online' },
+            },
         }),
 
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
-                email: {label: 'Email', type: 'text'},
-                password: {label: 'Password', type: 'password'},
+                email: { label: 'Email', type: 'text' },
+                password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
-                if (!credentials) {
+                try {
+                    if (!credentials) return null;
+
+                    const user = await prisma.user.findFirst({
+                        where: { email: credentials.email },
+                    });
+
+                    if (!user || !(await compare(credentials.password, user.password!))) {
+                        return null;
+                    }
+
+                    return {
+                        id: user.id,
+                        email: user.email!,
+                        name: user.name!,
+                        surname: user.surname,
+                        phone: user.phone,
+                        role: user.role,
+                    };
+                } catch (error) {
+                    console.error('Ошибка авторизации через CredentialsProvider:', error);
                     return null;
                 }
-
-                const user = await prisma.user.findFirst({
-                    where: {email: credentials.email},
-                });
-
-                if (!user || !(await compare(credentials.password, user.password!))) {
-                    return null;
-                }
-
-                return {
-                    id: user.id,
-                    email: user.email,
-                    name: user.name,
-                    surname: user.surname,
-                    phone: user.phone,
-                    role: user.role,
-                } as PrismaUS;
             },
         }),
     ],
@@ -76,50 +60,78 @@ export const authOptions: AuthOptions = {
         strategy: 'jwt',
     },
     callbacks: {
-        async signIn({user, account}) {
-            if (account?.provider === 'credentials') {
-                return true;
-            }
+        async signIn({ user, account }) {
+            try {
+                if (account?.provider === 'credentials') return true;
 
-            const existingUser = await prisma.user.findFirst({
-                where: {email: user.email},
-            });
-
-            if (!existingUser) {
-                // Создаем нового пользователя
-                await prisma.user.create({
-                    data: {
-                        email: user.email,
-                        name: user.name || 'User #' + user.id,
-                        password: hashSync(user.id.toString(), 10),
-                        verified: true,
-                        provider: account?.provider,
-                        providerId: account?.providerAccountId,
-                        registrationDate: new Date(),
-
-                    },
+                const existingUser = await prisma.user.findFirst({
+                    where: { email: user.email },
                 });
-            }
 
-            return true;
+                if (!existingUser) {
+                    await prisma.user.create({
+                        data: {
+                            email: user.email,
+                            name: user.name || user.email.split('@')[0],
+                            password: hashSync(user.id.toString(), 10),
+                            verified: true,
+                            provider: account?.provider,
+                            providerId: account?.providerAccountId,
+                            registrationDate: new Date(),
+                        },
+                    });
+                }
+
+                return true;
+            } catch (error) {
+                console.error('Ошибка во время signIn:', error);
+                return false;
+            }
         },
 
-        async jwt({token, user}) {
-            // При первом входе (после успешной аутентификации) добавляем id пользователя в JWT
+        async jwt({ token, user }) {
             if (user) {
-                token.id = user.id; // Добавляем id пользователя
-                token.role = user.role; // Добавляем роль пользователя
+                token.id = user.id;
+                token.role = user.role || 'USER';
             }
             return token;
         },
 
-        async session({session, token}) {
-            // Добавляем id и роль пользователя в сессию
+        async session({ session, token }) {
             if (session?.user) {
-                session.user.id = token.id as string; // Берем id из токена
-                session.user.role = token.role as string; // Берем роль из токена
+                session.user.id = token.id as string;
+                session.user.role = token.role as Role;
             }
             return session;
         },
     },
 };
+
+// Расширение типов NextAuth
+import { DefaultSession, DefaultUser } from 'next-auth';
+import { JWT, DefaultJWT } from 'next-auth/jwt';
+
+declare module 'next-auth' {
+    interface Session {
+        user: {
+            id: string;
+            role: Role;
+            name: string;
+            email: string;
+        };
+    }
+
+    interface User extends DefaultUser {
+        id: string;
+        role: Role;
+        name: string;
+        email: string;
+    }
+}
+
+declare module 'next-auth/jwt' {
+    interface JWT extends DefaultJWT {
+        id: string;
+        role: Role;
+    }
+}

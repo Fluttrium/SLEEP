@@ -35,50 +35,61 @@ export async function GET() {
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const {diseaseId, doctor, post, product} = body;
+        const { diseaseId, doctor, post, product } = body;
 
-        if (!diseaseId || !doctor?.id || !post?.id || !product?.id) {
+        if (!diseaseId || !Array.isArray(doctor) || !post?.id || !Array.isArray(product)) {
             return NextResponse.json(
-                {error: "Необходимо указать диагноз, врача и статью  и товар ."},
-                {status: 400}
+                { error: "Необходимо указать диагноз, список врачей, статью и товары." },
+                { status: 400 }
             );
         }
 
-        const [existingDisease, existingDoctor, existingPost, existingProduct] = await Promise.all([
-            prisma.disease.findUnique({where: {id: diseaseId}}),
-            prisma.user.findUnique({where: {id: doctor.id}}),
-            prisma.post.findUnique({where: {id: post.id}}),
-            prisma.product.findUnique({where: {id: product.id}}),
+        // Проверка существования переданных данных
+        const [existingDisease, existingPost] = await Promise.all([
+            prisma.disease.findUnique({ where: { id: diseaseId } }),
+            prisma.post.findUnique({ where: { id: post.id } }),
         ]);
 
         if (!existingDisease) {
-            return NextResponse.json({error: "Диагноз с таким ID не найден."}, {status: 404});
-        }
-        if (!existingDoctor) {
-            return NextResponse.json({error: "Врач с таким ID не найден."}, {status: 404});
+            return NextResponse.json({ error: "Диагноз с таким ID не найден." }, { status: 404 });
         }
         if (!existingPost) {
-            return NextResponse.json({error: "Статья с таким ID не найдена."}, {status: 404});
-        }
-        if (!existingProduct) {
-            return NextResponse.json({error: "Product с таким ID не найдена."}, {status: 404});
+            return NextResponse.json({ error: "Статья с таким ID не найдена." }, { status: 404 });
         }
 
+        // Проверка врачей и товаров
+        const doctorIds = doctor.map((d: { id: string }) => d.id);
+        const productIds = product.map((p: { id: number }) => p.id);
+
+        const [existingDoctors, existingProducts] = await Promise.all([
+            prisma.user.findMany({ where: { id: { in: doctorIds }, role: "DOCTOR" } }),
+            prisma.product.findMany({ where: { id: { in: productIds } } }),
+        ]);
+
+        if (existingDoctors.length !== doctorIds.length) {
+            return NextResponse.json({ error: "Некоторые врачи с указанными ID не найдены." }, { status: 404 });
+        }
+        if (existingProducts.length !== productIds.length) {
+            return NextResponse.json({ error: "Некоторые товары с указанными ID не найдены." }, { status: 404 });
+        }
+
+        // Обновление диагноза
         const updatedDisease = await prisma.disease.update({
-            where: {id: diseaseId},
+            where: { id: diseaseId },
             data: {
-                assignedDoctors: {set: [doctor]},
-                post: {connect: {id: post.id}},
-                product: {set: [product]}
+                assignedDoctor: { set: doctorIds.map((id) => ({ id })) }, // Установка связи по ID врачей
+                post: { connect: { id: post.id } }, // Связывание поста
+                Product: { set: productIds.map((id) => ({ id })) }, // Установка связи по ID товаров
             },
         });
 
-        return NextResponse.json({message: "Данные успешно обновлены.", updatedDisease});
+        return NextResponse.json({ message: "Данные успешно обновлены.", updatedDisease });
     } catch (error) {
         console.error("Ошибка при обновлении данных:", error);
-        return NextResponse.json({error: "Ошибка при обновлении данных."}, {status: 500});
+        return NextResponse.json({ error: "Ошибка при обновлении данных." }, { status: 500 });
     }
 }
+
 
 
 

@@ -1,6 +1,6 @@
 "use client";
-import {useSession, signOut} from "next-auth/react";
-import {Button} from "@/components/ui/button";
+import { useSession, signOut } from "next-auth/react";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -9,31 +9,33 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import {TestChart} from "@/components/ui/chart2";
-import {DesiesLinksNDocrors} from "@/components/prifilecomp/desiesLinksNDocrors";
-import {useEffect, useState} from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TestChart } from "@/components/ui/chart2";
+import { DesiesLinksNDocrors } from "@/components/prifilecomp/desiesLinksNDocrors";
+import { useEffect, useState } from "react";
 import NnewTestResComp from "@/components/newTestResComp";
-
 
 export function UserProfile() {
     const { data: session } = useSession();
     const userId = String(session?.user.email);
     const [chartData, setChartData] = useState<{ month: string; desktop: number }[]>([]);
     const [dataFetched, setDataFetched] = useState(false);
-    const [isWidgetOpen, setIsWidgetOpen] = useState(true); // Состояние для управления видимостью виджета
+    const [isWidgetOpen, setIsWidgetOpen] = useState(true); // Состояние для управления видимостью основного виджета
+    const [isTestResultsWidgetOpen, setIsTestResultsWidgetOpen] = useState(false); // Состояние для открытия/закрытия NnewTestResComp
 
     // Функция для загрузки данных
     const fetchData = async () => {
         if (!userId) return;
 
+        const results = localStorage.getItem("testResult");
+
         try {
             const response = await fetch("/api/user/test", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId }),
+                body: JSON.stringify({ userId, results }),
             });
 
             if (response.ok) {
@@ -68,11 +70,9 @@ export function UserProfile() {
                         className="relative w-full max-w-[90%] max-h-[90%] h-auto p-4"
                         onClick={(e) => e.stopPropagation()} // Предотвращает закрытие при клике внутри виджета
                     >
-                        <NnewTestResComp/>
+                        <NnewTestResComp isOpenn={isWidgetOpen} />
                     </div>
                 </div>
-
-
             )}
 
             {/* Основной контент страницы */}
@@ -94,11 +94,11 @@ export function UserProfile() {
                             <CardContent className="space-y-2">
                                 <div className="space-y-1">
                                     <Label htmlFor="name">Имя</Label>
-                                    <Input id="name" defaultValue=""/>
+                                    <Input id="name" defaultValue="" />
                                 </div>
                                 <div className="space-y-1">
                                     <Label htmlFor="username">Имя пользователя</Label>
-                                    <Input id="username" defaultValue=""/>
+                                    <Input id="username" defaultValue="" />
                                 </div>
                             </CardContent>
                             <CardFooter>
@@ -118,11 +118,11 @@ export function UserProfile() {
                             <CardContent className="space-y-2">
                                 <div className="space-y-1">
                                     <Label htmlFor="current">Текущий пароль</Label>
-                                    <Input id="current" type="password"/>
+                                    <Input id="current" type="password" />
                                 </div>
                                 <div className="space-y-1">
                                     <Label htmlFor="new">Новый пароль</Label>
-                                    <Input id="new" type="password"/>
+                                    <Input id="new" type="password" />
                                 </div>
                             </CardContent>
                             <CardFooter>
@@ -131,6 +131,21 @@ export function UserProfile() {
                         </Card>
                     </TabsContent>
                 </Tabs>
+
+                {/* Кнопка для открытия/закрытия виджета с результатами */}
+                <Button
+                    className="mt-4"
+                    onClick={() => setIsTestResultsWidgetOpen((prev) => !prev)}
+                >
+                    {isTestResultsWidgetOpen ? "Закрыть виджет результатов" : "Открыть виджет результатов"}
+                </Button>
+
+                {/* Виджет с результатами теста */}
+                {isTestResultsWidgetOpen && (
+                    <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
+                        <NnewTestResComp isOpenn={isTestResultsWidgetOpen} />
+                    </div>
+                )}
             </div>
 
             <div className="flex flex-col mx-3 basis-1/2">

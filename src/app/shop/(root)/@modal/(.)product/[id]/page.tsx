@@ -1,8 +1,8 @@
 
 
 import { notFound } from 'next/navigation';
-import {prisma} from "../../../../../../prisma/prisma-client";
-import {ChooseProductModal} from "../../../../../../shared/components/shared";
+import {prisma} from "../../../../../../../prisma/prisma-client";
+import {ChooseProductModal} from "../../../../../../../shared/components/shared";
 
 
 export default async function ProductModalPage({ params: { id } }: { params: { id: string } }) {

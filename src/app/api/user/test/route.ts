@@ -5,9 +5,9 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
         console.log("Received request body:", body); // Логируем тело запроса
-        const { email, results } = body;
+        const { userId, results } = body;
 
-        if (!email) {
+        if (!userId) {
             console.error("Email is required in the request body");
             return NextResponse.json({ error: "Email is required" }, { status: 400 });
         }
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
         if (results) {
             // Обновляем данные пользователя
             await prisma.user.update({
-                where: { email },
+                where: { email: userId },
                 data: {
                     DisesesList: results.map((result: any) => JSON.stringify(result)), // Преобразуем объекты в строки
                 },
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
         } else {
             // Если `results` нет, возвращаем данные пользователя
             const userData = await prisma.user.findUnique({
-                where: { email },
+                where: { email: userId },
                 select: { DisesesList: true },
             });
 

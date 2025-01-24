@@ -70,6 +70,6 @@ export const findPizzas = async (params: GetSearchParams) => {
       },
     },
   });
-
+  console.log('список категорий', categories)
   return categories;
 };

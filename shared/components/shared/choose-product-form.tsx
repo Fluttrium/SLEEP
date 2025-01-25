@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Title } from './title';
 import { Button } from '../ui';
@@ -25,22 +24,23 @@ export const ChooseProductForm: React.FC<Props> = ({
   loading,
 }) => {
   return (
-    <div className={cn(className, 'flex flex-1')}>
-      <div className="flex items-center justify-center flex-1 relative w-full">
+    <div className={cn(className, 'flex flex-col sm:flex-row')}>
+      <div className="flex justify-center sm:w-[40%] w-full mb-5 sm:mb-0">
         <img
           src={imageUrl}
           alt={name}
-          className="relative left-2 top-2 transition-all duration-300 w-[350px] h-[350px]"
+          className="transition-all duration-300 w-full h-auto max-w-[350px] max-h-[350px]"
         />
       </div>
 
-      <div className="w-[490px] bg-[#f7f6f5] p-7">
-        <Title text={name} size="md" className="font-extrabold mb-1" />
+      <div className="sm:w-[60%] w-full bg-[#f7f6f5] p-6 sm:p-8">
+        <Title text={name} size="lg" className="font-extrabold mb-2" />
 
         <Button
           loading={loading}
           onClick={() => onSubmit?.()}
-          className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
+          className="h-[55px] px-10 text-base rounded-[18px] w-full mt-6 sm:mt-8"
+        >
           Добавить в корзину за {price} ₽
         </Button>
       </div>

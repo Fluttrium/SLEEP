@@ -10,7 +10,6 @@ import { Button } from '../ui';
 import { IngredientItem } from './ingredient-item';
 import { cn } from '@/lib/utils';
 
-
 import { GroupVariants } from './group-variants';
 import { getPizzaDetails } from '@/lib/get-pizza-details';
 import { usePizzaOptions } from '@/hooks/use-pizza-options';
@@ -64,14 +63,17 @@ export const ChoosePizzaForm: React.FC<Props> = ({
   };
 
   return (
-    <div className={cn(className, 'flex flex-1')}>
-      <PizzaImage imageUrl={imageUrl} size={size} />
+    <div className={cn(className, 'flex flex-col sm:flex-row')}>
+      {/* Изображение Пиццы */}
+      <div className="flex justify-center sm:w-[50%] w-full mb-5 sm:mb-0">
+        <PizzaImage imageUrl={imageUrl} size={size} />
+      </div>
 
-      <div className="w-[490px] bg-[#f7f6f5] p-7">
+      <div className="sm:w-[50%] bg-[#f7f6f5] p-7 flex flex-col h-[80vh] overflow-y-auto">
         <Title text={name} size="md" className="font-extrabold mb-1" />
-
         <p className="text-gray-400">{textDetaills}</p>
 
+        {/* Выбор размера и типа пиццы */}
         <div className="flex flex-col gap-4 mt-5">
           <GroupVariants
             items={availableSizes}
@@ -86,7 +88,8 @@ export const ChoosePizzaForm: React.FC<Props> = ({
           />
         </div>
 
-        <div className="bg-gray-50 p-5 rounded-md h-[420px] overflow-auto scrollbar mt-5">
+        {/* Выбор ингредиентов (сокрытие только на мобильных экранах) */}
+        <div className="bg-gray-50 p-5 rounded-md h-[420px] overflow-y-auto scrollbar mt-5 hidden sm:block">
           <div className="grid grid-cols-3 gap-3">
             {ingredients.map((ingredient) => (
               <IngredientItem
@@ -101,10 +104,12 @@ export const ChoosePizzaForm: React.FC<Props> = ({
           </div>
         </div>
 
+        {/* Кнопка "Добавить в корзину" */}
         <Button
           loading={loading}
           onClick={handleClickAdd}
-          className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
+          className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10 mb-5"
+        >
           Добавить в корзину за {totalPrice} ₽
         </Button>
       </div>

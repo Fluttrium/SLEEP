@@ -16,6 +16,7 @@ import * as z from "zod"
 import {registerUser} from "@/app/actions";
 import {useRouter} from "next/navigation";
 import {signIn} from "next-auth/react";
+import {Checkbox} from "@/components/ui/checkbox";
 
 // Схема валидации с помощью zod
 const formSchema = z.object({
@@ -27,10 +28,13 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
+import { useState } from "react";
+
 export function SignUpForm() {
-    const {register, handleSubmit, formState: {errors}} = useForm<FormData>({
+    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(formSchema),
     });
+    const [isChecked, setIsChecked] = useState(false); // Состояние чекбокса
     const router = useRouter();
 
     const onSubmit = async (data: FormData) => {
@@ -40,7 +44,6 @@ export function SignUpForm() {
                 email: data.email,
                 password: data.password,
             });
-            // Перенаправляем пользователя на страницу проверки токена
             router.push(`/signup/checktoken`);
         } catch (error) {
             console.error("Registration error:", error);
@@ -53,7 +56,7 @@ export function SignUpForm() {
             <CardHeader>
                 <CardTitle className="text-xl">Регистрация</CardTitle>
                 <CardDescription>
-                    Введите информация о себе для регистрации
+                    Введите информацию о себе для регистрации
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -102,7 +105,31 @@ export function SignUpForm() {
                             />
                             {errors.password && <div>{errors.password.message}</div>}
                         </div>
-                        <Button type="submit" className="w-full">
+                        <div className="mt-4 text-xs flex flex-col items-center gap-2">
+                            <div className="flex items-center gap-2">
+                                <Checkbox
+                                    id="terms"
+                                    checked={isChecked}
+                                    onCheckedChange={(checked) => setIsChecked(!!checked)} // Обновляем состояние чекбокса
+                                />
+                                <span>
+                  Я ознакомился с{" "}
+                                    <a
+                                        href="/files/personal_data_policy.pdf"
+                                        download="Политика_персональных_данных.pdf"
+                                        className="underline text-primary cursor-pointer"
+                                    >
+                    Политикой обработки персональных данных
+                  </a>{" "}
+                                    и принимаю её условия.
+                </span>
+                            </div>
+                        </div>
+                        <Button
+                            type="submit"
+                            className="w-full"
+                            disabled={!isChecked} // Кнопка активируется только при нажатии на чекбокс
+                        >
                             Создать аккаунт
                         </Button>
                         <Button variant="outline" className="w-full" onClick={() => signIn("yandex")}>
@@ -120,3 +147,4 @@ export function SignUpForm() {
         </Card>
     );
 }
+

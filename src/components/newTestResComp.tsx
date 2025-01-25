@@ -14,7 +14,7 @@ function DiagnosisSection({maxDiagnosis, post}: { maxDiagnosis: any; post: Post 
         <div className="flex h-1/2 bg-white rounded-3xl flex-row shadow justify-between items-center p-3">
             <CardDescription className="flex flex-col gap-3 w-1/3 ml-4">
                 Вы отлично постарались! 🎉 Ваш тест завершён, и результаты готовы.
-                <strong>Ваш предположительный диагноз:</strong>
+                <strong>Ваше вероятное состояние:</strong>
                 <span className="text-green-600 text-2xl">
                     {maxDiagnosis ? maxDiagnosis.title : "Неизвестный диагноз"}
                 </span>
@@ -161,7 +161,7 @@ export default function NnewTestResComp({ isOpenn }: NnewTestResCompProps) {
         >
             <div className="flex flex-col w-1/2 h-full mr-3 gap-3">
                 <div className="flex h-1/2">
-                    <NewChart diseasesList={parsedResult}/>
+                    <NewChart diseasesList={parsedResult} disise={maxDiagnosis?.title || ""}/>
                 </div>
                 <DiagnosisSection maxDiagnosis={maxDiagnosis} post={post}/>
             </div>

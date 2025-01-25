@@ -56,7 +56,7 @@ const generateChartConfig = (diseasesList: any[]): ChartConfig => {
     return config;
 };
 
-export function NewChart({ diseasesList }: { diseasesList: any[] }) {
+export function NewChart({ diseasesList, disise }: { diseasesList: any[], disise: string }) {
     // Генерируем конфигурацию на основе списка заболеваний
     const dynamicChartConfig = generateChartConfig(diseasesList);
 
@@ -76,8 +76,8 @@ export function NewChart({ diseasesList }: { diseasesList: any[] }) {
                 <CardTitle>Результаты теста</CardTitle>
                 <CardDescription className="flex flex-col gap-3">
                     Вы отлично постарались! 🎉 Ваш тест завершён, и результаты готовы. На основе ваших ответов мы смогли предположить возможные проблемы и пути их решения.
-                    <strong>Ваш предположительный диагноз:</strong>
-                    <span className="text-green-600 text-2xl">Лёгкая форма бессонницы</span>
+                    <strong>Ваше вероятное состояние:</strong>
+                    <span className="text-green-600 text-2xl">{disise}</span>
                 </CardDescription>
             </CardHeader>
             <CardContent className="flex-1 my-10 items-center">

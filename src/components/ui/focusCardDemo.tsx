@@ -7,6 +7,7 @@ export function FocusCardsDemo() {
       title: "Попробуйте узнать больше о себе! Пройдите наш тест и откройте свои скрытые возможности!",
       src: "", // Замените на новый путь
     },
+    
   ];
 
   return <FocusCards cards={cards} />;

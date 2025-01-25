@@ -3,7 +3,7 @@ import { TimelineDemo } from '../timelinecomponent';
 
 const Steps = () => {
   return (
-    <div className="mt-10 sm:mt-20 my-8"> {/* mt-10 для мобильной версии, sm:mt-20 для более крупных экранов */}
+    <div className=""> {/* mt-10 для мобильной версии, sm:mt-20 для более крупных экранов */}
       <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-4xl mx-auto text-center tracking-tight font-medium text-black dark:text-white py-4">
         Как это работает?
       </h4>

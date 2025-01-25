@@ -83,7 +83,7 @@ export default function CheckoutPage() {
 
   return (
     <Container className="mt-10">
-      <Title text="Оформление заказа" className="font-extrabold mb-8 text-[36px]" />
+      <Title text="Оформление заказа" className=" ml-10 font-extrabold mb-8 text-[36px]" />
 
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -100,14 +100,18 @@ export default function CheckoutPage() {
               <CheckoutPersonalForm className={loading ? 'opacity-40 pointer-events-none' : ''} />
 
               <CheckoutAddressForm className={loading ? 'opacity-40 pointer-events-none' : ''} />
+
+              <div className="w-[400px]">
+              <CheckoutSidebar totalAmount={totalAmount} loading={loading || submitting} />
+            </div>
             </div>
 
             {/* Правая часть */}
-            <div className="w-[450px]">
+            {/* <div className="w-[450px]">
               <CheckoutSidebar totalAmount={totalAmount} loading={loading || submitting} />
-            </div>
+            </div> */}
           </div>
-        </form>
+        </form> 
       </FormProvider>
     </Container>
   );

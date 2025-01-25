@@ -41,18 +41,28 @@ export const ProductsGroupList: React.FC<Props> = ({
 
   return (
     <div className={className} id={title} ref={intersectionRef}>
+      
       <Title text={title} size="lg" className="font-extrabold mb-5" />
 
-      <div className={cn('grid grid-cols-3 gap-[50px]', listClassName)}>
-        {items.map((product, i) => (
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            name={product.name}
-            imageUrl={product.imageUrl}
-            price={product.items[0].price}
-            ingredients={product.ingredients}
-          />
+      {/* Сетка продуктов: flexbox для мобильных устройств и grid для десктопов */}
+      <div
+        className={cn(
+          'grid grid-cols-3 gap-[50px] md:grid',
+          'overflow-x-auto flex md:grid md:gap-[50px]', // Flexbox для мобильных экранов
+          listClassName
+        )}
+        style={{ scrollSnapType: 'x mandatory' }} // Для плавного скроллинга на мобильных
+      >
+        {items.map((product) => (
+          <div key={product.id} style={{ scrollSnapAlign: 'start' }}>
+            <ProductCard
+              id={product.id}
+              name={product.name}
+              imageUrl={product.imageUrl}
+              price={product.items[0].price}
+              ingredients={product.ingredients}
+            />
+          </div>
         ))}
       </div>
     </div>

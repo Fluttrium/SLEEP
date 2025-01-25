@@ -25,7 +25,7 @@ export const CheckoutCart: React.FC<Props> = ({
 }) => {
   return (
     <WhiteBlock title="1. Корзина" className={className}>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-4 sm:gap-5"> {/* Adjust gap for smaller screens */}
         {loading
           ? [...Array(4)].map((_, index) => <CheckoutItemSkeleton key={index} />)
           : items.map((item) => (
@@ -44,6 +44,7 @@ export const CheckoutCart: React.FC<Props> = ({
                 disabled={item.disabled}
                 onClickCountButton={(type) => onClickCountButton(item.id, item.quantity, type)}
                 onClickRemove={() => removeCartItem(item.id)}
+                className="flex flex-col sm:flex-row items-start justify-between" // Ensure items stack on mobile
               />
             ))}
       </div>

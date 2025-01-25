@@ -22,27 +22,34 @@ export const ProductCard: React.FC<Props> = ({
   ingredients,
   className,
 }) => {
+  // Функция для ограничения имени до двух слов
+  const truncateName = (name: string) => {
+    const words = name.split(' ');
+    return words.length > 2 ? `${words.slice(0, 2).join(' ')}...` : name;
+  };
+
   return (
-    <div className={className}>
+    <div className={`${className} w-[200px] h-[300px]`}>
       <Link href={`/product/${id}`}>
-        <div className="flex justify-center p-6 bg-secondary rounded-lg h-[260px]">
-          <img className="w-[215px] h-[215px]" src={imageUrl} alt={name} />
+        <div className="flex justify-center p-4 bg-secondary rounded-lg h-[160px]">
+          <img className="w-full h-full object-contain" src={imageUrl} alt={name} />
         </div>
 
-        <Title text={name} size="sm" className="mb-1 mt-3 font-bold" />
+        <Title text={truncateName(name)} size="sm" className="mb-1 mt-2 font-bold" /> {/* Применяем функцию для обрезки имени */}
 
-        <p className="text-sm text-gray-400">
+        {/* Ингредиенты скрыты на мобильных устройствах */}
+        <p className="text-xs text-gray-400 hidden md:block">
           {ingredients.map((ingredient) => ingredient.name).join(', ')}
         </p>
 
-        <div className="flex justify-between items-center mt-4">
-          <span className="text-[20px]">
-            от <b>{price} ₽</b>
+        <div className="flex justify-between items-center mt-2">
+          <span className="text-xs">
+            <b>{price} ₽</b>
           </span>
 
-          <Button variant="secondary" className="text-base font-bold">
-            <Plus size={20} className="mr-1" />
-            Добавить
+          <Button variant="secondary" className="text-xs font-bold">
+            <Plus size={16} className="mr-1" />
+            <span className="hidden sm:inline">Добавить</span>
           </Button>
         </div>
       </Link>

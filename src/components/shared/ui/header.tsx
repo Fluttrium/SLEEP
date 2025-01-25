@@ -128,15 +128,15 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                             <DropdownMenu>
                                 <DropdownMenuTrigger className="text-left">
                                     <div
-                                        className={cn(isActive("/cpap") || isActive("/methods") ? "text-primary font-bold" : "")}>
+                                        className={cn(isActive("/shop") || isActive("/methods") ? "text-primary font-bold" : "")}>
                                         Лечение нарушения сна
                                     </div>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="left-0 w-full">
                                     <DropdownMenuItem>
-                                        <Link href="/cpap">
+                                        <Link href="/shop">
                                             <div
-                                                className={cn("cursor-pointer", isActive("/cpap") && "text-primary font-bold")}>
+                                                className={cn("cursor-pointer", isActive("/shop") && "text-primary font-bold")}>
                                                 Сипап терапия
                                             </div>
                                         </Link>

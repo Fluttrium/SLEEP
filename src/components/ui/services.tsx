@@ -23,7 +23,7 @@ export function FeaturesSectionDemo() {
                             <Link href="/articles" className="text-black hover:underline">
                                 <Title text="Лечение" size="md" className="mt-4"/>
                             </Link>
-                            <ImageGallery
+                            {/* <ImageGallery
                                 images={["", "", ""]}/>
                         </li>
                         <li>
@@ -38,7 +38,7 @@ export function FeaturesSectionDemo() {
                                   className="text-black hover:underline">
                                 <Title text="Диагностика" size="md"/>
                             </Link>
-                            <ImageGallery images={["", "", ""]}/>
+                            <ImageGallery images={["", "", ""]}/> */}
                         </li>
                     </ul>
                 </>
@@ -73,9 +73,9 @@ export function FeaturesSectionDemo() {
 
     return (
         <div className='w-screen relative'>
-            <div className='absolute right-0 top-0 rotate-180 -z-50'>
+            {/* <div className='absolute right-0 top-0 rotate-180 -z-50'>
                 <Image src="/hero1.svg" alt="Icon" width={300} height={300} style={{height: '100%'}}/>
-            </div>
+            </div> */}
 
             <div className="relative z-20 py-2 lg: max-w-7xl mx-auto">
 
@@ -163,14 +163,14 @@ const ImageGallery = ({images}: { images: string[] }) => {
             className="rounded-xl p-1 bg-white dark:bg-neutral-800 dark:border-neutral-700 border border-neutral-100 overflow-hidden"
             style={{ width: "150px", height: "150px" }} // Фиксированный размер контейнера
         >
-            <Image
+            {/* <Image
                 src={image}
                 alt={`image-${idx}`}
                 width={150}
                 height={150}
                 className="rounded-lg object-cover mx-auto"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }} // Масштабируем изображение внутри контейнера
-            />
+            /> */}
         </motion.div>
     ))}
 </div>
@@ -193,7 +193,7 @@ export const SkeletonOne = () => {
     return (
         <div className="relative flex py-8 px-2 gap-10 h-full">
             <div className="w-full p-5 mx-auto bg-white dark:bg-neutral-900 shadow-2xl group h-full">
-                <div className="flex flex-1 w-full h-full flex-col space-y-2">
+                {/* <div className="flex flex-1 w-full h-full flex-col space-y-2">
                     <Image
                         src=""
                         alt="header"
@@ -201,7 +201,7 @@ export const SkeletonOne = () => {
                         height={400}
                         className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
                     />
-                </div>
+                </div> */}
             </div>
             <div
                 className="absolute bottom-0 z-40 inset-x-0 h-60 bg-gradient-to-t from-white dark:from-black via-white dark:via-black to-transparent w-full pointer-events-none"/>
@@ -221,13 +221,13 @@ export const SkeletonThree = () => {
             <div className="w-full mx-auto bg-transparent dark:bg-transparent group h-full">
                 <div className="flex flex-1 w-full h-full flex-col space-y-2 relative">
                     <IconBrandYoutubeFilled className="h-20 w-20 absolute z-10 inset-0 text-red-500 m-auto"/>
-                    <Image
+                    {/* <Image
                         src=""
                         alt="header"
                         width={800}
                         height={800}
                         className="h-full w-full aspect-square object-cover object-center rounded-sm blur-none group-hover/image:blur-md transition-all duration-200"
-                    />
+                    /> */}
                 </div>
             </div>
         </Link>
@@ -238,13 +238,13 @@ export const SkeletonFour = ({className}: { className?: string }) => {
     return (
         <div className={cn("relative flex flex-col items-center p-8 gap-6", className)}>
             {/* Картинка для корпоративных программ */}
-            <Image
+            {/* <Image
                 src="" // Замените на нужный путь к изображению
                 alt="Корпоративные программы"
                 width={600}
                 height={400}
                 className="rounded-lg object-cover"
-            />
+            /> */}
 
             {/* Текстовые блоки */}
             <div className="text-center">

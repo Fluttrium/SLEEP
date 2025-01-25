@@ -23,7 +23,7 @@ export function FeaturesSectionDemo() {
                             <Link href="/articles" className="text-black hover:underline">
                                 <Title text="Лечение" size="md" className="mt-4"/>
                             </Link>
-                            {/* <ImageGallery
+                            <ImageGallery
                                 images={["", "", ""]}/>
                         </li>
                         <li>
@@ -38,7 +38,7 @@ export function FeaturesSectionDemo() {
                                   className="text-black hover:underline">
                                 <Title text="Диагностика" size="md"/>
                             </Link>
-                            <ImageGallery images={["", "", ""]}/> */}
+                            <ImageGallery images={["", "", ""]}/>
                         </li>
                     </ul>
                 </>
@@ -73,9 +73,10 @@ export function FeaturesSectionDemo() {
 
     return (
         <div className='w-screen relative'>
-            {/* <div className='absolute right-0 top-0 rotate-180 -z-50'>
+            <div className='absolute right-0 top-0 rotate-180 -z-50'>
+            
                 <Image src="/hero1.svg" alt="Icon" width={300} height={300} style={{height: '100%'}}/>
-            </div> */}
+            </div>
 
             <div className="relative z-20 py-2 lg: max-w-7xl mx-auto">
 
@@ -163,6 +164,21 @@ const ImageGallery = ({images}: { images: string[] }) => {
             className="rounded-xl p-1 bg-white dark:bg-neutral-800 dark:border-neutral-700 border border-neutral-100 overflow-hidden"
             style={{ width: "150px", height: "150px" }} // Фиксированный размер контейнера
         >
+            <svg
+        width="100"
+        height="100"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 50 50"
+        className="rounded-lg object-cover mx-auto"
+      >
+        <path
+          d="M25 5v40M5 25h40"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
             {/* <Image
                 src={image}
                 alt={`image-${idx}`}
@@ -193,15 +209,30 @@ export const SkeletonOne = () => {
     return (
         <div className="relative flex py-8 px-2 gap-10 h-full">
             <div className="w-full p-5 mx-auto bg-white dark:bg-neutral-900 shadow-2xl group h-full">
-                {/* <div className="flex flex-1 w-full h-full flex-col space-y-2">
-                    <Image
+                <div className="flex flex-1 w-full h-full flex-col space-y-2">
+                <svg
+        width="400"
+        height="400"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 50 50"
+        className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
+      >
+        <path
+          d="M25 5v40M5 25h40"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+                    {/* <Image
                         src=""
                         alt="header"
                         width={400}
                         height={400}
                         className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
-                    />
-                </div> */}
+                    /> */}
+                </div>
             </div>
             <div
                 className="absolute bottom-0 z-40 inset-x-0 h-60 bg-gradient-to-t from-white dark:from-black via-white dark:via-black to-transparent w-full pointer-events-none"/>
@@ -221,6 +252,29 @@ export const SkeletonThree = () => {
             <div className="w-full mx-auto bg-transparent dark:bg-transparent group h-full">
                 <div className="flex flex-1 w-full h-full flex-col space-y-2 relative">
                     <IconBrandYoutubeFilled className="h-20 w-20 absolute z-10 inset-0 text-red-500 m-auto"/>
+                    <svg
+        width="800"
+        height="800"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 50 50"
+        className="h-full w-full aspect-square object-cover object-center rounded-sm blur-none group-hover/image:blur-md transition-all duration-200"
+      >
+        <path
+          d="M5 25h10l5-10 10 20 5-10h10"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle
+          cx="25"
+          cy="25"
+          r="23"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+      </svg>
                     {/* <Image
                         src=""
                         alt="header"
@@ -238,6 +292,29 @@ export const SkeletonFour = ({className}: { className?: string }) => {
     return (
         <div className={cn("relative flex flex-col items-center p-8 gap-6", className)}>
             {/* Картинка для корпоративных программ */}
+            <svg
+        width="600"
+        height="400"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 50 50"
+        className="rounded-lg object-cover"
+      >
+        <path
+          d="M15 20h20v15H15z"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinejoin="round"
+          fill="currentColor"
+        />
+        <path d="M20 25h10v5H20z" fill="#fff" />
+        <path
+          d="M25 5v5M15 10h20M25 35v5M15 40h20"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
             {/* <Image
                 src="" // Замените на нужный путь к изображению
                 alt="Корпоративные программы"

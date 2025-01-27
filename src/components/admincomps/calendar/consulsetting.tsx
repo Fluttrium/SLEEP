@@ -20,9 +20,11 @@ import {
 } from "@/components/ui/form"
 import {Input} from "@/components/ui/input"
 import {DropdownMenu, DropdownMenuContent, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
-import DatePicker, { DateObject } from "react-multi-date-picker";
+import DatePicker, {DateObject} from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import {Calendar} from "@/components/ui/calendar";
+import DocconsulComp from "@/components/admincomps/calendar/doctorsconsulcomponents/docconsulcomp";
+import {description} from "@/components/admincomps/chart1";
 
 
 const format = "MM/DD/YYYY";
@@ -39,11 +41,11 @@ const formSchema = z.object({
 })
 
 
-export default function ConsulSetting() {
+export default function qConsulSetting() {
     const [dates, setDates] = useState<DateObject[]>([
-        new DateObject().set({ day: 4, format }),
-        new DateObject().set({ day: 25, format }),
-        new DateObject().set({ day: 20, format })
+        new DateObject().set({day: 4, format}),
+        new DateObject().set({day: 25, format}),
+        new DateObject().set({day: 20, format})
     ]);
     const [doctorsProducts, setDoctorsProducts] = useState([]);
     const [doctors, setDoctors] = useState([]); // Состояние для хранения списка докторов
@@ -58,6 +60,7 @@ export default function ConsulSetting() {
             image: undefined,
         },
     });
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const formData = new FormData();
         formData.append('description', values.description);
@@ -77,7 +80,7 @@ export default function ConsulSetting() {
                 console.log("Успешно отправлено:", result);
                 alert("Доктор предоставляющий услуги успешно добавлен!");
                 form.reset();
-                document.dispatchEvent(new MouseEvent("mousedown", { bubbles: true })); // Закрыть диалог
+                document.dispatchEvent(new MouseEvent("mousedown", {bubbles: true})); // Закрыть диалог
             } else {
                 console.error("Ошибка при отправке:", response.statusText);
                 alert("Произошла ошибка при добавлении доктора.");
@@ -87,6 +90,7 @@ export default function ConsulSetting() {
             alert("Произошла ошибка. Попробуйте позже.");
         }
     }
+
     const {currentSection, setCurrentSection} = useCalendarPageStateStore((state) => ({
         currentSection: state.currentSection,
         setCurrentSection: state.setCurrentSection,
@@ -106,11 +110,13 @@ export default function ConsulSetting() {
 
         fetchDoctors();
     }, []); // Пустой массив зависимостей для вызова эффекта только один раз
+
     // Функция для обновления выбранного доктора
     const handleDoctorSelect = (doctor: User) => {
         setChosendoctor(doctor);
         form.setValue("doctorId", doctor.id); // Устанавливаем doctorId в форму
     };
+
     const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files ? e.target.files[0] : null;
         setImage(file);
@@ -147,7 +153,7 @@ export default function ConsulSetting() {
                                     <FormItem>
                                         <FormLabel>Изображение</FormLabel>
                                         <FormControl>
-                                            <Input type="file" onChange={handleImageSelect} />
+                                            <Input type="file" onChange={handleImageSelect}/>
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -193,8 +199,8 @@ export default function ConsulSetting() {
             </Dialog>
             <Button onClick={() => setCurrentSection("default")}>Settings Page Placeholder</Button>
             <div className="App">
-                <h1>Hello Next.js + TypeScript</h1>
-                <div style={{ textAlign: "center" }}>
+
+                <div style={{textAlign: "center"}}>
                     <DatePicker
                         value={dates}
                         onChange={setDates}
@@ -202,7 +208,7 @@ export default function ConsulSetting() {
                         sort
                         format={format}
                         calendarPosition="bottom-center"
-                        plugins={[<DatePanel />]}
+                        plugins={[<DatePanel/>]}
                     />
                 </div>
                 <ul>
@@ -212,15 +218,12 @@ export default function ConsulSetting() {
                 </ul>
             </div>
             {doctorsProducts.length > 0 ? (
-                <div>
-                    {doctorsProducts.map((docprod: ConsulProduct, index) => (
-                        <div
-
-                            key={docprod.id || index}
-                            className="p-2 border-b gap-3"
-                        >
-                            {docprod.description} {docprod.doctorID}
-                        </div>
+                <div className="grid grid-cols-3 gap-4">
+                    {doctorsProducts.map((docprod: ConsulProduct) => (
+                        <DocconsulComp key={docprod.id} consul={docprod}/>
+                    ))}
+                    {doctorsProducts.map((docprod: ConsulProduct) => (
+                        <DocconsulComp key={docprod.id} consul={docprod}/>
                     ))}
                 </div>
             ) : (

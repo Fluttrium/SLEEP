@@ -290,15 +290,16 @@ model consulOrder {
 
 model ConsulProduct {
   id                Int                 @id @default(autoincrement())
+  title             String?
   description       String
   doctorID          String
   image             String?
+  price             Int?
   ConsulProductItem ConsulProductItem[]
 }
 
 model ConsulProductItem {
   id              Int           @id @default(autoincrement())
-  price           Int
   date            DateTime
   consulProductId Int
   ConsulProduct   ConsulProduct @relation(fields: [consulProductId], references: [id])

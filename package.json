@@ -78,6 +78,7 @@
     "react-markdown": "^9.0.1",
     "react-multi-date-picker": "^4.5.2",
     "react-popover": "^0.5.10",
+    "react-time-picker": "^7.0.0",
     "react-toast": "^1.0.3",
     "react-use": "^17.5.1",
     "recharts": "^2.12.7",

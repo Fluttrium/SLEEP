@@ -300,7 +300,8 @@ model ConsulProduct {
 
 model ConsulProductItem {
   id              Int           @id @default(autoincrement())
-  date            DateTime
+  dateStart       DateTime
+  dateEnd         DateTime
   consulProductId Int
   ConsulProduct   ConsulProduct @relation(fields: [consulProductId], references: [id])
 }

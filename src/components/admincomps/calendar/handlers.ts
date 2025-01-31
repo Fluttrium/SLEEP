@@ -1,20 +1,26 @@
-export async function searchbydate(data: number) {
+
+export async function searchbydate(year: number, month: number) {
     try {
+        const body = { year, month };
+
+        // Логируем тело запроса перед отправкой
+        console.log("Тело запроса:", JSON.stringify(body));
+
         const response = await fetch("/api/admin/calendar/pickdata", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({data}),
+            body: JSON.stringify(body), // тело запроса
         });
 
         if (response.ok) {
-            const consulsAtDate = await response.json();
-            console.log('Записи на выбранный день:', consulsAtDate);
+            const consulsAtDate = await response.json(); // данные
+            console.log('Записи на выбранный месяц:', consulsAtDate);
             return consulsAtDate;
         } else {
             const errorData = await response.json();
-            console.error('Ошибка при поиске записей на выбранный день:', errorData.message);
+            console.error('Ошибка при поиске записей на выбранный месяц:', errorData.message);
             throw new Error(errorData.message);
         }
     } catch (error) {

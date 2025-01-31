@@ -282,15 +282,14 @@ model StoryItem {
 }
 
 model consulOrder {
-  id       Int    @id @default(autoincrement())
-  Time     Int
-  Date     Int
-  clientId String
+  id       Int    @id @default(autoincrement()) 
+  Time     Int    
+  Date     Int    
+  clientId String 
 }
 
 model ConsulProduct {
   id                Int                 @id @default(autoincrement())
-  title             String?
   description       String
   doctorID          String
   image             String?
@@ -300,9 +299,9 @@ model ConsulProduct {
 
 model ConsulProductItem {
   id              Int           @id @default(autoincrement())
-  dateStart       DateTime
-  dateEnd         DateTime
   consulProductId Int
+  dateEnd         DateTime
+  dateStart       DateTime
   ConsulProduct   ConsulProduct @relation(fields: [consulProductId], references: [id])
 }
 

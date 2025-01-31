@@ -2,13 +2,14 @@ import { motion } from "framer-motion";
 import * as React from "react";
 import { Calendar } from "@/components/ui/calendar";
 import HoursTable from "@/components/admincomps/calendar/hourstable";
-import { fetchAllDoctors, searchbydate } from "@/components/admincomps/calendar/handlers";
+import { fetchAllDoctors} from "@/components/admincomps/calendar/handlers";
 import { consulOrder, User } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import { useCalendarPageStateStore } from "@/components/admincomps/calendar/store/_calendarPageStore";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { searchbydate } from "./searchbydate";
 
 // Указание типа для записей (согласно вашей модели)
 interface Record {
@@ -58,26 +59,29 @@ export default function Calendardash() {
         return `${year}${month}${day}`;
     };
 
-    const handleDateChange = async (newDate: Date | undefined) => {
-        if (newDate) {
-            setDate(newDate);
-    
-            const year = newDate.getFullYear(); // Оставляем год как число
-            const month = newDate.getMonth() + 1; // Оставляем месяц как число
+    // calendar.tsx
+const handleDateChange = async (newDate: Date | undefined) => {
+    if (newDate) {
+        setDate(newDate);
 
-            try {
-                console.log(`Запрос на сервер: /api/consultations?year=${year}&month=${month}`);
+        const year = newDate.getFullYear(); // Оставляем год как число
+        const month = newDate.getMonth() + 1; // Оставляем месяц как число
 
-                // Отправляем запрос с параметрами года и месяца (как числа)
-                const records = await searchbydate(year, month); // Передаем как числа
-                setConsul(records);
-                setError(null);
-            } catch (err) {
-                setError("Ошибка при получении записей");
-                console.error(err);
-            }
+        // Логируем параметры перед запросом
+        console.log(`Запрос на сервер с параметрами: year=${year}, month=${month}`);
+
+        try {
+            // Выполняем запрос на сервер
+            const records = await searchbydate(year, month); // Передаем как числа
+            setConsul(records);
+            setError(null);
+        } catch (err) {
+            setError("Ошибка при получении записей");
+            console.error(err);
         }
-    };
+    }
+};
+
     
     return (
         <motion.div

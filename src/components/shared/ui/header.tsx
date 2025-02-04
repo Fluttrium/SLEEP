@@ -150,6 +150,15 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                                             </div>
                                         </Link>
                                     </DropdownMenuItem>
+                                    <DropdownMenuSeparator/>
+                                    <DropdownMenuItem>
+                                        <Link href="/consultations">
+                                            <div
+                                                className={cn("cursor-pointer", isActive("/methods") && "text-primary font-bold")}>
+                                                Записаться на прием
+                                            </div>
+                                        </Link>
+                                    </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                             <Link href="/articles">

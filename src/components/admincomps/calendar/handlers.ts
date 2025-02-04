@@ -1,28 +1,3 @@
-export async function searchbydate(data: number) {
-    try {
-        const response = await fetch("/api/admin/calendar/pickdata", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({data}),
-        });
-
-        if (response.ok) {
-            const consulsAtDate = await response.json();
-            console.log('Записи на выбранный день:', consulsAtDate);
-            return consulsAtDate;
-        } else {
-            const errorData = await response.json();
-            console.error('Ошибка при поиске записей на выбранный день:', errorData.message);
-            throw new Error(errorData.message);
-        }
-    } catch (error) {
-        console.error('Ошибка выполнения запроса:', error);
-        throw new Error('Не удалось получить записи.');
-    }
-}
-
 export async function searchbyhour(hour: number) {
     try {
         const response = await fetch("/api/admin/calendar/pickhour", {

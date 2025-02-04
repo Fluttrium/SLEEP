@@ -282,9 +282,9 @@ model StoryItem {
   story     Story    @relation(fields: [storyId], references: [id])
 }
 
+
 model ConsulProduct {
   id                Int                 @id @default(autoincrement())
-  title             String?
   description       String
   doctorID          String
   image             String?
@@ -294,9 +294,9 @@ model ConsulProduct {
 
 model ConsulProductItem {
   id              Int           @id @default(autoincrement())
-  dateStart       DateTime
-  dateEnd         DateTime
   consulProductId Int
+  dateEnd         DateTime
+  dateStart       DateTime
   ConsulProduct   ConsulProduct @relation(fields: [consulProductId], references: [id])
 }
 

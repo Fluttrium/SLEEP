@@ -1,344 +1,209 @@
 "use client";
 import React from "react";
-import {cn} from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
-import {motion} from "framer-motion";
-import {IconBrandYoutubeFilled} from "@tabler/icons-react";
+import { motion } from "framer-motion";
+import {
+  IconBrandYoutubeFilled,
+  IconStethoscope,
+  IconHeartbeat,
+  IconMicroscope,
+  IconUser,
+  IconBuildingHospital,
+  IconBed,
+  IconPill,
+  IconBrain,
+  IconClock,
+  IconAlertCircle,
+} from "@tabler/icons-react";
 import Link from "next/link";
-import {Title} from "../shared/ui/title";
 
 export function FeaturesSectionDemo() {
-    const features = [
-        {
-            title: "Для пациентов",
-            description: (
+  const features = [
+    {
+      title: "Для пациентов",
+      description: (
+        <>
+          <div className="mt-4">
+            Мы собрали все необходимые консультации, методы диагностики и эффективного лечения нарушений сна.
+          </div>
+          <div className="mt-6 space-y-4">
+            <FeatureWidget
+              icon={<IconStethoscope className="w-12 h-12 text-blue-500" />}
+              title="Лечение"
+              link="/articles"
+              description="Эффективные методы лечения нарушений сна"
+            />
+            <FeatureWidget
+              icon={<IconHeartbeat className="w-12 h-12 text-red-500" />}
+              title="Консультации"
+              link="/doctors"
+              description="Консультации с ведущими сомнологами"
+            />
+            <FeatureWidget
+              icon={<IconMicroscope className="w-12 h-12 text-green-500" />}
+              title="Диагностика"
+              link="https://telegra.ph/Polisomnografiya-07-27"
+              description="Точная диагностика нарушений сна"
+            />
+          </div>
+        </>
+      ),
+      icon: <IconBed className="w-20 h-20 text-blue-500" />,
+    },
+    {
+      title: "Для Врачей и клиник",
+      description: (
+        <>
+          <div className="mt-4 text-neutral-600 dark:text-neutral-400">
+            Напишите нам, если вы хотите привлекать больше пациентов с нарушениями сна.
+          </div>
+          <div className="mt-6 flex flex-col items-center gap-4">
+            <IconBuildingHospital className="w-12 h-12 text-blue-500" />
+            <Link
+              href="/for-doctors"
+              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              Написать нам
+            </Link>
+          </div>
+          <div className="mt-8 text-center">
+            <h3 className="text-lg font-semibold text-black dark:text-white mb-2">
+              Смотрите наше видео на YouTube
+            </h3>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+              Наши врачи-сомнологи объяснят, как мы помогаем пациентам улучшить качество жизни.
+            </p>
+            <Link
+              href="https://www.youtube.com/watch?v=RPa3_AD1_Vs"
+              target="_blank"
+              className="flex items-center gap-2 px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+            >
+              <IconBrandYoutubeFilled className="w-6 h-6" />
+              <span>Смотреть видео</span>
+            </Link>
+          </div>
+        </>
+      ),
+      icon: <IconBuildingHospital className="w-20 h-20 text-blue-500" />,
+    },
+    {
+      title: "Качество сна важно",
+      description: (
+        <>
+          <div className="mt-4 text-neutral-600 dark:text-neutral-400">
+            80% случаев синдрома апноэ во сне не диагностируются вовремя. Узнайте, как вы можете предотвратить это.
+          </div>
+          <div className="mt-6 flex flex-col items-center gap-4">
+            <IconAlertCircle className="w-20 h-20 text-yellow-500" />
+            <div className="text-center">
+              <h3 className="text-xl font-semibold text-black dark:text-white mb-2">
+                Почему это важно?
+              </h3>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                Недиагностированные нарушения сна могут привести к серьезным проблемам со здоровьем.
+              </p>
+            </div>
+            <Link
+              href="/sleep-disorders"
+              className="px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
+            >
+              Узнать больше
+            </Link>
+          </div>
+        </>
+      ),
+      icon: <IconAlertCircle className="w-20 h-20 text-yellow-500" />,
+    },
+  ];
 
-                <>
-
-                    <ul className="mt-4">
-                        <div>Мы собрали все необходимые консультации, методы диагностики и эффективного лечения
-                            нарушений сна.
-                        </div>
-                        <li>
-                            <Link href="/articles" className="text-black hover:underline">
-                                <Title text="Лечение" size="md" className="mt-4"/>
-                            </Link>
-                            <ImageGallery
-                                images={["", "", ""]}/>
-                        </li>
-                        <li>
-                            <Link href="/doctors" className="text-black hover:underline mt-2">
-                                <Title text="Консультации" size="md" className="mt-4"/>
-                            </Link>
-                            <ImageGallery
-                                images={["", "", ""]}/>
-                        </li>
-                        <li>
-                            <Link href="https://telegra.ph/Polisomnografiya-07-27"
-                                  className="text-black hover:underline">
-                                <Title text="Диагностика" size="md"/>
-                            </Link>
-                            <ImageGallery images={["", "", ""]}/>
-                        </li>
-                    </ul>
-                </>
-            ),
-            skeleton: <SkeletonTwo/>,
-            className: "border-b col-span-1 lg:col-span-2 dark:border-neutral-800",
-        },
-        {
-            title: "Для Врачей и клиник",
-            description:
-                "Напишите нам, если вы хотите привлекать больше пациентов с нарушениями сна",
-            skeleton: <SkeletonOne/>,
-            className:
-                "col-span-1 lg:col-span-4 border-b lg:border-r dark:border-neutral-800",
-        },
-        {
-            title: "Смотрите наше видео на YouTube",
-            description:
-                "Наши врачи-сомнологи объяснят, как мы помогаем пациентам улучшить качество жизни, начиная с первых симптомов и до полного выздоровления",
-            skeleton: <SkeletonThree/>,
-            className:
-                "col-span-1 lg:col-span-3 lg:border-r dark:border-neutral-800",
-        },
-        {
-            title: "Качество сна важно. Но большинство нарушений остаются без диагноза",
-            description:
-                "80% случаев синдрома апноэ во сне не диагностируются вовремя. Узнайте, как вы можете предотвратить это",
-            skeleton: <SkeletonFour/>,
-            className: "col-span-1 lg:col-span-3 border-b lg:border-none",
-        },
-    ];
-
-    return (
-        <div className='w-screen relative'>
-            <div className='absolute right-0 top-0 rotate-180 -z-50'>
+  return (
+    <div className="w-screen relative">
+        <div className='absolute right-0 top-0 rotate-180 -z-50'>
             
-                <Image src="/hero1.svg" alt="Icon" width={300} height={300} style={{height: '100%'}}/>
-            </div>
-
-            <div className="relative z-20 py-2 lg: max-w-7xl mx-auto">
-
-                <div className="px-8">
-                    <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-black dark:text-white">
-                        Наши услуги
-                    </h4>
-                </div>
-                <div className="relative">
-                    <div className="grid grid-cols-1 lg:grid-cols-6 mt-12 xl:border rounded-md dark:border-neutral-800">
-                        {features.map((feature) => (
-                            <FeatureCard key={feature.title} className={feature.className}>
-                                <FeatureTitle>{feature.title}</FeatureTitle>
-                                <FeatureDescription>{feature.description}</FeatureDescription>
-                                <div className="h-full w-full">{feature.skeleton}</div>
-                            </FeatureCard>
-                        ))}
-                    </div>
-                </div>
-            </div>
+            <Image src="/hero1.svg" alt="Icon" width={300} height={300} style={{height: '100%'}}/>
         </div>
-    );
+      <div className="relative z-20 py-2 lg:max-w-7xl mx-auto">
+        <div className="px-8 text-center">
+        <h4 className="text-4xl lg:text-6xl font-bold tracking-tight text-center text-black dark:text-white leading-tight">
+  Наши <span className="text-blue-500">услуги</span>
+</h4>
+        </div>
+        <div className="relative mt-12">
+          {/* Полукруг сверху */}
+          <div className="relative overflow-hidden before:absolute before:top-0 before:left-1/2 before:-translate-x-1/2 before:w-[150%] before:h-[50px] before:bg-neutral-200 dark:before:bg-neutral-800 before:rounded-t-full">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 xl:border rounded-md dark:border-neutral-800 p-6 bg-white dark:bg-neutral-900 shadow-md">
+              {features.map((feature, index) => (
+                <FeatureCard key={index}>
+                  <FeatureTitle>{feature.title}</FeatureTitle>
+                  <FeatureDescription>{feature.description}</FeatureDescription>
+                  {feature.icon && <div className="flex justify-center mt-6">{feature.icon}</div>}
+                </FeatureCard>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-const FeatureCard = ({
-                         children,
-                         className,
-                     }: {
-    children?: React.ReactNode;
-    className?: string;
+const FeatureCard = ({ children }: { children?: React.ReactNode }) => {
+    return (
+      <motion.div
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className="p-6 sm:p-8 relative overflow-hidden bg-white dark:bg-neutral-800 rounded-lg shadow-lg hover:shadow-xl transition-shadow flex flex-col justify-between h-full"
+      >
+        {children}
+      </motion.div>
+    );
+  };
+
+const FeatureTitle = ({ children }: { children?: React.ReactNode }) => {
+  return (
+    <h3 className="text-xl md:text-2xl font-semibold text-black dark:text-white text-center mb-4">
+      {children}
+    </h3>
+  );
+};
+
+const FeatureDescription = ({ children }: { children?: React.ReactNode }) => {
+  return (
+    <div className="text-sm md:text-base text-neutral-600 dark:text-neutral-300 text-center max-w-md mx-auto">
+      {children}
+    </div>
+  );
+};
+
+const FeatureWidget = ({
+  icon,
+  title,
+  link,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  link: string;
+  description: string;
 }) => {
-    return (
-        <div className={cn("p-4 sm:p-8 relative overflow-hidden", className)}>
-            {children}
-        </div>
-    );
-};
-
-const FeatureTitle = ({children}: { children?: React.ReactNode }) => {
-    return (
-        <div
-            className="max-w-5xl mx-auto text-left tracking-tight text-black dark:text-white text-xl md:text-2xl md:leading-snug">
-            {children}
-        </div>
-    );
-};
-
-const FeatureDescription = ({children}: { children?: React.ReactNode }) => {
-    return (
-        <div
-            className={cn(
-                "text-sm md:text-base max-w-4xl text-left mx-auto",
-                "text-neutral-500 text-center font-normal dark:text-neutral-300",
-                "text-left max-w-sm mx-0 md:text-sm my-2"
-            )}
-        >
-            {children}
-        </div>
-    );
-};
-
-// Компонент для отображения галереи изображений
-const ImageGallery = ({images}: { images: string[] }) => {
-    const imageVariants = {
-        whileHover: {
-            scale: 1.1,
-            rotate: 0,
-            zIndex: 100,
-        },
-        whileTap: {
-            scale: 1.1,
-            rotate: 0,
-            zIndex: 100,
-        },
-    };
-
-    return (
-        <div className="flex flex-wrap gap-4 mt-4 justify-center">
-    {images.map((image, idx) => (
-        <motion.div
-            key={idx}
-            variants={imageVariants}
-            whileHover="whileHover"
-            whileTap="whileTap"
-            className="rounded-xl p-1 bg-white dark:bg-neutral-800 dark:border-neutral-700 border border-neutral-100 overflow-hidden"
-            style={{ width: "150px", height: "150px" }} // Фиксированный размер контейнера
-        >
-            <svg
-        width="100"
-        height="100"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 50 50"
-        className="rounded-lg object-cover mx-auto"
+  return (
+    <Link href={link} className="block group">
+      <motion.div
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="flex items-center gap-4 p-4 bg-white dark:bg-neutral-800 rounded-lg shadow-sm hover:shadow-md transition-shadow"
       >
-        <path
-          d="M25 5v40M5 25h40"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-      </svg>
-            {/* <Image
-                src={image}
-                alt={`image-${idx}`}
-                width={150}
-                height={150}
-                className="rounded-lg object-cover mx-auto"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }} // Масштабируем изображение внутри контейнера
-            /> */}
-        </motion.div>
-    ))}
-</div>
-
-    );
-};
-
-// Остальные компоненты остаются без изменений...
-
-
-export const SkeletonTwo = () => {
-    return (
-        <div className="relative flex flex-col items-start p-8 gap-10 h-full overflow-hidden">
-            {/* TODO: Add custom content for SkeletonTwo */}
+        <div className="flex-shrink-0">{icon}</div>
+        <div>
+          <h3 className="text-lg font-semibold text-black dark:text-white">
+            {title}
+          </h3>
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+            {description}
+          </p>
         </div>
-    );
+      </motion.div>
+    </Link>
+  );
 };
-
-export const SkeletonOne = () => {
-    return (
-        <div className="relative flex py-8 px-2 gap-10 h-full">
-            <div className="w-full p-5 mx-auto bg-white dark:bg-neutral-900 shadow-2xl group h-full">
-                <div className="flex flex-1 w-full h-full flex-col space-y-2">
-                <svg
-        width="400"
-        height="400"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 50 50"
-        className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
-      >
-        <path
-          d="M25 5v40M5 25h40"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-      </svg>
-                    {/* <Image
-                        src=""
-                        alt="header"
-                        width={400}
-                        height={400}
-                        className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
-                    /> */}
-                </div>
-            </div>
-            <div
-                className="absolute bottom-0 z-40 inset-x-0 h-60 bg-gradient-to-t from-white dark:from-black via-white dark:via-black to-transparent w-full pointer-events-none"/>
-            <div
-                className="absolute top-0 z-40 inset-x-0 h-60 bg-gradient-to-b from-white dark:from-black via-transparent to-transparent w-full pointer-events-none"/>
-        </div>
-    );
-};
-
-export const SkeletonThree = () => {
-    return (
-        <Link
-            href="https://www.youtube.com/watch?v=RPa3_AD1_Vs"
-            target="__blank"
-            className="relative flex gap-10 h-full group/image"
-        >
-            <div className="w-full mx-auto bg-transparent dark:bg-transparent group h-full">
-                <div className="flex flex-1 w-full h-full flex-col space-y-2 relative">
-                    <IconBrandYoutubeFilled className="h-20 w-20 absolute z-10 inset-0 text-red-500 m-auto"/>
-                    <svg
-        width="800"
-        height="800"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 50 50"
-        className="h-full w-full aspect-square object-cover object-center rounded-sm blur-none group-hover/image:blur-md transition-all duration-200"
-      >
-        <path
-          d="M5 25h10l5-10 10 20 5-10h10"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <circle
-          cx="25"
-          cy="25"
-          r="23"
-          stroke="currentColor"
-          strokeWidth="2"
-        />
-      </svg>
-                    {/* <Image
-                        src=""
-                        alt="header"
-                        width={800}
-                        height={800}
-                        className="h-full w-full aspect-square object-cover object-center rounded-sm blur-none group-hover/image:blur-md transition-all duration-200"
-                    /> */}
-                </div>
-            </div>
-        </Link>
-    );
-};
-
-export const SkeletonFour = ({className}: { className?: string }) => {
-    return (
-        <div className={cn("relative flex flex-col items-center p-8 gap-6", className)}>
-            {/* Картинка для корпоративных программ */}
-            <svg
-        width="600"
-        height="400"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 50 50"
-        className="rounded-lg object-cover"
-      >
-        <path
-          d="M15 20h20v15H15z"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinejoin="round"
-          fill="currentColor"
-        />
-        <path d="M20 25h10v5H20z" fill="#fff" />
-        <path
-          d="M25 5v5M15 10h20M25 35v5M15 40h20"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-      </svg>
-            {/* <Image
-                src="" // Замените на нужный путь к изображению
-                alt="Корпоративные программы"
-                width={600}
-                height={400}
-                className="rounded-lg object-cover"
-            /> */}
-
-            {/* Текстовые блоки */}
-            <div className="text-center">
-                <h2 className="text-2xl font-bold text-black dark:text-white">
-                    Корпоративные программы
-                </h2>
-                <div className="text-lg font-medium text-neutral-700 dark:text-neutral-300">
-                    Хороший сон — основа продуктивности
-                </div>
-                <div className="text-md font-normal text-neutral-600 dark:text-neutral-400 mt-2">
-                    271 млрд рублей в месяц — потенциальные потери работодателей от недосыпающих сотрудников
-                </div>
-                <div className="text-md font-normal text-neutral-600 dark:text-neutral-400 mt-2">
-                    Мы улучшим сон ваших сотрудников и повысим их продуктивность
-                </div>
-            </div>
-        </div>
-    );
-};
-  

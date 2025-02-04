@@ -14,9 +14,7 @@ export async function POST(req: Request) {
 
         // Поиск записей на указанную дату
         const records = await prisma.consulOrder.findMany({
-            where: {
-                Time: hour, // Фильтрация по дате
-            },
+
         });
 
         return NextResponse.json(records, { status: 200 });

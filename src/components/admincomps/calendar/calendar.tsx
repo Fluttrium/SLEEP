@@ -3,7 +3,7 @@ import * as React from "react";
 import { Calendar } from "@/components/ui/calendar";
 import HoursTable from "@/components/admincomps/calendar/hourstable";
 import { fetchAllDoctors} from "@/components/admincomps/calendar/handlers";
-import { consulOrder, User } from "@prisma/client";
+import {  User } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import { useCalendarPageStateStore } from "@/components/admincomps/calendar/store/_calendarPageStore";

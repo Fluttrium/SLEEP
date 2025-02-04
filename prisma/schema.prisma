@@ -30,10 +30,10 @@ model User {
   accounts               Account[]
   cart                   Cart?
   consul                 Consul[]
+  consulorders           ConsulOrder[]
   Disease                Disease[]
   messages               Message[]
   orders                 Order[]
-  consulorders           ConsulOrder[]
   profile                Profile?
   sessions               Session[]
   verificationToken      VerificationToken? @relation("UserToVerificationToken")
@@ -282,13 +282,13 @@ model StoryItem {
   story     Story    @relation(fields: [storyId], references: [id])
 }
 
-
 model ConsulProduct {
   id                Int                 @id @default(autoincrement())
   description       String
   doctorID          String
   image             String?
   price             Int?
+  title             String?
   ConsulProductItem ConsulProductItem[]
 }
 

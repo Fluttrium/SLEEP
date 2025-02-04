@@ -6,7 +6,9 @@ import { Title } from '@/components/shared/ui/title';
 import { findPizzas, GetSearchParams } from '@/lib/find-pizzas';
 import { CartButton, Filters, TopBar } from '../../../../shared/components/shared';
 import { ProductsGroupList } from '@/components/product-group-list';
-import { Footer } from '@/components/footer';
+import Footer from "@/components/footer";
+
+
 
 export default async function Home({ searchParams }: { searchParams: GetSearchParams }) {
   const categories = await findPizzas(searchParams);

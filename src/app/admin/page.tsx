@@ -8,6 +8,7 @@ import {Redactor} from "@/components/admincomps/main/Redactor";
 import {TestCreator} from "@/components/admincomps/main/TestCreator";
 import Calendardash from "@/components/admincomps/calendar/calendar";
 import CalendarMainPage from "@/components/admincomps/calendar/calendarMainPage";
+import Dashboard from "../(dashboard)/dashboard/page";
 
 
 
@@ -26,6 +27,9 @@ export default function AdminMainPage() {
                 return <TestCreator/>;
             case 'calendar':
                 return <CalendarMainPage/>;
+            case 'dashboard':
+                return <Dashboard/>;
+            
             default:
                 return null;
         }

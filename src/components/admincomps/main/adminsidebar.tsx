@@ -5,7 +5,8 @@ import {
     CircleUserRound,
     UsersRound,
     LogOut,
-    SquarePen, SquareCheckBig, Calendar
+    SquarePen, SquareCheckBig, Calendar,
+    LayoutDashboard
 } from "lucide-react"
 import {
     Tooltip,
@@ -111,6 +112,22 @@ export default function Sidebar() {
                         Календарь
                     </TooltipContent>
                 </Tooltip>
+                <Tooltip>
+  <TooltipTrigger asChild>
+    <Button
+      onClick={() => setSection('dashboard')}
+      variant="ghost"
+      size="icon"
+      className= {`rounded-lg ${isActive('dashboard')}`}
+      aria-label="Конструктор"
+    >
+      <LayoutDashboard className="size-7" /> {/* Иконка конструктора */}
+    </Button>
+  </TooltipTrigger>
+  <TooltipContent side="right" sideOffset={10}>
+    Конструктор
+  </TooltipContent>
+</Tooltip>
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button

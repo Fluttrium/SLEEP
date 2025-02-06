@@ -1,3 +1,5 @@
+import DashboardProducts from "./products/page";
+
 export default function Dashboard() {
-  return <div>Dashboard</div>;
+  return <div><DashboardProducts/></div>;
 }

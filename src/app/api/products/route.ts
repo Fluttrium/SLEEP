@@ -1,5 +1,6 @@
 import {NextResponse} from 'next/server'
 import {PrismaClient} from '@prisma/client'
+import {uploadFile} from "@/lib/storage/storageSet";
 
 const prisma = new PrismaClient()
 
@@ -17,9 +18,32 @@ export async function GET() {
     }
 }
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
     try {
-        const {name, imageUrl, categoryId} = await request.json()
+        const formData = await req.formData();
+
+        console.log(formData);
+        const name = formData.get("name") as string;
+        const categoryId = formData.get("categoryId") as unknown as number;
+        const imageFile = formData.get("imageFile");
+
+        if (!categoryId) {
+            return NextResponse.json(
+                {error: "нет id категории"},
+                {status: 400}
+            );
+        }
+        if (!imageFile || !(imageFile instanceof Blob)) {
+            return NextResponse.json(
+                { message: "No file provided or invalid file type" },
+                { status: 400 }
+            );
+        }
+
+        const fileBuffer = Buffer.from(await imageFile.arrayBuffer());
+        const key = `product/${Date.now()}_${imageFile.name}`;
+        const imageUrl = await uploadFile({ key, file: fileBuffer });
+        console.log(imageUrl);
 
         const product = await prisma.product.create({
             data: {
@@ -30,9 +54,9 @@ export async function POST(request: Request) {
         })
 
         return NextResponse.json(product, {status: 201})
-    } catch (error) {
+    } catch (error: any) {
         return NextResponse.json(
-            {error: 'Ошибка при создании продукта'},
+            {error: 'Ошибка при создании продукта' },
             {status: 500}
         )
     }

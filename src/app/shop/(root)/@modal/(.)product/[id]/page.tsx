@@ -1,15 +1,11 @@
-
-
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import {prisma} from "../../../../../../../prisma/prisma-client";
-import {ChooseProductModal} from "../../../../../../../shared/components/shared";
+import { prisma } from "../../../../../../../prisma/prisma-client";
+import { ChooseProductModal } from "../../../../../../../shared/components/shared";
 
-
-export default async function ProductModalPage({ params: { id } }: { params: { id: string } }) {
+async function fetchProduct(id: string) {
   const product = await prisma.product.findFirst({
-    where: {
-      id: Number(id),
-    },
+    where: { id: Number(id) },
     include: {
       ingredients: true,
       items: true,
@@ -20,5 +16,15 @@ export default async function ProductModalPage({ params: { id } }: { params: { i
     return notFound();
   }
 
-  return <ChooseProductModal product={product} />;
+  return product;
+}
+
+export default async function ProductModalPage({ params: { id } }: { params: { id: string } }) {
+  const product = await fetchProduct(id);
+
+  return (
+    <Suspense fallback={<div>Загрузка...</div>}>
+      <ChooseProductModal product={product} />
+    </Suspense>
+  );
 }

@@ -46,7 +46,13 @@ export default function DashboardProducts() {
       try {
         const response = await fetch('/api/categories');
         const data = await response.json();
-        setCategories(data); // Устанавливаем категории
+
+        // Убедитесь, что data — это массив
+        if (Array.isArray(data)) {
+          setCategories(data);
+        } else {
+          console.error('Ошибка: категории не в виде массива');
+        }
       } catch (error) {
         console.error('Ошибка загрузки категорий:', error);
       }
@@ -118,6 +124,12 @@ export default function DashboardProducts() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {products.map((product) => {
+            // Проверяем, что categories — это массив
+            if (!Array.isArray(categories)) {
+              console.error('Ошибка: categories не является массивом');
+              return null;
+            }
+
             const category = categories.find((cat) => cat.id === product.categoryId);
             return (
               <div

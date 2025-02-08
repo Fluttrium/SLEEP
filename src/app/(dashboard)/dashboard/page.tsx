@@ -1,9 +1,13 @@
-import { PostTable } from "@/components/admincomps/PostTable";
-import DashboardProducts from "./products/page";
 import { PostProducts } from "@/components/admincomps/PostProducts";
+import DashboardProducts from "./products/page";
 
 export default function Dashboard() {
-  return <div><DashboardProducts/>
-  <PostProducts/>
-  </div>;
+  return (
+    <div>
+      <div style={{ maxHeight: '80vh', overflowY: 'auto' }}>
+        <DashboardProducts />
+      </div>
+      <PostProducts />
+    </div>
+  );
 }

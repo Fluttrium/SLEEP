@@ -27,6 +27,7 @@ interface ProductFormData {
   name: string;
   imageFile: FileList;
   categoryId: number;
+  price: number;  // Добавляем поле для цены
 }
 
 export function PostProducts() {
@@ -78,10 +79,11 @@ export function PostProducts() {
             const formData = new FormData();
             formData.append("name", data.name);
             formData.append("categoryId", data.categoryId.toString());
-            
+            formData.append("price", data.price.toString());  // Добавляем цену в formData
+
             if (data.imageFile && data.imageFile[0]) {
                 const imageFile = data.imageFile[0];
-                formData.append("imageFile", data.imageFile[0]);
+                formData.append("imageFile", imageFile);
             }
             console.log("Отправляемые данные:", Object.fromEntries(formData.entries()));
 
@@ -144,6 +146,16 @@ export function PostProducts() {
                                         className="mt-1 block w-full"
                                     />
                                     {errors.imageFile && <span className="text-red-500">Обязательное поле</span>}
+                                </div>
+
+                                <div>
+                                    <label>Цена:</label>
+                                    <input
+                                        type="number"
+                                        {...register("price", {required: true})}  // Добавляем поле для цены
+                                        className="mt-1 block w-full p-2 border rounded-md"
+                                    />
+                                    {errors.price && <span className="text-red-500">Обязательное поле</span>}
                                 </div>
 
                                 <div>

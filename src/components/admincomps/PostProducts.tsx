@@ -7,12 +7,10 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import * as React from "react";
-import {format} from "date-fns";
-import {Button} from "@/components/ui/button";
-import {Category, Product} from "@prisma/client";
-import {usePostRedactorStore} from "@/app/admin/_store/adminpageStore";
-import {Badge} from "@/components/ui/badge";
-import {Plus} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Category, Ingredient, Product } from "@prisma/client";
+import { usePostRedactorStore } from "@/app/admin/_store/adminpageStore";
+import { Plus } from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -20,23 +18,26 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog";
-import {useForm, SubmitHandler} from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import Image from "next/image";
 
 interface ProductFormData {
   name: string;
   imageFile: FileList;
   categoryId: number;
-  price: number;  // Добавляем поле для цены
+  price: number;
+  accessories: number[]; // Поле для выбора аксессуаров
 }
 
 export function PostProducts() {
     const [products, setProducts] = React.useState<Product[]>([]);
     const [categories, setCategories] = React.useState<Category[]>([]);
+    const [ingredients, setIngredients] = React.useState<Ingredient[]>([]); // Стейт для ингредиентов
+    const [selectedCategory, setSelectedCategory] = React.useState<number | null>(null);
     const [loading, setLoading] = React.useState(true);
-    const {register, handleSubmit, reset, formState: {errors}} = useForm<ProductFormData>();
+    const { register, handleSubmit, reset, formState: { errors }, control } = useForm<ProductFormData>();
     const [message, setMessage] = React.useState("");
-    const {setIsCreatingPost, setCreatedPost} = usePostRedactorStore();
+    const { setIsCreatingPost, setCreatedPost } = usePostRedactorStore();
 
     const fetchProducts = async () => {
         try {
@@ -58,19 +59,13 @@ export function PostProducts() {
         }
     };
 
-    const handleDeleteProduct = async (id: number) => {
-        if (!confirm("Вы уверены, что хотите удалить этот товар?")) return;
-        
+    const fetchIngredients = async () => {
         try {
-            const response = await fetch(`/api/products?id=${id}`, {
-                method: "DELETE",
-            });
-
-            if (response.ok) {
-                setProducts(prev => prev.filter(p => p.id !== id));
-            }
+            const response = await fetch("/api/ingredients");
+            const data = await response.json();
+            setIngredients(data);
         } catch (error) {
-            console.error("Ошибка при удалении:", error);
+            console.error("Ошибка при получении ингредиентов:", error);
         }
     };
 
@@ -79,12 +74,17 @@ export function PostProducts() {
             const formData = new FormData();
             formData.append("name", data.name);
             formData.append("categoryId", data.categoryId.toString());
-            formData.append("price", data.price.toString());  // Добавляем цену в formData
+            formData.append("price", data.price.toString());
 
             if (data.imageFile && data.imageFile[0]) {
-                const imageFile = data.imageFile[0];
-                formData.append("imageFile", imageFile);
+                formData.append("imageFile", data.imageFile[0]);
             }
+
+            // Добавляем аксессуары, если категория не "Аксессуары"
+            if (selectedCategory !== categories.find(cat => cat.name === "Аксессуары")?.id) {
+                formData.append("accessories", JSON.stringify(data.accessories));
+            }
+
             console.log("Отправляемые данные:", Object.fromEntries(formData.entries()));
 
             const response = await fetch("/api/products", {
@@ -93,7 +93,7 @@ export function PostProducts() {
             });
 
             const result = await response.json();
-            
+
             if (response.ok) {
                 setMessage("Товар успешно добавлен!");
                 reset();
@@ -109,7 +109,7 @@ export function PostProducts() {
 
     React.useEffect(() => {
         const loadData = async () => {
-            await Promise.all([fetchProducts(), fetchCategories()]);
+            await Promise.all([fetchProducts(), fetchCategories(), fetchIngredients()]); // Загружаем товары, категории и ингредиенты
             setLoading(false);
         };
         loadData();
@@ -121,7 +121,7 @@ export function PostProducts() {
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button variant='default' className="m-5">
-                            <Plus/>
+                            <Plus />
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
@@ -131,7 +131,7 @@ export function PostProducts() {
                                 <div>
                                     <label>Название товара:</label>
                                     <input
-                                        {...register("name", {required: true})}
+                                        {...register("name", { required: true })}
                                         className="mt-1 block w-full p-2 border rounded-md"
                                     />
                                     {errors.name && <span className="text-red-500">Обязательное поле</span>}
@@ -142,7 +142,7 @@ export function PostProducts() {
                                     <input
                                         type="file"
                                         accept="image/*"
-                                        {...register("imageFile", {required: true})}
+                                        {...register("imageFile", { required: true })}
                                         className="mt-1 block w-full"
                                     />
                                     {errors.imageFile && <span className="text-red-500">Обязательное поле</span>}
@@ -152,7 +152,7 @@ export function PostProducts() {
                                     <label>Цена:</label>
                                     <input
                                         type="number"
-                                        {...register("price", {required: true})}  // Добавляем поле для цены
+                                        {...register("price", { required: true })}
                                         className="mt-1 block w-full p-2 border rounded-md"
                                     />
                                     {errors.price && <span className="text-red-500">Обязательное поле</span>}
@@ -161,8 +161,9 @@ export function PostProducts() {
                                 <div>
                                     <label>Категория:</label>
                                     <select
-                                        {...register("categoryId", {required: true})}
+                                        {...register("categoryId", { required: true })}
                                         className="mt-1 block w-full p-2 border rounded-md"
+                                        onChange={(e) => setSelectedCategory(Number(e.target.value))}
                                     >
                                         <option value="">Выберите категорию</option>
                                         {categories.map((category) => (
@@ -173,6 +174,26 @@ export function PostProducts() {
                                     </select>
                                     {errors.categoryId && <span className="text-red-500">Обязательное поле</span>}
                                 </div>
+
+                                {/* Выбор ингредиентов, если категория не "Аксессуары" */}
+                                {selectedCategory && categories.find(cat => cat.id === selectedCategory)?.name !== "Акссесуары" && (
+                                    <div>
+                                        <label>Выберите ингредиенты:</label>
+                                        <div className="mt-1 grid grid-cols-2 gap-2">
+                                            {ingredients.map((ingredient) => (
+                                                <label key={ingredient.id} className="flex items-center">
+                                                    <input
+                                                        type="checkbox"
+                                                        value={ingredient.id}
+                                                        {...register("accessories")} // Мы все равно используем "accessories" в форме
+                                                        className="mr-2"
+                                                    />
+                                                    {ingredient.name} ({ingredient.price} руб.)
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
 
                                 <Button type="submit">Создать товар</Button>
                                 {message && <p className="mt-2 text-sm text-green-600">{message}</p>}

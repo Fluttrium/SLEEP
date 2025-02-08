@@ -1,6 +1,5 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";  // Импорт кнопки для удаления
 
 interface Product {
   id: number;
@@ -10,6 +9,7 @@ interface Product {
   category: {
     name: string;
   };
+  price: number; // Поле для отображения цены
 }
 
 export default function DashboardProducts() {
@@ -18,7 +18,7 @@ export default function DashboardProducts() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const productsRes = await fetch('/api/products');
+        const productsRes = await fetch('/api/products');  // Путь к вашему API
         const productsData = await productsRes.json();
         setProducts(productsData);
       } catch (error) {
@@ -27,6 +27,23 @@ export default function DashboardProducts() {
     }
     fetchData();
   }, []);
+
+  // Обработчик для удаления товара
+  const handleDeleteProduct = async (id: number) => {
+    if (!confirm("Вы уверены, что хотите удалить этот товар?")) return;
+
+    try {
+      const response = await fetch(`/api/products?id=${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setProducts(prev => prev.filter(p => p.id !== id));  // Удаляем товар из списка
+      }
+    } catch (error) {
+      console.error("Ошибка при удалении товара:", error);
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -44,6 +61,13 @@ export default function DashboardProducts() {
             )}
             <h2 className="text-xl font-bold mt-4">{product.name}</h2>
             <p>Категория: {product.category?.name || "Категория не указана"}</p>
+            <p className="mt-2 text-lg font-semibold">Цена: {product.price} руб.</p> {/* Отображаем цену */}
+
+            <div className="mt-4 flex justify-between">
+            <Button onClick={() => handleDeleteProduct(product.id)} variant="destructive">
+  Удалить
+</Button>
+            </div>
           </div>
         ))}
       </div>

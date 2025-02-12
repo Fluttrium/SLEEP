@@ -88,7 +88,7 @@ export function PostCategoryProducts() {
   }, []);
 
   return (
-    <div className="absolute bottom-0 right-0 pb-5 pr-5">
+    <div className="absolute bottom-20 right-0 pb-5 pr-5">
       <Dialog>
         <DialogTrigger asChild>
           <Button variant='outline' className="m-5">

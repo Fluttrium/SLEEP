@@ -31,3 +31,28 @@ export async function POST(request: Request) {
     )
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+
+    if (!id) {
+      return NextResponse.json(
+        { error: 'ID категории обязательно' },
+        { status: 400 }
+      )
+    }
+
+    const deletedCategory = await prisma.category2.delete({
+      where: { id: Number(id) }
+    })
+
+    return NextResponse.json(deletedCategory)
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Ошибка при удалении категории' },
+      { status: 500 }
+    )
+  }
+}

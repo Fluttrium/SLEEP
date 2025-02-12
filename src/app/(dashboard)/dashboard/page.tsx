@@ -4,15 +4,12 @@ import { PostCategoryProducts } from "@/components/admincomps/PostCategoryProduc
 
 export default function Dashboard() {
   return (
-    <div className="h-screen">
-      {/* Основной контент с прокруткой */}
+    <div className="h-screen ">
       <div className="flex-1 overflow-y-auto p-4">
         <DashboardProducts />
       </div>
-
-      Фиксированные кнопки управления
       <div className="flex-1 overflow-y-auto p-4 flex-col">
-        <PostCategoryProducts />
+      <PostCategoryProducts />
         <PostProducts />
       </div>
     </div>

@@ -117,7 +117,7 @@ export function PostProducts() {
 
     return (
         <div>
-            <div className='absolute bottom-0 right-0 pb-5 pr-5'>
+            <div className='absolute bottom-10 right-0 pb-5 pr-5'>
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button variant='default' className="m-5">

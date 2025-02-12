@@ -1,8 +1,7 @@
-// components/admin/PostCategoryProducts.tsx
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { FolderPlus } from "lucide-react";
+import { FolderPlus, Trash } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -35,6 +34,27 @@ export function PostCategoryProducts() {
       setCategories(data);
     } catch (error) {
       console.error("Ошибка при получении категорий:", error);
+    }
+  };
+
+  const deleteCategory = async (id: number) => {
+    if (!window.confirm("Вы уверены, что хотите удалить категорию?")) return;
+    
+    try {
+      const response = await fetch(`/api/categories?id=${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setMessage("Категория успешно удалена!");
+        await fetchCategories();
+      } else {
+        const error = await response.json();
+        setMessage(error.error || "Ошибка при удалении категории");
+      }
+    } catch (error) {
+      console.error("Ошибка:", error);
+      setMessage("Ошибка при удалении категории");
     }
   };
 
@@ -79,7 +99,6 @@ export function PostCategoryProducts() {
           <DialogHeader>
             <DialogTitle>Управление категориями</DialogTitle>
             
-            {/* Форма создания категории */}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
               <div>
                 <label>Название категории:</label>
@@ -94,7 +113,6 @@ export function PostCategoryProducts() {
               {message && <p className="mt-2 text-sm text-green-600">{message}</p>}
             </form>
 
-            {/* Список существующих категорий */}
             <div className="mt-6">
               <h3 className="font-medium mb-2">Существующие категории:</h3>
               <ul className="space-y-2">
@@ -104,6 +122,13 @@ export function PostCategoryProducts() {
                     className="flex justify-between items-center bg-gray-50 p-2 rounded-md"
                   >
                     <span>{category.name}</span>
+                    <Button 
+                      variant="destructive" 
+                      size="sm" 
+                      onClick={() => deleteCategory(category.id)}
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
                   </li>
                 ))}
               </ul>

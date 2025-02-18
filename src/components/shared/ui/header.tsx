@@ -143,7 +143,7 @@ export const Header: React.FC<Props> = ({className, hasSearch}) => {
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator/>
                                     <DropdownMenuItem>
-                                        <Link href="https://telegra.ph/Polisomnografiya-07-27">
+                                        <Link href="/diagnosicsmetods">
                                             <div
                                                 className={cn("cursor-pointer", isActive("/methods") && "text-primary font-bold")}>
                                                 Методы Диагностики

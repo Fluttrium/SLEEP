@@ -317,6 +317,14 @@ model ConsulOrder {
   user        User?       @relation(fields: [userId], references: [id])
 }
 
+model Metod {
+  id               Int     @id @default(autoincrement())
+  title            String
+  description      String
+  addeddescription String?
+  image            String
+}
+
 enum Role {
   USER
   ADMIN

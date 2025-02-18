@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { PostsCard } from "@/components/postsforuser/PostCard";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import React, {useEffect, useState} from "react";
+import {PostsCard} from "@/components/postsforuser/PostCard";
+import {useRouter} from "next/navigation";
+import {Button} from "@/components/ui/button";
 
 interface Cat {
     id: number;
@@ -16,13 +16,14 @@ export type Post = {
     published: boolean;
     image?: string;
     categories?: string[];
+    posttype?: string[]; // Добавляем поле posttype
 };
 
 interface PostPageCompProps {
     showLimited?: boolean; // Новый пропс
 }
 
-export function PostPageComp({ showLimited = false }: PostPageCompProps) {
+export function PostPageComp({showLimited = false}: PostPageCompProps) {
     const [posts, setPosts] = useState<Post[] | null>(null);
     const [categories, setCategories] = useState<Cat[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -35,11 +36,11 @@ export function PostPageComp({ showLimited = false }: PostPageCompProps) {
         try {
             const [postsResponse, categoriesResponse] = await Promise.all([
                 fetch("/api/articles", {
-                    headers: { "Cache-Control": "no-cache" },
+                    headers: {"Cache-Control": "no-cache"},
                     cache: "no-store",
                 }),
                 fetch("/api/articles/cat", {
-                    headers: { "Cache-Control": "no-cache" },
+                    headers: {"Cache-Control": "no-cache"},
                     cache: "no-store",
                 }),
             ]);
@@ -77,15 +78,16 @@ export function PostPageComp({ showLimited = false }: PostPageCompProps) {
     if (!posts || progress < 100) {
         return (
             <div className="w-screen h-screen flex items-center justify-center">
-                <progress value={progress} max="100" className="w-1/2 md:w-1/3 lg:w-1/4" />
+                <progress value={progress} max="100" className="w-1/2 md:w-1/3 lg:w-1/4"/>
             </div>
         );
     }
 
-    // Если showLimited=true, показываем только 3 статьи
-    const displayedPosts = showLimited ? posts.slice(0, 3) : posts;
+    const displayedPosts = showLimited
+        ? posts.filter((post) => post.posttype?.includes("MAIN")).slice(0, 3)
+        : posts.filter((post) => post.posttype?.includes("BASE"));
 
-    // Фильтрация постов по категориям (если showLimited=false)
+// Фильтрация по выбранной категории (если showLimited=false)
     const filteredPosts = selectedCategory
         ? displayedPosts.filter((post) => post.categories?.includes(selectedCategory))
         : displayedPosts;

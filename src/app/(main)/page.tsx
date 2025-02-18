@@ -1,20 +1,15 @@
 "use client"
-import {NewsGroupList} from "@/components/shared/news-grouplist";
 import {TopBar} from "@/components/shared/top-bar";
 import {Hero} from "@/components/shared/hero";
 import React from "react";
 import Steps from "@/components/shared/steps";
-import {Container} from "@/components/shared/ui/container";
 import {SleepStats} from "@/components/shared/ui/blocks";
-import {GlareCard} from "@/components/ui/glare-card";
 import TeamCard from "@/components/shared/team";
 import Information from "@/components/shared/information";
 import Footer from "@/components/footer";
-import {BentoGrid} from "@/components/ui/bento-grid";
-import {BentoGridDemo} from "@/components/ui/bento-gridDemo";
 import {FeaturesSectionDemo} from "@/components/ui/services";
-import {Article} from "@/components/shared/ui/article";
 import {PostPageComp} from "@/components/postsforuser/PostPageComp";
+
 export default function Home() {
     return (
         <>
@@ -48,7 +43,7 @@ export default function Home() {
                 </div>
                 <Information/>
                 <Footer/>
-                
+
             </div>
         </>
     );

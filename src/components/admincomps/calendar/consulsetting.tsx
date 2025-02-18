@@ -200,7 +200,7 @@ export default function QConsulSetting() {
                 </DialogContent>
             </Dialog>
 
-            <Button onClick={() => setCurrentSection("default")}>Settings Page Placeholder</Button>
+
 
             {doctorsProducts.length > 0 ? (
                 <div className="grid grid-cols-3 gap-4">

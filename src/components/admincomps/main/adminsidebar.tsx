@@ -105,7 +105,7 @@ export default function Sidebar() {
                             className={`rounded-lg ${isActive('calendar')}`}
                             aria-label="Календарь"
                         >
-                            <Calendar  className="size-7"/>
+                            <Calendar className="size-7"/>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={10}>
@@ -113,21 +113,37 @@ export default function Sidebar() {
                     </TooltipContent>
                 </Tooltip>
                 <Tooltip>
-  <TooltipTrigger asChild>
-    <Button
-      onClick={() => setSection('dashboard')}
-      variant="ghost"
-      size="icon"
-      className= {`rounded-lg ${isActive('dashboard')}`}
-      aria-label="Конструктор"
-    >
-      <LayoutDashboard className="size-7" /> {/* Иконка конструктора */}
-    </Button>
-  </TooltipTrigger>
-  <TooltipContent side="right" sideOffset={10}>
-    Конструктор
-  </TooltipContent>
-</Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            onClick={() => setSection('dashboard')}
+                            variant="ghost"
+                            size="icon"
+                            className={`rounded-lg ${isActive('dashboard')}`}
+                            aria-label="Конструктор"
+                        >
+                            <LayoutDashboard className="size-7"/> {/* Иконка конструктора */}
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" sideOffset={10}>
+                        Конструктор
+                    </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            onClick={() => setSection('metods')}
+                            variant="ghost"
+                            size="icon"
+                            className={`rounded-lg ${isActive('metods')}`}
+                            aria-label="Методы диагностики"
+                        >
+                            <LayoutDashboard className="size-7"/> {/* Иконка конструктора */}
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" sideOffset={10}>
+                        Методы диагностики
+                    </TooltipContent>
+                </Tooltip>
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button

@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { Tests } from "@/components/admincomps/TestTable";
-import { Category } from "@prisma/client";
+import {$Enums, Category} from "@prisma/client";
 import {createJSONStorage, persist} from "zustand/middleware";
+import PostType = $Enums.PostType;
 
 // Интерфейс для постов
 interface Post {
@@ -14,6 +15,7 @@ interface Post {
     authorId: number;
     categories: Category[];
     image?: string;
+    posttype: PostType;
 }
 
 // Стор для управления секциями дашборда

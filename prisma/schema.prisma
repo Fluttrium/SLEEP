@@ -116,6 +116,7 @@ model Post {
   diseaseId  Int?
   disease    Disease?   @relation("PostToDisease")
   categories Category[] @relation("CategoryToPost")
+  posttype   PostType[]
 }
 
 model Category {
@@ -331,4 +332,10 @@ enum OrderStatus {
 enum UserRole {
   USER
   ADMIN
+}
+
+enum PostType {
+  MAIN
+  TEST
+  BASE
 }

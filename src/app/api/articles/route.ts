@@ -17,6 +17,7 @@ export async function GET() {
             published: post.published,
             image: post.image,
             categories: post.categories.map(category => category.name),
+            posttype: post.posttype,
         }));
 
         // Возвращаем данные с отключением кэширования

@@ -3,14 +3,22 @@ import {MdEditor, config, ToolbarNames} from "md-editor-rt";
 import React, {useState} from "react";
 import {usePostRedactorStore} from "@/app/admin/_store/adminpageStore";
 import {Dialog, DialogContent, DialogFooter, DialogTrigger} from "@/components/ui/dialog";
-import {Category} from "@prisma/client";
+import {$Enums, Category} from "@prisma/client";
 import {Badge} from "@/components/ui/badge";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Plus} from "lucide-react";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
+import PostType = $Enums.PostType;
 
 config({
     editorConfig: {
@@ -100,7 +108,6 @@ config({
     }
 });
 
-
 export function PostRedacor() {
     const {createdPost, setCreatedPost, setIsCreatingPost} = usePostRedactorStore();
     const [text, setText] = React.useState(() => createdPost ? createdPost.body || "" : "");
@@ -110,27 +117,31 @@ export function PostRedacor() {
     const [categoryLoading, setCategoryLoading] = React.useState(false);
     const [error, setError] = useState('');
     const [categories, setCategories] = useState<Category[]>([]);
-    const [categories2, setCategories2] = useState<Category[]>([]);// Хранение категорий
+    const [categories2, setCategories2] = useState<Category[]>([]);
     const [image, setImage] = useState<File | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
 
+    const initialPostType = createdPost
+        ? (Array.isArray(createdPost.posttype) ? createdPost.posttype : [createdPost.posttype])
+        : [];
+    const [postType, setPostType] = React.useState<PostType[]>(initialPostType);
+
     const fetchCategoriesbyPost = async () => {
-        if (!createdPost) return; // Если пост не создан, ничего не делать
+        if (!createdPost) return;
         try {
             const response = await fetch(`/api/admin/post/${createdPost.id}/categories`);
             const data = await response.json();
-            setCategories(data.postCategories); // Устанавливаем категории, связанные с постом
-            setCategories2(data.allCategories); // Устанавливаем все категории
+            setCategories(data.postCategories);
+            setCategories2(data.allCategories);
         } catch (error) {
             console.error("Ошибка при получении категорий:", error);
         }
     };
 
-
     React.useEffect(() => {
         fetchCategoriesbyPost();
         setImageUrl(createdPost!.image || "");
-    }, [createdPost, fetchCategoriesbyPost]);
+    }, [createdPost]);
 
     const onUploadImg = async (files: File[], callback: (urls: string[]) => void) => {
         try {
@@ -156,7 +167,6 @@ export function PostRedacor() {
 
     const handleSave = async () => {
         if (!createdPost) return;
-
         const {id, title} = createdPost;
         const response = await fetch(`/api/admin/post`, {
             method: 'PUT',
@@ -196,12 +206,12 @@ export function PostRedacor() {
             });
 
             if (!response.ok) {
-                Error("Ошибка при создании категории");
+                throw new Error("Ошибка при создании категории");
             }
 
             setCategoryName("");
             alert("Категория успешно создана");
-            await fetchCategoriesbyPost(); // Обновляем категории после создания
+            await fetchCategoriesbyPost();
 
         } catch (error) {
             console.error("Ошибка:", error);
@@ -224,7 +234,7 @@ export function PostRedacor() {
             if (response.ok) {
                 const updatedPost = await response.json();
                 console.log('Категория удалена из поста:', updatedPost);
-                await fetchCategoriesbyPost(); // Обновляем список категорий после удаления
+                await fetchCategoriesbyPost();
             } else {
                 const errorData = await response.json();
                 console.error('Ошибка при удалении категории из поста:', errorData.message);
@@ -247,7 +257,7 @@ export function PostRedacor() {
             if (response.ok) {
                 const updatedPost = await response.json();
                 console.log('Категория добавлена к посту:', updatedPost);
-                fetchCategoriesbyPost(); // Обновляем список категорий после добавления
+                fetchCategoriesbyPost();
             } else {
                 const errorData = await response.json();
                 console.error('Ошибка при добавлении категории к посту:', errorData.message);
@@ -268,12 +278,10 @@ export function PostRedacor() {
             alert("Пожалуйста, выберите изображение.");
             return;
         }
-
         if (!createdPost?.id) {
             alert("Ошибка: пост не найден.");
             return;
         }
-
         const formData = new FormData();
         formData.append("file", image);
         formData.append("id", createdPost.id.toString());
@@ -297,11 +305,48 @@ export function PostRedacor() {
         }
     };
 
+    const postTypeNames: Record<PostType, string> = {
+        [PostType.MAIN]: "Главная страница",
+        [PostType.TEST]: "Результат теста",
+        [PostType.BASE]: "База знаний"
+    };
+
+    const handleTogglePostType = async (selectedType: PostType) => {
+        let updatedTypes: PostType[];
+        if (postType.includes(selectedType)) {
+            updatedTypes = postType.filter((type) => type !== selectedType);
+        } else {
+            updatedTypes = [...postType, selectedType];
+        }
+        setPostType(updatedTypes);
+        if (!createdPost) return;
+        try {
+            const response = await fetch(`/api/admin/post/types`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: createdPost.id,
+                    title: createdPost.title,
+                    body: text,
+                    imageUrl: imageUrl,
+                    posttypes: updatedTypes,
+                }),
+            });
+            if (response.ok) {
+                const updatedPost = await response.json();
+                console.log('Пост обновлён:', updatedPost);
+            } else {
+                console.error('Ошибка при обновлении типа поста');
+            }
+        } catch (error) {
+            console.error('Ошибка при обновлении поста:', error);
+        }
+    };
+
 
     return (
         <div className="relative flex flex-col h-full">
             <div className="absolute top-0 left-0 space-x-2.5">
-
                 <Button variant="destructive" onClick={() => {
                     setCreatedPost(null);
                     setIsCreatingPost(false);
@@ -315,7 +360,6 @@ export function PostRedacor() {
                     <DialogTrigger asChild>
                         <Button>Редактировать категории</Button>
                     </DialogTrigger>
-
                     <DialogContent aria-describedby="dialog-description">
                         <div id="dialog-description">Пожалуйста, заполните форму для создания новой категории.</div>
                         <Dialog>
@@ -376,7 +420,6 @@ export function PostRedacor() {
                                 )}
                             </TableBody>
                         </Table>
-
                         <Table>
                             <TableHeader>
                                 <TableRow>
@@ -398,7 +441,6 @@ export function PostRedacor() {
                         </Table>
                     </DialogContent>
                 </Dialog>
-
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button className='px-4' onClick={handleSave}>
@@ -419,19 +461,39 @@ export function PostRedacor() {
                             <CardFooter>
                                 <Button onClick={handleUploadImage}>Загрузить фото</Button>
                                 <img
-                                    src={imageUrl!} // Укажите путь к изображению
+                                    src={imageUrl!}
                                     alt="Описание изображения"
-                                    width={400} // Ширина изображения
-                                    height={500} // Высота изображения
+                                    width={400}
+                                    height={500}
                                 />
                             </CardFooter>
-
                         </Card>
                     </DialogContent>
                 </Dialog>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline">
+                            {postType.length > 0
+                                ? postType.map((type) => postTypeNames[type]).join(", ")
+                                : "Выбрать зону"}
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem onClick={() => handleTogglePostType(PostType.MAIN)}>
+                                Главная страница {postType.includes(PostType.MAIN) && "✓"}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleTogglePostType(PostType.TEST)}>
+                                Результат теста {postType.includes(PostType.TEST) && "✓"}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleTogglePostType(PostType.BASE)}>
+                                База знаний {postType.includes(PostType.BASE) && "✓"}
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
 
             </div>
-
             <div className="flex-grow mt-10 overflow-hidden">
                 <div className="h-full w-full">
                     <MdEditor

@@ -6,7 +6,6 @@ import {Separator} from "@/components/ui/separator";
 import {Users} from "@/components/admincomps/main/Users";
 import {Redactor} from "@/components/admincomps/main/Redactor";
 import {TestCreator} from "@/components/admincomps/main/TestCreator";
-import Calendardash from "@/components/admincomps/calendar/calendar";
 import CalendarMainPage from "@/components/admincomps/calendar/calendarMainPage";
 import Dashboard from "@/components/admincomps/productRedactor/mainProductRedactor";
 import Metodredactor from "@/components/admincomps/metodredactor/metodredactor";

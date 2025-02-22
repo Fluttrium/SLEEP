@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Category2 } from '@prisma/client';
+import React, {useState, useEffect} from 'react';
+import {Button} from '@/components/ui/button';
+import {Category2} from '@prisma/client';
 import {ProductWithRelations} from "../../../../@types/prisma";
 import {ChooseProductModal} from "../../../../shared/components/shared";
 
@@ -49,8 +49,8 @@ export default function DashboardProducts() {
         try {
             await fetch(`/api/products`, {
                 method: "DELETE",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id }),
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({id}),
             });
             setProducts(prev => prev.filter(p => p.id !== id));
         } catch (error) {

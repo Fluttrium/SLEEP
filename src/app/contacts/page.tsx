@@ -24,13 +24,11 @@ export default function Contacts() {
                 <Building className="w-6 h-6 text-blue-600 mt-1" />
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    ООО «Fluttrium»
+                    Бочкарев Михаил Викторович
                   </h3>
                   <div className="space-y-1 text-gray-600 text-sm">
-                    <p>ИНН: 1000014076</p>
-                    <p>КПП: 100001001</p>
-                    <p>ОГРН: 1241000000669</p>
-                    <p>ОКПО: 99276658</p>
+                    <p>ИНН: 7710140679</p>
+                    <p>КПП: 771301001</p>
                   </div>
                 </div>
               </div>
@@ -45,8 +43,8 @@ export default function Contacts() {
                     Режим работы
                   </h3>
                   <div className="grid grid-cols-2 gap-4 text-gray-600">
-                    <div>Понедельник - Воскресенье</div>
-                    <div className="text-right">10:00 - 20:00</div>
+                    <div>Понедельник - Пятница</div>
+                    <div className="text-right">10:00 - 19:00</div>
                   </div>
                 </div>
               </div>
@@ -69,7 +67,7 @@ export default function Contacts() {
                       href="tel:+789210112794" 
                       className="text-blue-600 hover:text-blue-800 transition-colors text-lg"
                     >
-                      +7 (921) 011-27-94
+                      +7 (981) 700 3974
                     </a>
                   </div>
                 </div>
@@ -87,7 +85,7 @@ export default function Contacts() {
                           href="mailto:info@daggerrknives.ru" 
                           className="text-blue-600 hover:text-blue-800 transition-colors"
                         >
-                          info@fluttrium.ru
+                          mikhail.bochkarev82@gmail.com
                         </a>
                         <p className="text-sm text-gray-500 mt-1">По всем вопросам</p>
                       </div>
@@ -96,7 +94,7 @@ export default function Contacts() {
                           href="mailto:fluttrium@gmail.com" 
                           className="text-blue-600 hover:text-blue-800 transition-colors"
                         >
-                          service@fluttrium.ru
+                          mikhail.bochkarev82@gmail.com
                         </a>
                         <p className="text-sm text-gray-500 mt-1">Сервисное обслуживание</p>
                       </div>
@@ -116,7 +114,7 @@ export default function Contacts() {
                         href="mailto:partner@fluttrium.ru" 
                         className="text-blue-600 hover:text-blue-800 transition-colors"
                       >
-                        partner@fluttrium.ru
+                        mikhail.bochkarev82@gmail.com
                       </a>
                       <p className="text-sm text-gray-500 mt-1">Дилерские программы</p>
                     </div>

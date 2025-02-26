@@ -34,6 +34,7 @@ export async function POST(req: Request) {
                 },
                 assignedDoctor: true,
                 Product: true,
+                Metod: true,
             },
         });
 

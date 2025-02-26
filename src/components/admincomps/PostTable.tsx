@@ -9,7 +9,7 @@ import {
 import * as React from "react";
 import {format} from "date-fns";
 import {Button} from "@/components/ui/button";
-import {Category} from "@prisma/client";
+import {$Enums, Category} from "@prisma/client";
 import {usePostRedactorStore} from "@/app/admin/_store/adminpageStore";
 import {Badge} from "@/components/ui/badge";
 import {Plus} from "lucide-react";
@@ -20,7 +20,9 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog";
+import PostType = $Enums.PostType;
 
+// Интерфейс для постов
 interface Post {
     id: number;
     createdAt: Date;
@@ -30,7 +32,10 @@ interface Post {
     published: boolean;
     authorId: number;
     categories: Category[];
+    image?: string;
+    posttype: PostType;
 }
+
 
 export function PostTable() {
     const [post, setPost] = React.useState<Post[]>([]);

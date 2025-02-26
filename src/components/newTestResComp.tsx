@@ -2,11 +2,12 @@
 
 import {NewChart} from "@/components/newchart";
 import React, {useEffect, useState, useMemo, useRef} from "react";
-import Doctorscopmonent from "@/components/resultComponents/doctorscopmonent";
+
 import {PostsResult} from "@/components/resultComponents/postrsult";
 import {CardDescription} from "@/components/ui/card";
 import {useSession} from "next-auth/react";
-import {Category, Disease, Post, User} from "@prisma/client";
+import {Category, Disease, Metod, Post, Product, User} from "@prisma/client";
+import {DoctorsComponent, MetodsComponent, ProductsComponent} from "@/components/resultComponents/doctorscopmonent";
 
 // Компонент для отображения диагноза и поста
 function DiagnosisSection({maxDiagnosis, post}: { maxDiagnosis: any; post: Post | null }) {
@@ -36,7 +37,7 @@ interface NnewTestResCompProps {
     isOpenn: boolean; // Убедитесь, что тип здесь boolean
 }
 
-export default function NnewTestResComp({ isOpenn }: NnewTestResCompProps) {
+export default function NnewTestResComp({isOpenn}: NnewTestResCompProps) {
     const [result, setResult] = useState<string[] | null>(null);
     const [maxDiagnosis, setMaxDiagnosis] = useState<any | null>(null);
     const {data: session} = useSession();
@@ -44,6 +45,8 @@ export default function NnewTestResComp({ isOpenn }: NnewTestResCompProps) {
     const [disease, setDisease] = useState<Disease>();
     const [post, setPost] = useState<Post & { categories: Category[] } | null>(null);
     const [doctors, setDoctors] = useState<User[]>([]);
+    const [metods, setMetods] = useState<Metod[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
 
     // Состояние для управления видимостью компонента
     const [isOpen, setIsOpen] = useState(isOpenn);  // Используйте пропс isOpen напрямую
@@ -64,6 +67,9 @@ export default function NnewTestResComp({ isOpenn }: NnewTestResCompProps) {
             setDisease(data.disease);
             setPost(data.disease.post);
             setDoctors(data.disease.assignedDoctor);
+            setMetods(data.disease.Metod);
+            setProducts(data.disease.Product);
+
         } catch (err) {
             console.error("Ошибка при загрузке данных для виджета:", err);
         }
@@ -128,17 +134,21 @@ export default function NnewTestResComp({ isOpenn }: NnewTestResCompProps) {
             );
 
             setMaxDiagnosis(maxDiagnosis);
-            console.log('Вероятное сосотояние',maxDiagnosis);
+            console.log('Вероятное сосотояние', maxDiagnosis);
             fetchInfoForWidget(maxDiagnosis.title);
         }
     }, [parsedResult]);
 
-    // Обработчик клика вне области компонента
     const handleOutsideClick = (e: MouseEvent) => {
         if (!containerRef.current?.contains(e.target as Node)) {
+            const formElement = document.querySelector(".no-close"); // Проверяем форму
+            if (formElement && formElement.contains(e.target as Node)) return; // Если клик по форме — не закрываем
+
             setIsOpen(false);
         }
     };
+
+
 
     useEffect(() => {
         document.addEventListener("mousedown", handleOutsideClick);
@@ -157,7 +167,7 @@ export default function NnewTestResComp({ isOpenn }: NnewTestResCompProps) {
     return (
         <div
             ref={containerRef}
-            className="bg-neutral-300 h-[90%] w-[90%] rounded-3xl flex flex-row p-3"
+            className="bg-neutral-300 h-[99%] w-[99%] rounded-3xl flex flex-row p-1"
         >
             <div className="flex flex-col w-1/2 h-full mr-3 gap-3">
                 <div className="flex h-1/2">
@@ -166,9 +176,9 @@ export default function NnewTestResComp({ isOpenn }: NnewTestResCompProps) {
                 <DiagnosisSection maxDiagnosis={maxDiagnosis} post={post}/>
             </div>
             <div className="flex flex-col w-1/2 gap-2 h-full">
-                <Doctorscopmonent doctors={doctors}/>
-                <Doctorscopmonent doctors={doctors}/>
-                <Doctorscopmonent doctors={doctors}/>
+                <DoctorsComponent doctors={doctors}/>
+                <MetodsComponent metods={metods}/>
+                <ProductsComponent products={products}/>
             </div>
         </div>
     );

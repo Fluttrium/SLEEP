@@ -167,6 +167,7 @@ model Disease {
   OptionMax      Option[]  @relation("MaxDiseases")
   OptionMin      Option[]  @relation("MinDiseases")
   Product        Product[] @relation("ProductDiseases")
+  Metod          Metod[]   @relation("MetodDiseases")
 }
 
 model CPAPMachine {
@@ -318,11 +319,12 @@ model ConsulOrder {
 }
 
 model Metod {
-  id               Int     @id @default(autoincrement())
+  id               Int       @id @default(autoincrement())
   title            String
   description      String
   addeddescription String?
   image            String
+  Disease          Disease[] @relation("MetodDiseases")
 }
 
 enum Role {

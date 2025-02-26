@@ -5,4 +5,5 @@ export type ProductWithRelations = Product & {
     ingredients: Ingredient[];
     category2?: Category2 | null;
     price?: number; // Сделать price необязательным
+
   };  

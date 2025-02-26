@@ -26,7 +26,7 @@ import {
     DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import {Post, Product, User} from "@prisma/client";
+import {Metod, Post, Product, User} from "@prisma/client";
 import {ScrollArea} from "@/components/ui/scroll-area";
 
 interface TestRedactorProps {
@@ -79,6 +79,8 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
     const [resultTitle, setResultTitle] = useState("");
     const [doctorsList, setDoctorsList] = useState<User[]>([]);
     const [desiesDoctor, setDesiesDoctor] = useState<User[]>([]);
+    const [metodsList, setMetodsList] = useState<Metod[]>([]);
+    const [desiesMetodsList, setDesiesMetodsList] = useState<Metod[]>([]);
     const [postsList, setPostsList] = useState<Post[]>([]);
     const [desiesPosts, setDesiesPosts] = useState<Post>();
     const [dloading, setDloading] = useState(false);
@@ -102,6 +104,14 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                 : [...prev, doctor]
         );
     };
+    const toggleMetods = (metod: Metod) => {
+        setDesiesMetodsList((prev) =>
+            prev.some((p) => p.id === metod.id)
+                ? prev.filter((p) => p.id !== metod.id)
+                : [...prev, metod]
+        );
+    };
+
 
 
 
@@ -213,6 +223,7 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
             setDoctorsList(data.doctors);
             setPostsList(data.posts);
             setProductsList(data.products)
+            setMetodsList(data.metods)
 
 
         } catch (error) {
@@ -324,6 +335,7 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
                     doctor: desiesDoctor,
                     post: {id: desiesPosts.id},
                     product: products,
+                    metods: desiesMetodsList
                 }),
             });
 
@@ -623,24 +635,29 @@ export function TestRedactor({onClose, test}: TestRedactorProps) {
 
                                                                         <div
                                                                             className="flex flex-row  justify-between items-center mx-8">
-                                                                            <Label htmlFor="post" className="text-left">
+                                                                            <Label htmlFor="metod" className="text-left">
                                                                                 Рекомендация метода обследования
                                                                             </Label>
                                                                             <DropdownMenu>
                                                                                 <DropdownMenuTrigger asChild>
                                                                                     <Button className='flex '
                                                                                             variant="outline">
-                                                                                        {desiesPosts ? desiesPosts.title : "выберите метод"}
+                                                                                      Выберите методы
                                                                                     </Button>
                                                                                 </DropdownMenuTrigger>
                                                                                 <DropdownMenuContent>
-                                                                                    {postsList.map((post) => (
+                                                                                    {metodsList.map((metod) => (
                                                                                         <div
-                                                                                            key={post.id}
-                                                                                            className="cursor-pointer"
-                                                                                            onClick={() => setDesiesPosts(post)}
+                                                                                            key={metod.id}
+                                                                                            className={`cursor-pointer p-2 flex items-center ${
+                                                                                                desiesMetodsList.some((p) => p.id === metod.id) ? "bg-blue-200" : ""
+                                                                                            }`}
+                                                                                            onClick={() => toggleMetods(metod)}
                                                                                         >
-                                                                                            {post.title}
+                                                                                            <span>{metod.title}</span>
+                                                                                            {desiesMetodsList.some((p) => p.id === metod.id) && (
+                                                                                                <span className="ml-auto text-green-500">✔</span>
+                                                                                            )}
                                                                                         </div>
                                                                                     ))}
                                                                                 </DropdownMenuContent>
